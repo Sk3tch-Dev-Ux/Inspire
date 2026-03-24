@@ -66,7 +66,7 @@ export async function POST(request: NextRequest) {
     // TODO: Integrate email service to send confirmation email
     // Example with Resend:
     // const { data, error } = await resend.emails.send({
-    //   from: 'orders@inspire-pcs.com',
+    //   from: 'orders@inspirepc.com',
     //   to: email,
     //   subject: `Order Confirmed - ${orderId}`,
     //   html: `

@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
             product_data: {
               name: `Inspire Custom PC - ${tier.charAt(0).toUpperCase() + tier.slice(1)} Build`,
               description: `Custom PC build with selected components: ${componentList}`,
-              images: ['https://inspire-pcs.com/og-image.png'], // Replace with actual image URL
+              images: ['https://inspirepc.com/og-image.png'], // Replace with actual image URL
             },
             unit_amount: total * 100, // Stripe uses cents
           },

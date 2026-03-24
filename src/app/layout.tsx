@@ -4,8 +4,28 @@ import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
 
 export const metadata: Metadata = {
-  title: 'Inspire | Custom PC Building',
-  description: 'Premium custom-built computers crafted for performance, reliability, and your unique needs.',
+  title: {
+    default: 'Inspire PC | Custom PC Building, Troubleshooting & Repairs',
+    template: '%s | Inspire PC',
+  },
+  description: 'Professional PC building, troubleshooting, diagnostics, and upgrade services. You buy the parts, we build it right. Serving customers nationwide at inspirepc.com.',
+  metadataBase: new URL('https://inspirepc.com'),
+  openGraph: {
+    title: 'Inspire PC | Custom PC Building, Troubleshooting & Repairs',
+    description: 'Professional PC building, troubleshooting, diagnostics, and upgrade services. You buy the parts, we build it right.',
+    url: 'https://inspirepc.com',
+    siteName: 'Inspire PC',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Inspire PC | Custom PC Building, Troubleshooting & Repairs',
+    description: 'Professional PC building, troubleshooting, diagnostics, and upgrade services.',
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 }
 
 export default function RootLayout({

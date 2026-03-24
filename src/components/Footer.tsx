@@ -38,17 +38,17 @@ export default function Footer() {
               Professional PC building, troubleshooting, diagnostics, and upgrade services. Your parts, our expertise.
             </p>
             <div className="space-y-3">
-              <a href="mailto:hello@inspire-pcs.com" className="flex items-center gap-3 text-silver hover:text-electric transition-colors text-sm">
+              <a href="mailto:support@inspirepc.com" className="flex items-center gap-3 text-silver hover:text-electric transition-colors text-sm">
                 <Mail className="w-4 h-4" />
-                hello@inspire-pcs.com
+                support@inspirepc.com
               </a>
-              <a href="tel:+15551234567" className="flex items-center gap-3 text-silver hover:text-electric transition-colors text-sm">
+              <a href="tel:+13303148860" className="flex items-center gap-3 text-silver hover:text-electric transition-colors text-sm">
                 <Phone className="w-4 h-4" />
-                (555) 123-4567
+                (330) 314-8860
               </a>
               <div className="flex items-center gap-3 text-silver text-sm">
                 <MapPin className="w-4 h-4" />
-                San Francisco, CA
+                Girard, OH 44420
               </div>
             </div>
           </div>

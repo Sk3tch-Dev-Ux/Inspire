@@ -373,7 +373,7 @@ export default function WarrantyPage() {
 
           <div className="grid md:grid-cols-2 gap-6">
             <motion.a
-              href="mailto:warranty@inspirepc.com"
+              href="mailto:support@inspirepc.com"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -384,12 +384,12 @@ export default function WarrantyPage() {
               </div>
               <div>
                 <h3 className="font-display font-semibold text-pearl">Email Support</h3>
-                <p className="text-silver text-sm">warranty@inspirepc.com</p>
+                <p className="text-silver text-sm">support@inspirepc.com</p>
               </div>
             </motion.a>
 
             <motion.a
-              href="tel:+1234567890"
+              href="tel:+13303148860"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -401,7 +401,7 @@ export default function WarrantyPage() {
               </div>
               <div>
                 <h3 className="font-display font-semibold text-pearl">Phone Support</h3>
-                <p className="text-silver text-sm">(555) 123-4567</p>
+                <p className="text-silver text-sm">(330) 314-8860</p>
               </div>
             </motion.a>
           </div>

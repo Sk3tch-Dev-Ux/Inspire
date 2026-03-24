@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
     // const resend = new Resend(process.env.RESEND_API_KEY);
     //
     // const { data, error } = await resend.emails.send({
-    //   from: 'noreply@inspire-pcs.com',
+    //   from: 'noreply@inspirepc.com',
     //   to: email,
     //   subject: `We received your ${subject} request`,
     //   html: `
@@ -63,8 +63,8 @@ export async function POST(request: NextRequest) {
     //
     // // Optionally send notification email to your team
     // const { data: adminEmail, error: adminError } = await resend.emails.send({
-    //   from: 'noreply@inspire-pcs.com',
-    //   to: 'support@inspire-pcs.com',
+    //   from: 'noreply@inspirepc.com',
+    //   to: 'support@inspirepc.com',
     //   subject: `New Contact Form Submission: ${subject}`,
     //   html: `
     //     <h2>New Contact Form Submission</h2>

@@ -91,20 +91,20 @@ export default function ContactPage() {
     {
       icon: Mail,
       title: 'Email',
-      value: 'hello@inspire-pcs.com',
+      value: 'support@inspirepc.com',
       description: 'We typically respond within 24 hours',
     },
     {
       icon: Phone,
       title: 'Phone',
-      value: '(555) 123-4567',
-      description: 'Call us during business hours',
+      value: '(330) 314-8860',
+      description: 'Call or text anytime',
     },
     {
       icon: MapPin,
       title: 'Location',
-      value: 'Local Service Area',
-      description: 'We serve the entire region',
+      value: 'Girard, OH 44420',
+      description: 'Serving the Mahoning Valley & shipping nationwide',
     },
     {
       icon: Clock,
@@ -235,7 +235,7 @@ export default function ContactPage() {
                     value={formData.phone}
                     onChange={handleInputChange}
                     className="input-field w-full"
-                    placeholder="(555) 123-4567"
+                    placeholder="(330) 314-8860"
                   />
                 </div>
 
@@ -369,12 +369,12 @@ export default function ContactPage() {
             For urgent matters, feel free to call us directly during business hours.
           </p>
           <motion.a
-            href="tel:+15551234567"
+            href="tel:+13303148860"
             className="btn-primary inline-block"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            Call Now: (555) 123-4567
+            Call Now: (330) 314-8860
           </motion.a>
         </div>
       </motion.section>
