@@ -15,6 +15,9 @@ COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
 
+# Ensure public dir exists (may not have any static assets yet)
+RUN mkdir -p public
+
 RUN npm run build
 
 # Stage 3: Production runner
