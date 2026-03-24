@@ -20,6 +20,8 @@ import {
   Award,
   Clock,
   Smile,
+  X,
+  ChevronRight,
 } from 'lucide-react'
 
 type BuildCategory = 'All' | 'Gaming' | 'Workstation' | 'Content Creation' | 'Budget'
@@ -33,6 +35,8 @@ interface Build {
   icon: React.ReactNode
   gradientFrom: string
   gradientTo: string
+  components: { label: string; value: string }[]
+  highlights: string[]
 }
 
 const builds: Build[] = [
@@ -45,6 +49,15 @@ const builds: Build[] = [
     icon: <Gamepad2 className="w-12 h-12" />,
     gradientFrom: 'from-electric',
     gradientTo: 'to-volt',
+    components: [
+      { label: 'CPU', value: 'AMD Ryzen 7 7800X3D' },
+      { label: 'GPU', value: 'NVIDIA RTX 4070 Ti' },
+      { label: 'RAM', value: '32GB DDR5-6000 CL30' },
+      { label: 'Storage', value: '2TB NVMe Gen4 SSD' },
+      { label: 'Case', value: 'Fractal Design North' },
+      { label: 'Cooler', value: 'Arctic Freezer 34 eSports' },
+    ],
+    highlights: ['Custom sleeved PSU cables', 'Sub-65dB under load', '1440p gaming ready'],
   },
   {
     id: 2,
@@ -55,6 +68,15 @@ const builds: Build[] = [
     icon: <Monitor className="w-12 h-12" />,
     gradientFrom: 'from-volt',
     gradientTo: 'to-electric',
+    components: [
+      { label: 'CPU', value: 'Intel Core i9-14900K' },
+      { label: 'GPU', value: 'NVIDIA RTX 6000 Ada' },
+      { label: 'RAM', value: '192GB DDR5-5600 ECC' },
+      { label: 'Storage', value: '4TB NVMe Gen4 + 8TB HDD' },
+      { label: 'Case', value: 'be quiet! Dark Base Pro 901' },
+      { label: 'Cooler', value: 'Noctua NH-D15' },
+    ],
+    highlights: ['Dual NVMe RAID 0 scratch disk', '10GbE networking', 'Whisper-quiet operation'],
   },
   {
     id: 3,
@@ -65,6 +87,15 @@ const builds: Build[] = [
     icon: <Zap className="w-12 h-12" />,
     gradientFrom: 'from-electric',
     gradientTo: 'to-amber',
+    components: [
+      { label: 'CPU', value: 'AMD Ryzen 5 5600X' },
+      { label: 'GPU', value: 'NVIDIA RTX 4060' },
+      { label: 'RAM', value: '16GB DDR4-3200' },
+      { label: 'Storage', value: '1TB NVMe SSD' },
+      { label: 'Case', value: 'Thermaltake Versa H18' },
+      { label: 'Cooler', value: 'Stock Wraith Stealth' },
+    ],
+    highlights: ['Under $800 total', '100+ FPS in most titles at 1080p', 'Easy upgrade path to DDR5'],
   },
   {
     id: 4,
@@ -75,6 +106,15 @@ const builds: Build[] = [
     icon: <Cpu className="w-12 h-12" />,
     gradientFrom: 'from-volt',
     gradientTo: 'to-coral',
+    components: [
+      { label: 'CPU', value: 'Intel Xeon W9-3595X' },
+      { label: 'GPU', value: 'NVIDIA RTX 5880 48GB' },
+      { label: 'RAM', value: '512GB DDR5-4800 ECC' },
+      { label: 'Storage', value: '8TB NVMe RAID + 32TB NAS' },
+      { label: 'Case', value: 'Corsair 7000D Airflow' },
+      { label: 'Cooler', value: '360mm AIO Liquid Cooler' },
+    ],
+    highlights: ['IPMI remote management', 'Redundant PSU setup', 'ISV certified for CAD/CAM'],
   },
   {
     id: 5,
@@ -85,6 +125,15 @@ const builds: Build[] = [
     icon: <Gamepad2 className="w-12 h-12" />,
     gradientFrom: 'from-coral',
     gradientTo: 'to-electric',
+    components: [
+      { label: 'CPU', value: 'AMD Ryzen 9 7950X3D' },
+      { label: 'GPU', value: 'NVIDIA RTX 4090 24GB' },
+      { label: 'RAM', value: '32GB DDR5-6400 CL28' },
+      { label: 'Storage', value: '2TB NVMe Gen5 SSD' },
+      { label: 'Case', value: 'Lian Li O11 Dynamic EVO' },
+      { label: 'Cooler', value: '360mm Custom Loop' },
+    ],
+    highlights: ['360+ FPS at 1440p competitive', 'Hardline tubing custom loop', 'Full RGB sync'],
   },
   {
     id: 6,
@@ -95,6 +144,15 @@ const builds: Build[] = [
     icon: <Monitor className="w-12 h-12" />,
     gradientFrom: 'from-amber',
     gradientTo: 'to-volt',
+    components: [
+      { label: 'CPU', value: 'AMD Ryzen 7 7700X' },
+      { label: 'GPU', value: 'NVIDIA RTX 4080 16GB' },
+      { label: 'RAM', value: '64GB DDR5-5600' },
+      { label: 'Storage', value: '2TB NVMe + 4TB SATA SSD' },
+      { label: 'Case', value: 'NZXT H7 Flow' },
+      { label: 'Cooler', value: 'Corsair H150i Elite' },
+    ],
+    highlights: ['NVENC hardware encoding', 'Dual monitor support', 'Optimized for OBS Studio'],
   },
   {
     id: 7,
@@ -105,6 +163,15 @@ const builds: Build[] = [
     icon: <Cpu className="w-12 h-12" />,
     gradientFrom: 'from-electric',
     gradientTo: 'to-coral',
+    components: [
+      { label: 'CPU', value: 'Intel Core i7-14700' },
+      { label: 'GPU', value: 'AMD Radeon Pro W6800' },
+      { label: 'RAM', value: '32GB DDR5-4800' },
+      { label: 'Storage', value: '1TB NVMe SSD' },
+      { label: 'Case', value: 'Fractal Design Define 7' },
+      { label: 'Cooler', value: 'Noctua NH-U12S' },
+    ],
+    highlights: ['Near-silent under load', 'ISV certified for AutoCAD', 'Compact footprint'],
   },
   {
     id: 8,
@@ -115,6 +182,15 @@ const builds: Build[] = [
     icon: <Zap className="w-12 h-12" />,
     gradientFrom: 'from-volt',
     gradientTo: 'to-amber',
+    components: [
+      { label: 'CPU', value: 'AMD Ryzen 5 7600X' },
+      { label: 'GPU', value: 'NVIDIA RTX 4070 12GB' },
+      { label: 'RAM', value: '32GB DDR5-5200' },
+      { label: 'Storage', value: '1TB NVMe Gen4 SSD' },
+      { label: 'Case', value: 'Phanteks Eclipse G360A' },
+      { label: 'Cooler', value: 'DeepCool AK400' },
+    ],
+    highlights: ['Great for 1080p video editing', 'Handles Premiere & DaVinci', 'Under $1,100 total'],
   },
   {
     id: 9,
@@ -125,6 +201,15 @@ const builds: Build[] = [
     icon: <Gamepad2 className="w-12 h-12" />,
     gradientFrom: 'from-coral',
     gradientTo: 'to-volt',
+    components: [
+      { label: 'CPU', value: 'Intel Core i9-14900KS' },
+      { label: 'GPU', value: 'NVIDIA RTX 4090 Ti 24GB' },
+      { label: 'RAM', value: '64GB DDR5-7200 CL34' },
+      { label: 'Storage', value: '4TB NVMe Gen5 SSD' },
+      { label: 'Case', value: 'Hyte Y70 Touch' },
+      { label: 'Cooler', value: '420mm AIO Liquid Cooler' },
+    ],
+    highlights: ['4K 120Hz+ gaming', 'Full Corsair iCUE RGB ecosystem', 'Showcased with touch LCD panel'],
   },
   {
     id: 10,
@@ -135,6 +220,15 @@ const builds: Build[] = [
     icon: <Monitor className="w-12 h-12" />,
     gradientFrom: 'from-electric',
     gradientTo: 'to-volt',
+    components: [
+      { label: 'CPU', value: 'AMD Ryzen 7 7700' },
+      { label: 'GPU', value: 'NVIDIA RTX 4060 Ti 16GB' },
+      { label: 'RAM', value: '32GB DDR5-5600' },
+      { label: 'Storage', value: '2TB NVMe SSD' },
+      { label: 'Case', value: 'Cooler Master NR200P MAX' },
+      { label: 'Cooler', value: 'Integrated 280mm AIO' },
+    ],
+    highlights: ['Mini-ITX form factor', 'Under 20L volume', 'Full desktop performance'],
   },
 ]
 
@@ -148,6 +242,7 @@ const stats = [
 
 export default function GalleryContent() {
   const [activeCategory, setActiveCategory] = useState<BuildCategory>('All')
+  const [selectedBuild, setSelectedBuild] = useState<Build | null>(null)
 
   const filteredBuilds =
     activeCategory === 'All'
@@ -156,6 +251,78 @@ export default function GalleryContent() {
 
   return (
     <div className="pt-20">
+      {/* Build Detail Modal */}
+      {selectedBuild && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          onClick={() => setSelectedBuild(null)}
+        >
+          {/* Backdrop */}
+          <div className="absolute inset-0 bg-midnight/80 backdrop-blur-sm" />
+
+          {/* Modal */}
+          <div
+            className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto bg-obsidian border border-steel rounded-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header gradient */}
+            <div className={`relative h-40 bg-gradient-to-br ${selectedBuild.gradientFrom} ${selectedBuild.gradientTo} rounded-t-2xl flex items-center justify-center`}>
+              <div className="absolute inset-0 bg-black/20" />
+              <div className="relative text-pearl/80">
+                {selectedBuild.icon}
+              </div>
+              <button
+                onClick={() => setSelectedBuild(null)}
+                className="absolute top-4 right-4 w-10 h-10 rounded-full bg-midnight/60 border border-steel flex items-center justify-center text-pearl hover:bg-midnight/80 transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Content */}
+            <div className="p-8">
+              <div className="flex items-center gap-3 mb-2">
+                <h2 className="text-2xl font-display font-bold text-pearl">{selectedBuild.name}</h2>
+                <span className="px-3 py-1 text-xs font-medium text-electric bg-electric/10 rounded-full border border-electric/30">
+                  {selectedBuild.category}
+                </span>
+              </div>
+              <p className="text-silver mb-6">{selectedBuild.note}</p>
+
+              {/* Component List */}
+              <h3 className="text-sm font-semibold text-pearl uppercase tracking-wider mb-3">Components</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8">
+                {selectedBuild.components.map((comp) => (
+                  <div key={comp.label} className="flex items-center gap-3 p-3 bg-midnight rounded-lg border border-steel">
+                    <span className="text-xs font-bold text-electric uppercase w-12 shrink-0">{comp.label}</span>
+                    <span className="text-sm text-pearl">{comp.value}</span>
+                  </div>
+                ))}
+              </div>
+
+              {/* Highlights */}
+              <h3 className="text-sm font-semibold text-pearl uppercase tracking-wider mb-3">Highlights</h3>
+              <div className="space-y-2 mb-8">
+                {selectedBuild.highlights.map((highlight) => (
+                  <div key={highlight} className="flex items-center gap-2">
+                    <ChevronRight className="w-4 h-4 text-volt shrink-0" />
+                    <span className="text-sm text-silver">{highlight}</span>
+                  </div>
+                ))}
+              </div>
+
+              {/* CTA */}
+              <Link
+                href="/order"
+                className="btn-primary w-full text-center inline-block"
+                onClick={() => setSelectedBuild(null)}
+              >
+                Build Something Like This
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
       {/* Hero Section */}
       <section className="relative py-24 overflow-hidden">
         <div className="absolute inset-0">
@@ -256,7 +423,10 @@ export default function GalleryContent() {
                   </p>
 
                   {/* View Build Button */}
-                  <button className="flex items-center gap-2 text-electric font-medium text-sm group/btn hover:gap-3 transition-all duration-300">
+                  <button
+                    onClick={() => setSelectedBuild(build)}
+                    className="flex items-center gap-2 text-electric font-medium text-sm group/btn hover:gap-3 transition-all duration-300"
+                  >
                     View Details
                     <ArrowRight className="w-4 h-4" />
                   </button>
