@@ -2,16 +2,20 @@
 
 import { motion } from 'framer-motion'
 import Link from 'next/link'
-import { 
-  Wrench, 
-  ListChecks, 
-  Settings, 
-  HardDrive, 
+import {
+  Wrench,
+  ListChecks,
+  Settings,
+  HardDrive,
   Cpu,
   CheckCircle,
   ArrowRight,
   ExternalLink,
-  Zap
+  Zap,
+  AlertTriangle,
+  Shield,
+  RotateCcw,
+  Flame
 } from 'lucide-react'
 
 const services = [
@@ -123,7 +127,7 @@ export default function ServicesPage() {
               Our <span className="gradient-text">Services</span>
             </h1>
             <p className="text-silver text-lg">
-              From planning your perfect build to expert assembly, we offer a complete range of services to bring your PC to life.
+              Custom PC building, troubleshooting, repairs, and upgrades. We offer a complete range of services to keep your PC running perfectly.
             </p>
           </motion.div>
         </div>
@@ -178,6 +182,109 @@ export default function ServicesPage() {
                 </div>
               </motion.div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Troubleshooting & Repair Services Section */}
+      <section className="py-24">
+        <div className="max-w-7xl mx-auto px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-3xl md:text-4xl font-display font-bold mb-4 text-pearl">
+              Troubleshooting & <span className="gradient-text">Repair Services</span>
+            </h2>
+            <p className="text-silver text-lg max-w-2xl mx-auto">
+              Having PC problems? We offer comprehensive diagnostics, repairs, and optimization services.
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+            {[
+              {
+                icon: AlertTriangle,
+                title: 'Hardware Diagnostics',
+                description: 'Complete system scan to identify hardware issues, failing components, and connectivity problems.',
+                price: '$49',
+                turnaround: '1-2 business days',
+              },
+              {
+                icon: Settings,
+                title: 'Software Troubleshooting',
+                description: 'Fix crashes, freezes, blue screens, driver issues, and general Windows problems.',
+                price: '$39',
+                turnaround: '1-2 business days',
+              },
+              {
+                icon: Shield,
+                title: 'Virus & Malware Removal',
+                description: 'Professional scanning, removal, and protection setup to keep your system secure.',
+                price: '$59',
+                turnaround: '1-2 business days',
+              },
+              {
+                icon: Cpu,
+                title: 'Component Upgrades',
+                description: 'Install new RAM, storage drives, GPUs, CPUs, or cooling solutions with full testing.',
+                price: '$49+',
+                turnaround: '1-2 business days',
+              },
+              {
+                icon: HardDrive,
+                title: 'Data Recovery',
+                description: 'Recover files from failing drives, corrupted storage, or deleted partitions.',
+                price: '$79+',
+                turnaround: '2-5 business days',
+              },
+              {
+                icon: Zap,
+                title: 'Performance Optimization',
+                description: 'Optimize system settings, cleanup bloatware, and maximize your PC\'s speed.',
+                price: '$79',
+                turnaround: '1-2 business days',
+              },
+            ].map((service, index) => (
+              <motion.div
+                key={service.title}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                className="card group h-full flex flex-col bg-obsidian"
+              >
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-electric/20 to-volt/20 flex items-center justify-center mb-6 group-hover:from-electric/30 group-hover:to-volt/30 transition-colors">
+                  <service.icon className="w-7 h-7 text-electric" />
+                </div>
+
+                <h3 className="font-display text-xl font-semibold mb-3 text-pearl">
+                  {service.title}
+                </h3>
+
+                <p className="text-silver text-sm mb-6 flex-grow">
+                  {service.description}
+                </p>
+
+                <div className="pt-4 border-t border-steel">
+                  <div className="flex items-baseline justify-between">
+                    <span className="text-2xl font-display font-bold gradient-text">
+                      {service.price}
+                    </span>
+                    <span className="text-xs text-silver">{service.turnaround}</span>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          <div className="text-center mb-16">
+            <Link href="/troubleshooting" className="inline-flex items-center gap-2 text-electric hover:text-volt transition-colors text-lg font-semibold">
+              View All Repair Services
+              <ArrowRight className="w-5 h-5" />
+            </Link>
           </div>
         </div>
       </section>
@@ -351,14 +458,14 @@ export default function ServicesPage() {
               Ready to Get <span className="gradient-text">Started</span>?
             </h2>
             <p className="text-silver text-lg max-w-2xl mx-auto mb-10">
-              Whether you need help planning your build or have parts ready to go, we&apos;re here to help.
+              Whether you're building a new PC or need to fix and optimize your current system, we're here to help.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Link href="/order" className="btn-primary">
                 Book a Service
               </Link>
-              <Link href="/pricing" className="btn-secondary">
-                View Full Pricing
+              <Link href="/contact" className="btn-secondary">
+                Contact Us
               </Link>
             </div>
           </motion.div>

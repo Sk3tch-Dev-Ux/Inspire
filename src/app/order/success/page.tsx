@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion'
 import Link from 'next/link'
-import { CheckCircle, ChevronRight, Mail, Package, Calendar } from 'lucide-react'
+import { CheckCircle, ChevronRight } from 'lucide-react'
 
 export default function OrderSuccessPage() {
   return (
@@ -12,48 +12,50 @@ export default function OrderSuccessPage() {
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5 }}
+          className="space-y-8"
         >
-          <div className="w-24 h-24 mx-auto rounded-full bg-gradient-to-br from-electric/20 to-volt/20 flex items-center justify-center mb-8">
-            <CheckCircle className="w-12 h-12 text-volt" />
-          </div>
+          {/* Success Icon */}
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ delay: 0.2, type: 'spring' }}
+            className="w-24 h-24 mx-auto rounded-full bg-gradient-to-br from-electric/20 to-volt/20 flex items-center justify-center"
+          >
+            <CheckCircle className="w-12 h-12 text-electric" />
+          </motion.div>
 
-          <h1 className="section-title mb-4">
-            Order <span className="gradient-text">Confirmed!</span>
-          </h1>
+          {/* Heading */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+          >
+            <h1 className="text-4xl md:text-5xl font-display font-bold mb-4 text-pearl">
+              Order <span className="gradient-text">Submitted!</span>
+            </h1>
+          </motion.div>
 
-          <p className="section-subtitle mx-auto mb-12">
-            Thank you for choosing Inspire. We&apos;re excited to build your dream PC. You&apos;ll receive a confirmation email shortly with your order details.
-          </p>
+          {/* Message */}
+          <motion.p
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+            className="text-lg text-silver max-w-lg mx-auto"
+          >
+            Thank you! We've received your build request and will be in touch within 24 hours.
+          </motion.p>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-            <div className="card text-center">
-              <Mail className="w-8 h-8 text-electric mx-auto mb-3" />
-              <h3 className="font-display font-semibold mb-1">Confirmation Email</h3>
-              <p className="text-silver text-sm">Check your inbox</p>
-            </div>
-            <div className="card text-center">
-              <Calendar className="w-8 h-8 text-electric mx-auto mb-3" />
-              <h3 className="font-display font-semibold mb-1">Build Time</h3>
-              <p className="text-silver text-sm">5-7 business days</p>
-            </div>
-            <div className="card text-center">
-              <Package className="w-8 h-8 text-electric mx-auto mb-3" />
-              <h3 className="font-display font-semibold mb-1">Shipping Updates</h3>
-              <p className="text-silver text-sm">Tracking sent via email</p>
-            </div>
-          </div>
-
-          <div className="flex flex-wrap justify-center gap-4">
-            <Link href="/" className="btn-primary">
-              <span className="flex items-center gap-2">
-                Back to Home
-                <ChevronRight className="w-4 h-4" />
-              </span>
+          {/* Back to Home Link */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+          >
+            <Link href="/" className="btn-primary inline-flex items-center gap-2">
+              Back to Home
+              <ChevronRight className="w-4 h-4" />
             </Link>
-            <Link href="/warranty" className="btn-secondary">
-              View Warranty Info
-            </Link>
-          </div>
+          </motion.div>
         </motion.div>
       </div>
     </div>

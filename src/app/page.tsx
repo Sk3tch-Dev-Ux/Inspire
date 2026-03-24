@@ -2,19 +2,22 @@
 
 import { motion } from 'framer-motion'
 import Link from 'next/link'
-import { 
-  Wrench, 
-  Zap, 
-  Shield, 
-  CheckCircle, 
-  ChevronRight, 
+import {
+  Wrench,
+  Zap,
+  Shield,
+  CheckCircle,
+  ChevronRight,
   Monitor,
   Gamepad2,
   Briefcase,
   Palette,
   Package,
   ListChecks,
-  ExternalLink
+  ExternalLink,
+  AlertCircle,
+  TrendingUp,
+  Image as ImageIcon
 } from 'lucide-react'
 
 const processSteps = [
@@ -98,18 +101,18 @@ export default function Home() {
             </h1>
 
             <p className="text-lg md:text-xl text-silver mb-10 max-w-2xl">
-              You choose and buy the components. We build it right. Professional PC assembly with meticulous cable management, thorough testing, and expert craftsmanship.
+              Custom PC building, troubleshooting & diagnostics, or upgrading your existing system. We handle it all with expert craftsmanship and attention to detail.
             </p>
 
             <div className="flex flex-wrap gap-4">
               <Link href="/order" className="btn-primary">
                 <span className="flex items-center gap-2">
-                  Book Your Build
+                  Book a Build
                   <ChevronRight className="w-4 h-4" />
                 </span>
               </Link>
-              <Link href="/pricing" className="btn-secondary">
-                View Services
+              <Link href="/troubleshooting" className="btn-secondary">
+                Get PC Help
               </Link>
             </div>
           </motion.div>
@@ -127,33 +130,33 @@ export default function Home() {
                 <div className="absolute top-8 left-8 right-8">
                   <div className="flex items-center gap-3 mb-6">
                     <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-electric to-volt flex items-center justify-center">
-                      <Wrench className="w-6 h-6 text-midnight" />
+                      <Zap className="w-6 h-6 text-midnight" />
                     </div>
                     <div>
-                      <p className="text-xs text-silver">Build Service</p>
-                      <p className="font-display font-semibold text-pearl">What We Do</p>
+                      <p className="text-xs text-silver">Our Services</p>
+                      <p className="font-display font-semibold text-pearl">We Offer</p>
                     </div>
                   </div>
                   <div className="space-y-3">
                     <div className="flex items-center gap-2 text-sm">
                       <CheckCircle className="w-4 h-4 text-volt" />
-                      <span className="text-pearl">Expert Assembly</span>
+                      <span className="text-pearl">Custom PC Building</span>
                     </div>
                     <div className="flex items-center gap-2 text-sm">
                       <CheckCircle className="w-4 h-4 text-volt" />
-                      <span className="text-pearl">Cable Management</span>
+                      <span className="text-pearl">Troubleshooting</span>
                     </div>
                     <div className="flex items-center gap-2 text-sm">
                       <CheckCircle className="w-4 h-4 text-volt" />
-                      <span className="text-pearl">Stress Testing</span>
+                      <span className="text-pearl">Hardware Diagnostics</span>
                     </div>
                     <div className="flex items-center gap-2 text-sm">
                       <CheckCircle className="w-4 h-4 text-volt" />
-                      <span className="text-pearl">OS Installation</span>
+                      <span className="text-pearl">Component Upgrades</span>
                     </div>
                     <div className="flex items-center gap-2 text-sm">
                       <CheckCircle className="w-4 h-4 text-volt" />
-                      <span className="text-pearl">BIOS Configuration</span>
+                      <span className="text-pearl">Performance Optimization</span>
                     </div>
                   </div>
                 </div>
@@ -205,71 +208,67 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Budget Planning Section */}
+      {/* Services Overview Section */}
       <section className="py-24">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-            >
-              <h2 className="text-3xl md:text-4xl font-display font-bold mb-6 text-pearl">
-                Not Sure What Parts to <span className="gradient-text">Buy?</span>
-              </h2>
-              <p className="text-silver text-lg mb-6">
-                Tell us your budget and what you want to do with your PC. We&apos;ll create a custom parts list on PC Part Picker so you can see exactly what your build will cost before you buy anything.
-              </p>
-              <ul className="space-y-4 mb-8">
-                {[
-                  'Personalized parts recommendations',
-                  'Guaranteed compatibility',
-                  'Transparent pricing via PC Part Picker',
-                  'No obligation to use our build service',
-                ].map((item) => (
-                  <li key={item} className="flex items-center gap-3 text-pearl">
-                    <CheckCircle className="w-5 h-5 text-volt shrink-0" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-              <Link href="/services" className="btn-primary inline-flex items-center gap-2">
-                Learn About Budget Builds
-                <ExternalLink className="w-4 h-4" />
-              </Link>
-            </motion.div>
-            
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="gradient-border"
-            >
-              <div className="bg-obsidian p-8 rounded-xl">
-                <h3 className="text-2xl font-display font-semibold mb-6 text-pearl">Example Budget Ranges</h3>
-                <div className="space-y-4">
-                  {[
-                    { budget: '$800 - $1,000', use: 'Entry Gaming / Everyday', fps: '1080p 60+ FPS' },
-                    { budget: '$1,200 - $1,500', use: 'Mid-Range Gaming', fps: '1440p 60+ FPS' },
-                    { budget: '$2,000 - $2,500', use: 'High-End Gaming / Streaming', fps: '1440p 144+ FPS' },
-                    { budget: '$3,000+', use: 'Enthusiast / Workstation', fps: '4K Gaming / Pro Apps' },
-                  ].map((tier) => (
-                    <div key={tier.budget} className="flex justify-between items-center p-4 bg-steel/30 rounded-lg">
-                      <div>
-                        <p className="font-semibold text-pearl">{tier.budget}</p>
-                        <p className="text-sm text-silver">{tier.use}</p>
-                      </div>
-                      <span className="text-electric text-sm">{tier.fps}</span>
-                    </div>
-                  ))}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-3xl md:text-4xl font-display font-bold mb-4 text-pearl">
+              What We <span className="gradient-text">Offer</span>
+            </h2>
+            <p className="text-silver text-lg max-w-2xl mx-auto">
+              From building custom PCs to fixing problems and boosting performance, we've got all your PC needs covered.
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              {
+                icon: Wrench,
+                title: 'Custom PC Building',
+                description: 'You pick the parts, we build it right',
+                href: '/services',
+              },
+              {
+                icon: AlertCircle,
+                title: 'Troubleshooting & Repair',
+                description: 'Diagnostics, fixes, and virus removal',
+                href: '/troubleshooting',
+              },
+              {
+                icon: TrendingUp,
+                title: 'Upgrades & Optimization',
+                description: 'Boost your existing PC\'s performance',
+                href: '/troubleshooting',
+              },
+            ].map((service, index) => (
+              <motion.div
+                key={service.title}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                className="card group flex flex-col"
+              >
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-electric/20 to-volt/20 flex items-center justify-center mb-6 group-hover:from-electric/30 group-hover:to-volt/30 transition-colors">
+                  <service.icon className="w-7 h-7 text-electric" />
                 </div>
-                <p className="text-silver text-sm mt-4 text-center">
-                  * Prices are for parts only. Build service fee is separate.
+                <h3 className="font-display text-xl font-semibold mb-2 text-pearl">
+                  {service.title}
+                </h3>
+                <p className="text-silver text-sm mb-6 flex-grow">
+                  {service.description}
                 </p>
-              </div>
-            </motion.div>
+                <Link href={service.href} className="inline-flex items-center gap-2 text-electric hover:text-volt transition-colors">
+                  Learn More
+                  <ChevronRight className="w-4 h-4" />
+                </Link>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
@@ -312,6 +311,60 @@ export default function Home() {
                 </p>
               </motion.div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Build Gallery Teaser Section */}
+      <section className="py-24 bg-obsidian">
+        <div className="max-w-7xl mx-auto px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-3xl md:text-4xl font-display font-bold mb-4 text-pearl">
+              Featured <span className="gradient-text">Builds</span>
+            </h2>
+            <p className="text-silver text-lg max-w-2xl mx-auto">
+              Check out some of the amazing systems we've assembled.
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-4 gap-6 mb-10">
+            {[
+              { name: 'Gaming Powerhouse', specs: '4070 Ti, 7800X3D' },
+              { name: 'Creator Workstation', specs: 'RTX 4080, 7950X' },
+              { name: 'Esports Machine', specs: '4070, 7700X' },
+              { name: 'Budget 1080p', specs: '4060 Ti, 5700X3D' },
+            ].map((build, index) => (
+              <motion.div
+                key={build.name}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                className="card group cursor-pointer"
+              >
+                <div className="w-full h-48 bg-gradient-to-br from-steel/30 to-obsidian rounded-lg flex items-center justify-center mb-4 group-hover:from-electric/20 group-hover:to-volt/20 transition-colors">
+                  <ImageIcon className="w-12 h-12 text-steel" />
+                </div>
+                <h3 className="font-display text-lg font-semibold text-pearl mb-1">
+                  {build.name}
+                </h3>
+                <p className="text-sm text-silver">
+                  {build.specs}
+                </p>
+              </motion.div>
+            ))}
+          </div>
+
+          <div className="text-center">
+            <Link href="/gallery" className="inline-flex items-center gap-2 text-electric hover:text-volt transition-colors text-lg font-semibold">
+              View Full Gallery
+              <ChevronRight className="w-5 h-5" />
+            </Link>
           </div>
         </div>
       </section>
@@ -388,20 +441,20 @@ export default function Home() {
             transition={{ duration: 0.6 }}
           >
             <h2 className="text-3xl md:text-4xl font-display font-bold mb-6 text-pearl">
-              Ready to Get Your PC <span className="gradient-text">Built Right</span>?
+              Ready to Get <span className="gradient-text">Started</span>?
             </h2>
             <p className="text-silver text-lg max-w-2xl mx-auto mb-10">
-              Whether you have your parts ready or need help planning your build, we&apos;re here to help.
+              Whether you're building a custom PC, need troubleshooting help, or want to upgrade your existing system, we're here to help.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Link href="/order" className="btn-primary">
                 <span className="flex items-center gap-2">
-                  Book Your Build
+                  Book a Service
                   <ChevronRight className="w-4 h-4" />
                 </span>
               </Link>
-              <Link href="/services" className="btn-secondary">
-                Explore Services
+              <Link href="/contact" className="btn-secondary">
+                Contact Us
               </Link>
             </div>
           </motion.div>

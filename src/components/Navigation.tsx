@@ -7,9 +7,11 @@ import { Menu, X, Cpu, ChevronRight } from 'lucide-react'
 
 const navLinks = [
   { href: '/services', label: 'Services' },
+  { href: '/troubleshooting', label: 'Repairs' },
   { href: '/pricing', label: 'Pricing' },
-  { href: '/about', label: 'About Us' },
-  { href: '/warranty', label: 'Warranty' },
+  { href: '/gallery', label: 'Gallery' },
+  { href: '/about', label: 'About' },
+  { href: '/contact', label: 'Contact' },
 ]
 
 export default function Navigation() {

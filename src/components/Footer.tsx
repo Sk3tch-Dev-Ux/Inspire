@@ -2,17 +2,22 @@ import Link from 'next/link'
 import { Cpu, Mail, Phone, MapPin, ArrowUpRight } from 'lucide-react'
 
 const footerLinks = {
+  services: [
+    { href: '/services', label: 'PC Building' },
+    { href: '/troubleshooting', label: 'Troubleshooting & Repair' },
+    { href: '/pricing', label: 'Pricing' },
+    { href: '/gallery', label: 'Build Gallery' },
+  ],
   company: [
     { href: '/about', label: 'About Us' },
-    { href: '/services', label: 'Services' },
-    { href: '/pricing', label: 'Pricing' },
     { href: '/warranty', label: 'Warranty' },
+    { href: '/contact', label: 'Contact Us' },
+    { href: '/pricing#faq', label: 'FAQs' },
   ],
-  support: [
-    { href: '/order', label: 'Build Your PC' },
-    { href: '/warranty', label: 'Warranty Claims' },
-    { href: '#', label: 'Support Center' },
-    { href: '#', label: 'FAQs' },
+  getStarted: [
+    { href: '/order', label: 'Book a Build' },
+    { href: '/troubleshooting', label: 'Get PC Help' },
+    { href: '/contact', label: 'Request a Quote' },
   ],
 }
 
@@ -30,7 +35,7 @@ export default function Footer() {
               <span className="font-display text-xl font-bold">Inspire</span>
             </Link>
             <p className="text-silver text-sm leading-relaxed mb-6">
-              Premium custom-built computers crafted for performance, reliability, and your unique needs.
+              Professional PC building, troubleshooting, diagnostics, and upgrade services. Your parts, our expertise.
             </p>
             <div className="space-y-3">
               <a href="mailto:hello@inspire-pcs.com" className="flex items-center gap-3 text-silver hover:text-electric transition-colors text-sm">
@@ -48,11 +53,11 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Company Links */}
+          {/* Services Links */}
           <div>
-            <h4 className="font-display font-semibold text-pearl mb-6">Company</h4>
+            <h4 className="font-display font-semibold text-pearl mb-6">Services</h4>
             <ul className="space-y-3">
-              {footerLinks.company.map((link) => (
+              {footerLinks.services.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
@@ -66,11 +71,11 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Support Links */}
+          {/* Company Links */}
           <div>
-            <h4 className="font-display font-semibold text-pearl mb-6">Support</h4>
+            <h4 className="font-display font-semibold text-pearl mb-6">Company</h4>
             <ul className="space-y-3">
-              {footerLinks.support.map((link) => (
+              {footerLinks.company.map((link) => (
                 <li key={link.label}>
                   <Link
                     href={link.href}
@@ -84,22 +89,22 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Newsletter */}
+          {/* Get Started Links */}
           <div>
-            <h4 className="font-display font-semibold text-pearl mb-6">Stay Updated</h4>
-            <p className="text-silver text-sm mb-4">
-              Get the latest news on builds, deals, and tech tips.
-            </p>
-            <form className="space-y-3">
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="input-field text-sm"
-              />
-              <button type="submit" className="btn-primary w-full">
-                <span>Subscribe</span>
-              </button>
-            </form>
+            <h4 className="font-display font-semibold text-pearl mb-6">Get Started</h4>
+            <ul className="space-y-3">
+              {footerLinks.getStarted.map((link) => (
+                <li key={link.label}>
+                  <Link
+                    href={link.href}
+                    className="text-silver hover:text-electric transition-colors text-sm inline-flex items-center gap-1 group"
+                  >
+                    {link.label}
+                    <ArrowUpRight className="w-3 h-3 opacity-0 -translate-y-1 translate-x-1 group-hover:opacity-100 group-hover:translate-y-0 group-hover:translate-x-0 transition-all" />
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
 

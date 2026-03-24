@@ -1,15 +1,17 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
-import { 
-  ChevronRight, 
-  ChevronLeft, 
+import {
+  ChevronRight,
+  ChevronLeft,
   Check,
   Wrench,
   Zap,
   ListChecks,
-  Package
+  Package,
+  Loader2,
 } from 'lucide-react'
 
 type ServiceType = 'standard' | 'express' | 'planning'
@@ -88,7 +90,11 @@ const useCases = [
 ]
 
 export default function OrderPage() {
+  const router = useRouter()
   const [step, setStep] = useState(1)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
+  const [errorMessage, setErrorMessage] = useState('')
   const [formData, setFormData] = useState<FormData>({
     service: 'standard',
     addons: [],
@@ -129,8 +135,39 @@ export default function OrderPage() {
   }
 
   const handleSubmit = async () => {
-    console.log('Order submitted:', formData)
-    alert('Order submitted! We\'ll be in touch within 24 hours.')
+    setIsSubmitting(true)
+    setSubmitStatus('idle')
+    setErrorMessage('')
+
+    try {
+      const response = await fetch('/api/order', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Failed to submit order')
+      }
+
+      const data = await response.json()
+      setSubmitStatus('success')
+      console.log('Order submitted successfully:', data)
+
+      // Redirect to success page after a short delay
+      setTimeout(() => {
+        router.push('/order/success')
+      }, 500)
+    } catch (error) {
+      setSubmitStatus('error')
+      setErrorMessage(error instanceof Error ? error.message : 'Failed to submit order. Please try again.')
+      console.error('Order submission error:', error)
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   const isStep2Valid = formData.service === 'planning' 
@@ -629,14 +666,34 @@ export default function OrderPage() {
               <ChevronRight className="w-4 h-4" />
             </button>
           ) : (
-            <button
-              onClick={handleSubmit}
-              disabled={!isStep3Valid}
-              className="btn-primary flex items-center gap-2"
-            >
-              Submit Order
-              <Check className="w-4 h-4" />
-            </button>
+            <div className="flex flex-col items-end gap-3">
+              <button
+                onClick={handleSubmit}
+                disabled={!isStep3Valid || isSubmitting}
+                className="btn-primary flex items-center gap-2"
+              >
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    Submitting...
+                  </>
+                ) : (
+                  <>
+                    Submit Order
+                    <Check className="w-4 h-4" />
+                  </>
+                )}
+              </button>
+              {submitStatus === 'error' && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="text-red-400 text-sm bg-red-950/30 px-4 py-2 rounded-lg border border-red-800/50"
+                >
+                  {errorMessage}
+                </motion.div>
+              )}
+            </div>
           )}
         </div>
       </div>
