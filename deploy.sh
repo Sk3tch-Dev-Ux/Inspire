@@ -1,65 +1,72 @@
 #!/bin/bash
 # ===========================================
-# Inspire PC - Deployment Script
-# Run this on your VPS after cloning the repo
+# Inspire PC - VPS Deployment Script
 # ===========================================
+# Prerequisites:
+#   - Docker and Docker Compose installed
+#   - .env file with all required variables (see .env.example)
+#   - Citadel Nginx container connected to inspire_default network
+#     (run once: docker network connect inspire_default docker-nginx-1)
 
 set -e
 
 echo "=== Inspire PC Deployment ==="
 echo ""
 
-# ---- Step 1: Build & start the container ----
-echo "[1/4] Building and starting Docker container..."
-docker compose up -d --build
-echo "  ✓ Container running on 127.0.0.1:3000"
-echo ""
-
-# ---- Step 2: Set up SSL directory ----
-echo "[2/4] Setting up SSL certificate directory..."
-sudo mkdir -p /etc/ssl/inspirepc.com
-echo "  ✓ Directory created at /etc/ssl/inspirepc.com"
-echo ""
-echo "  !! IMPORTANT: You need to add your Cloudflare Origin Certificate:"
-echo "     1. Go to Cloudflare → inspirepc.com → SSL/TLS → Origin Server"
-echo "     2. Click 'Create Certificate'"
-echo "     3. Save the certificate to:  /etc/ssl/inspirepc.com/origin.pem"
-echo "     4. Save the private key to:  /etc/ssl/inspirepc.com/origin-key.pem"
-echo "     5. Set permissions: sudo chmod 600 /etc/ssl/inspirepc.com/origin-key.pem"
-echo ""
-
-# ---- Step 3: Install Nginx config ----
-echo "[3/4] Installing Nginx configuration..."
-sudo cp nginx/inspirepc.com.conf /etc/nginx/sites-available/inspirepc.com
-sudo ln -sf /etc/nginx/sites-available/inspirepc.com /etc/nginx/sites-enabled/inspirepc.com
-
-echo "  Testing Nginx config..."
-if sudo nginx -t 2>&1; then
-    echo "  ✓ Nginx config is valid"
-else
-    echo "  ✗ Nginx config has errors - fix before reloading!"
-    exit 1
+# Check .env exists
+if [ ! -f .env ]; then
+  echo "ERROR: .env file not found. Copy .env.example and fill in values:"
+  echo "  cp .env.example .env"
+  exit 1
 fi
+
+# Build and start containers
+echo "[1/2] Building and starting containers..."
+docker compose down
+docker compose up -d --build
+echo "  Done. Waiting for services to be healthy..."
+
+# Wait for postgres
+echo -n "  Postgres: "
+for i in $(seq 1 30); do
+  if docker exec inspire-postgres pg_isready -U inspire > /dev/null 2>&1; then
+    echo "ready"
+    break
+  fi
+  echo -n "."
+  sleep 1
+done
+
+# Wait for web
+echo -n "  Web: "
+for i in $(seq 1 60); do
+  if docker exec inspire-web wget --no-verbose --tries=1 --spider http://localhost:3000/ > /dev/null 2>&1; then
+    echo "ready"
+    break
+  fi
+  echo -n "."
+  sleep 2
+done
+
 echo ""
 
-# ---- Step 4: Reload Nginx ----
-echo "[4/4] Reloading Nginx..."
-sudo systemctl reload nginx
-echo "  ✓ Nginx reloaded"
-echo ""
+# Ensure Nginx can reach Inspire
+echo "[2/2] Ensuring Nginx network connectivity..."
+if docker network connect inspire_default docker-nginx-1 2>/dev/null; then
+  echo "  Connected Nginx to inspire network"
+  echo "  Reloading Nginx config..."
+  docker exec docker-nginx-1 nginx -s reload
+else
+  echo "  Already connected"
+fi
 
-# ---- Done ----
+echo ""
 echo "=== Deployment Complete ==="
 echo ""
-echo "Next steps:"
-echo "  1. Add Cloudflare Origin Certificate (see Step 2 above)"
-echo "  2. In Cloudflare DNS, add an A record:"
-echo "     Name: @    Value: <your-vps-ip>    Proxy: ON (orange cloud)"
-echo "     Name: www  Value: <your-vps-ip>    Proxy: ON (orange cloud)"
-echo "  3. In Cloudflare SSL/TLS, set mode to 'Full (Strict)'"
-echo "  4. Visit https://inspirepc.com to verify"
+echo "Verify: curl -I http://inspirepc.com"
 echo ""
 echo "Useful commands:"
-echo "  docker compose logs -f        # View container logs"
-echo "  docker compose restart         # Restart the container"
-echo "  docker compose up -d --build   # Rebuild after code changes"
+echo "  docker compose logs -f inspire-web    # View web logs"
+echo "  docker compose logs -f postgres       # View DB logs"
+echo "  docker compose restart inspire-web    # Restart web"
+echo "  docker compose up -d --build          # Rebuild"

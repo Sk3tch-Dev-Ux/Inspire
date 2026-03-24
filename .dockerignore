@@ -4,4 +4,7 @@ node_modules
 .gitignore
 *.md
 .DS_Store
-.env*.local
+.env
+.env.*
+db/
+nginx/

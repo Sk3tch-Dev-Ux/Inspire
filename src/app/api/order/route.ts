@@ -1,92 +1,71 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server';
+import { query } from '@/lib/db';
+import { sanitize } from '@/lib/sanitize';
+import { rateLimit } from '@/lib/rate-limit';
+import { sendOrderConfirmation, sendOrderNotification } from '@/lib/email';
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json()
+    const ip = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
+    const { success } = rateLimit(ip, 3, 60_000);
+    if (!success) {
+      return NextResponse.json({ error: 'Too many requests. Please wait a moment.' }, { status: 429 });
+    }
 
-    // Extract form fields
-    const {
-      service,
-      addons,
-      hasOwnParts,
-      budgetRange,
-      useCase,
-      pcpartpickerUrl,
-      partsList,
-      name,
-      email,
-      phone,
-      address,
-      city,
-      state,
-      zip,
-      notes,
-    } = body
+    const body = await request.json();
 
-    // Validate required fields
+    const name = sanitize(body.name);
+    const email = sanitize(body.email);
+    const phone = sanitize(body.phone);
+    const service = sanitize(body.service);
+    const hasOwnParts = Boolean(body.hasOwnParts);
+    const budgetRange = sanitize(body.budgetRange);
+    const useCase = sanitize(body.useCase);
+    const pcpartpickerUrl = sanitize(body.pcpartpickerUrl);
+    const partsList = sanitize(body.partsList);
+    const address = sanitize(body.address);
+    const city = sanitize(body.city);
+    const state = sanitize(body.state);
+    const zip = sanitize(body.zip);
+    const notes = sanitize(body.notes);
+    const addons: string[] = Array.isArray(body.addons) ? body.addons.map(String) : [];
+
     if (!name || !email || !phone || !service) {
       return NextResponse.json(
         { error: 'Missing required fields: name, email, phone, and service are required' },
         { status: 400 }
-      )
+      );
     }
 
-    // Validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      return NextResponse.json(
-        { error: 'Invalid email address' },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: 'Invalid email address' }, { status: 400 });
     }
 
-    // Generate order ID
-    const orderId = `INS-${Date.now()}`
+    const orderId = `INS-${Date.now()}`;
 
-    // Log the complete order to console
-    console.log('=== NEW ORDER SUBMITTED ===')
-    console.log('Order ID:', orderId)
-    console.log('Service:', service)
-    console.log('Add-ons:', addons)
-    console.log('Has Own Parts:', hasOwnParts)
-    console.log('Budget Range:', budgetRange)
-    console.log('Use Case:', useCase)
-    console.log('PC Part Picker URL:', pcpartpickerUrl)
-    console.log('Parts List:', partsList)
-    console.log('Name:', name)
-    console.log('Email:', email)
-    console.log('Phone:', phone)
-    console.log('Address:', address)
-    console.log('City:', city)
-    console.log('State:', state)
-    console.log('ZIP:', zip)
-    console.log('Notes:', notes)
-    console.log('=== END ORDER ===')
+    await query(
+      `INSERT INTO orders (order_id, service, addons, has_own_parts, budget_range, use_case, pcpartpicker_url, parts_list, name, email, phone, address, city, state, zip, notes)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16)`,
+      [orderId, service, JSON.stringify(addons), hasOwnParts, budgetRange, useCase, pcpartpickerUrl, partsList, name, email, phone, address, city, state, zip, notes]
+    );
 
-    // TODO: Integrate email service to send confirmation email
-    // Example with Resend:
-    // const { data, error } = await resend.emails.send({
-    //   from: 'orders@inspirepc.com',
-    //   to: email,
-    //   subject: `Order Confirmed - ${orderId}`,
-    //   html: `
-    //     <h1>Thank you for your order!</h1>
-    //     <p>Your order ID is: ${orderId}</p>
-    //     <p>We'll be in touch within 24 hours to confirm details.</p>
-    //   `,
-    // })
+    try {
+      await Promise.all([
+        sendOrderConfirmation({ orderId, name, email, phone, service, addons }),
+        sendOrderNotification({ orderId, name, email, phone, service, addons, notes }),
+      ]);
+    } catch (emailErr) {
+      console.error('Email send failed (non-blocking):', emailErr);
+    }
 
-    // Return success response
     return NextResponse.json({
       success: true,
-      message: 'Order submitted successfully. We\'ll be in touch within 24 hours.',
+      message: "Order submitted successfully. We'll be in touch within 24 hours.",
       orderId,
-    })
+    });
   } catch (error) {
-    console.error('Order submission error:', error)
-    return NextResponse.json(
-      { error: 'Failed to process order. Please try again.' },
-      { status: 500 }
-    )
+    console.error('Order submission error:', error);
+    return NextResponse.json({ error: 'Failed to process order. Please try again.' }, { status: 500 });
   }
 }

@@ -3,7 +3,8 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Menu, X, Cpu, ChevronRight } from 'lucide-react'
+import { Menu, X, ChevronRight } from 'lucide-react'
+import Logo from './Logo'
 
 const navLinks = [
   { href: '/services', label: 'Services' },
@@ -22,16 +23,8 @@ export default function Navigation() {
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-3 group">
-            <div className="relative">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-electric to-volt flex items-center justify-center">
-                <Cpu className="w-5 h-5 text-midnight" />
-              </div>
-              <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-electric to-volt blur-lg opacity-50 group-hover:opacity-75 transition-opacity" />
-            </div>
-            <span className="font-display text-xl font-bold tracking-tight">
-              Inspire
-            </span>
+          <Link href="/" className="group">
+            <Logo size="md" />
           </Link>
 
           {/* Desktop Navigation */}

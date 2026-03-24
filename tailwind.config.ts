@@ -17,10 +17,6 @@ const config: Config = {
           glow: '#00d4ff33',
         }
       },
-      fontFamily: {
-        display: ['Orbitron', 'sans-serif'],
-        body: ['Rajdhani', 'sans-serif'],
-      },
       animation: {
         'glow-pulse': 'glow-pulse 2s ease-in-out infinite',
         'float': 'float 6s ease-in-out infinite',

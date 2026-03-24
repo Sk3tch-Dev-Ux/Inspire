@@ -1,5 +1,6 @@
 import Link from 'next/link'
-import { Cpu, Mail, Phone, MapPin, ArrowUpRight } from 'lucide-react'
+import { Mail, Phone, MapPin, ArrowUpRight } from 'lucide-react'
+import Logo from './Logo'
 
 const footerLinks = {
   services: [
@@ -28,11 +29,8 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           {/* Brand Column */}
           <div className="lg:col-span-1">
-            <Link href="/" className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-electric to-volt flex items-center justify-center">
-                <Cpu className="w-5 h-5 text-midnight" />
-              </div>
-              <span className="font-display text-xl font-bold">Inspire</span>
+            <Link href="/" className="inline-block mb-6">
+              <Logo size="md" />
             </Link>
             <p className="text-silver text-sm leading-relaxed mb-6">
               Professional PC building, troubleshooting, diagnostics, and upgrade services. Your parts, our expertise.
@@ -114,10 +112,10 @@ export default function Footer() {
             © {new Date().getFullYear()} Inspire Custom PCs. All rights reserved.
           </p>
           <div className="flex items-center gap-6">
-            <Link href="#" className="text-silver hover:text-electric transition-colors text-sm">
+            <Link href="/privacy" className="text-silver hover:text-electric transition-colors text-sm">
               Privacy Policy
             </Link>
-            <Link href="#" className="text-silver hover:text-electric transition-colors text-sm">
+            <Link href="/terms" className="text-silver hover:text-electric transition-colors text-sm">
               Terms of Service
             </Link>
           </div>
