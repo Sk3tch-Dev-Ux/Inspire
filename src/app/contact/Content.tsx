@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
 import { Mail, Phone, MapPin, Clock, Send } from 'lucide-react';
+import AnimatedSection from '@/components/AnimatedSection';
 
 export default function ContactContent() {
   const [formData, setFormData] = useState({
@@ -67,26 +67,6 @@ export default function ContactContent() {
     }
   };
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.2,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.5 },
-    },
-  };
-
   const contactInfo = [
     {
       icon: Mail,
@@ -117,50 +97,33 @@ export default function ContactContent() {
   return (
     <div className="min-h-screen bg-midnight">
       {/* Hero Section */}
-      <motion.section
-        className="section relative overflow-hidden pt-20 pb-12"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.8 }}
-      >
+      <AnimatedSection className="section relative overflow-hidden pt-20 pb-12">
         <div className="absolute inset-0 opacity-20 pointer-events-none">
           <div className="absolute top-20 left-10 w-72 h-72 bg-electric rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-pulse" />
           <div className="absolute bottom-0 right-20 w-96 h-96 bg-volt rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-pulse" />
         </div>
 
         <div className="relative max-w-6xl mx-auto px-6">
-          <motion.div
-            className="text-center mb-12"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-          >
+          <div className="text-center mb-12">
             <h1 className="section-title gradient-text mb-4">Get In Touch</h1>
             <p className="section-subtitle text-silver">
               Have questions about our PC building services? We'd love to hear from you.
             </p>
-          </motion.div>
+          </div>
         </div>
-      </motion.section>
+      </AnimatedSection>
 
       {/* Main Contact Section */}
-      <motion.section
-        className="section relative py-16"
-        variants={containerVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: '-100px' }}
-      >
+      <AnimatedSection className="section relative py-16">
         <div className="max-w-6xl mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
             {/* Contact Info Cards */}
             {contactInfo.map((info, index) => {
               const Icon = info.icon;
               return (
-                <motion.div
+                <div
                   key={index}
                   className="card p-6 border border-steel/30 hover:border-electric/50 transition-colors duration-300"
-                  variants={itemVariants}
                 >
                   <div className="flex items-start space-x-4">
                     <div className="flex-shrink-0">
@@ -176,7 +139,7 @@ export default function ContactContent() {
                       <p className="text-silver text-sm">{info.description}</p>
                     </div>
                   </div>
-                </motion.div>
+                </div>
               );
             })}
           </div>
@@ -184,10 +147,7 @@ export default function ContactContent() {
           {/* Contact Form Section */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
             {/* Form */}
-            <motion.div
-              className="order-2 lg:order-1"
-              variants={itemVariants}
-            >
+            <div className="order-2 lg:order-1">
               <form onSubmit={handleSubmit} className="space-y-6">
                 {/* Name Field */}
                 <div>
@@ -281,43 +241,33 @@ export default function ContactContent() {
 
                 {/* Status Messages */}
                 {status === 'success' && (
-                  <motion.div
-                    className="p-4 rounded-lg bg-green-900/20 border border-green-500/50 text-green-400"
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                  >
+                  <div className="p-4 rounded-lg bg-green-900/20 border border-green-500/50 text-green-400">
                     {statusMessage}
-                  </motion.div>
+                  </div>
                 )}
 
                 {status === 'error' && (
-                  <motion.div
-                    className="p-4 rounded-lg bg-red-900/20 border border-red-500/50 text-red-400"
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                  >
+                  <div className="p-4 rounded-lg bg-red-900/20 border border-red-500/50 text-red-400">
                     {statusMessage}
-                  </motion.div>
+                  </div>
                 )}
 
                 {/* Submit Button */}
-                <motion.button
+                <button
                   type="submit"
                   disabled={loading}
                   className="btn-primary w-full flex items-center justify-center gap-2"
-                  whileHover={{ scale: loading ? 1 : 1.02 }}
-                  whileTap={{ scale: loading ? 1 : 0.98 }}
                 >
                   <Send className="w-4 h-4" />
                   {loading ? 'Sending...' : 'Send Message'}
-                </motion.button>
+                </button>
 
                 <p className="text-silver text-sm text-center">* Required fields</p>
               </form>
-            </motion.div>
+            </div>
 
             {/* Right Side Content */}
-            <motion.div className="order-1 lg:order-2 space-y-8" variants={itemVariants}>
+            <div className="order-1 lg:order-2 space-y-8">
               {/* Map Placeholder */}
               <div className="card p-8 border border-steel/30">
                 <div className="w-full h-96 rounded-lg bg-gradient-to-br from-obsidian to-obsidian border border-steel/30 flex items-center justify-center">
@@ -332,10 +282,7 @@ export default function ContactContent() {
               </div>
 
               {/* FAQ Callout */}
-              <motion.div
-                className="card p-6 border border-electric/30 bg-gradient-to-br from-electric/5 to-volt/5"
-                whileHover={{ borderColor: '#10B981' }}
-              >
+              <div className="card p-6 border border-electric/30 hover:border-volt/50 transition-colors duration-300 bg-gradient-to-br from-electric/5 to-volt/5">
                 <h3 className="font-display text-lg font-bold text-pearl mb-2">
                   Have Questions?
                 </h3>
@@ -347,37 +294,29 @@ export default function ContactContent() {
                   className="inline-flex items-center gap-2 text-electric hover:text-volt font-semibold transition-colors"
                 >
                   View FAQ
-                  <span className="text-xl">→</span>
+                  <span className="text-xl">&#8594;</span>
                 </Link>
-              </motion.div>
-            </motion.div>
+              </div>
+            </div>
           </div>
         </div>
-      </motion.section>
+      </AnimatedSection>
 
       {/* CTA Section */}
-      <motion.section
-        className="section relative py-16 border-t border-steel/30"
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
-      >
+      <AnimatedSection className="section relative py-16 border-t border-steel/30">
         <div className="max-w-4xl mx-auto px-6 text-center">
           <h2 className="section-title gradient-text mb-4">Urgent Request?</h2>
           <p className="text-silver mb-8">
             For urgent matters, feel free to call us directly during business hours.
           </p>
-          <motion.a
+          <a
             href="tel:+13303148860"
             className="btn-primary inline-block"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
           >
             Call Now: (330) 314-8860
-          </motion.a>
+          </a>
         </div>
-      </motion.section>
+      </AnimatedSection>
     </div>
   );
 }

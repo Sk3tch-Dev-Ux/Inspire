@@ -1,7 +1,5 @@
-'use client'
-
-import { motion } from 'framer-motion'
 import Link from 'next/link'
+import AnimatedSection from '@/components/AnimatedSection'
 import {
   Wrench,
   Zap,
@@ -14,7 +12,6 @@ import {
   Palette,
   Package,
   ListChecks,
-  ExternalLink,
   AlertCircle,
   TrendingUp,
   Image as ImageIcon
@@ -78,56 +75,42 @@ export default function HomeContent() {
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,var(--color-midnight)_70%)]" />
         </div>
 
-        <div className="relative max-w-7xl mx-auto px-6 py-24">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="max-w-4xl"
-          >
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.2, duration: 0.5 }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-steel/50 border border-steel mb-8"
-            >
-              <span className="w-2 h-2 rounded-full bg-volt animate-pulse" />
-              <span className="text-sm text-silver">Professional PC Assembly Service</span>
-            </motion.div>
+        <div className="relative max-w-7xl mx-auto px-6 py-24 w-full">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            {/* Left Column — Text */}
+            <div>
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-steel/50 border border-steel mb-8">
+                <span className="w-2 h-2 rounded-full bg-volt" />
+                <span className="text-sm text-silver">Professional PC Assembly Service</span>
+              </div>
 
-            <h1 className="text-4xl md:text-6xl font-display font-bold mb-6 text-pearl">
-              Your Parts, Our{' '}
-              <span className="gradient-text">Expertise</span>
-            </h1>
+              <h1 className="text-4xl md:text-6xl font-display font-bold mb-6 text-pearl">
+                Your Parts, Our{' '}
+                <span className="gradient-text">Expertise</span>
+              </h1>
 
-            <p className="text-lg md:text-xl text-silver mb-10 max-w-2xl">
-              Custom PC building, troubleshooting & diagnostics, or upgrading your existing system. We handle it all with expert craftsmanship and attention to detail.
-            </p>
+              <p className="text-lg md:text-xl text-silver mb-10 max-w-2xl">
+                Custom PC building, troubleshooting & diagnostics, or upgrading your existing system. We handle it all with expert craftsmanship and attention to detail.
+              </p>
 
-            <div className="flex flex-wrap gap-4">
-              <Link href="/order" className="btn-primary">
-                <span className="flex items-center gap-2">
-                  Book a Build
-                  <ChevronRight className="w-4 h-4" />
-                </span>
-              </Link>
-              <Link href="/troubleshooting" className="btn-secondary">
-                Get PC Help
-              </Link>
+              <div className="flex flex-wrap gap-4">
+                <Link href="/order" className="btn-primary">
+                  <span className="flex items-center gap-2">
+                    Book a Build
+                    <ChevronRight className="w-4 h-4" />
+                  </span>
+                </Link>
+                <Link href="/troubleshooting" className="btn-secondary">
+                  Get PC Help
+                </Link>
+              </div>
             </div>
-          </motion.div>
 
-          {/* Floating Elements */}
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.5, duration: 0.8 }}
-            className="hidden lg:block absolute right-0 top-1/2 -translate-y-1/2"
-          >
-            <div className="relative">
-              <div className="w-80 h-80 rounded-3xl bg-gradient-to-br from-steel/50 to-obsidian border border-steel overflow-hidden">
+            {/* Right Column — Services Card */}
+            <div className="hidden lg:block">
+              <div className="w-full max-w-sm ml-auto rounded-3xl bg-gradient-to-br from-steel/50 to-obsidian border border-steel overflow-hidden relative">
                 <div className="absolute inset-0 bg-gradient-to-br from-electric/10 to-volt/10" />
-                <div className="absolute top-8 left-8 right-8">
+                <div className="relative p-8">
                   <div className="flex items-center gap-3 mb-6">
                     <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-electric to-volt flex items-center justify-center">
                       <Zap className="w-6 h-6 text-midnight" />
@@ -138,227 +121,173 @@ export default function HomeContent() {
                     </div>
                   </div>
                   <div className="space-y-3">
-                    <div className="flex items-center gap-2 text-sm">
-                      <CheckCircle className="w-4 h-4 text-volt" />
-                      <span className="text-pearl">Custom PC Building</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm">
-                      <CheckCircle className="w-4 h-4 text-volt" />
-                      <span className="text-pearl">Troubleshooting</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm">
-                      <CheckCircle className="w-4 h-4 text-volt" />
-                      <span className="text-pearl">Hardware Diagnostics</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm">
-                      <CheckCircle className="w-4 h-4 text-volt" />
-                      <span className="text-pearl">Component Upgrades</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm">
-                      <CheckCircle className="w-4 h-4 text-volt" />
-                      <span className="text-pearl">Performance Optimization</span>
-                    </div>
+                    {['Custom PC Building', 'Troubleshooting', 'Hardware Diagnostics', 'Component Upgrades', 'Performance Optimization'].map((service) => (
+                      <div key={service} className="flex items-center gap-2 text-sm">
+                        <CheckCircle className="w-4 h-4 text-volt" />
+                        <span className="text-pearl">{service}</span>
+                      </div>
+                    ))}
                   </div>
                 </div>
               </div>
             </div>
-          </motion.div>
+          </div>
         </div>
       </section>
 
       {/* How It Works Section */}
       <section className="py-24 bg-obsidian">
         <div className="max-w-7xl mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
+          <AnimatedSection className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-display font-bold mb-4 text-pearl">
               How It <span className="gradient-text">Works</span>
             </h2>
             <p className="text-silver text-lg max-w-2xl mx-auto">
               A simple process to get your PC built by professionals.
             </p>
-          </motion.div>
+          </AnimatedSection>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {processSteps.map((step, index) => (
-              <motion.div
-                key={step.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className="card group"
-              >
-                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-electric/20 to-volt/20 flex items-center justify-center mb-6 group-hover:from-electric/30 group-hover:to-volt/30 transition-colors">
-                  <step.icon className="w-7 h-7 text-electric" />
+          <AnimatedSection>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {processSteps.map((step) => (
+                <div key={step.title} className="card group">
+                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-electric/20 to-volt/20 flex items-center justify-center mb-6 group-hover:from-electric/30 group-hover:to-volt/30 transition-colors">
+                    <step.icon className="w-7 h-7 text-electric" />
+                  </div>
+                  <h3 className="font-display text-xl font-semibold mb-3 text-pearl">
+                    {step.title}
+                  </h3>
+                  <p className="text-silver text-sm leading-relaxed">
+                    {step.description}
+                  </p>
                 </div>
-                <h3 className="font-display text-xl font-semibold mb-3 text-pearl">
-                  {step.title}
-                </h3>
-                <p className="text-silver text-sm leading-relaxed">
-                  {step.description}
-                </p>
-              </motion.div>
-            ))}
-          </div>
+              ))}
+            </div>
+          </AnimatedSection>
         </div>
       </section>
 
       {/* Services Overview Section */}
       <section className="py-24">
         <div className="max-w-7xl mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
+          <AnimatedSection className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-display font-bold mb-4 text-pearl">
               What We <span className="gradient-text">Offer</span>
             </h2>
             <p className="text-silver text-lg max-w-2xl mx-auto">
-              From building custom PCs to fixing problems and boosting performance, we've got all your PC needs covered.
+              From building custom PCs to fixing problems and boosting performance, we&apos;ve got all your PC needs covered.
             </p>
-          </motion.div>
+          </AnimatedSection>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            {[
-              {
-                icon: Wrench,
-                title: 'Custom PC Building',
-                description: 'You pick the parts, we build it right',
-                href: '/services',
-              },
-              {
-                icon: AlertCircle,
-                title: 'Troubleshooting & Repair',
-                description: 'Diagnostics, fixes, and virus removal',
-                href: '/troubleshooting',
-              },
-              {
-                icon: TrendingUp,
-                title: 'Upgrades & Optimization',
-                description: 'Boost your existing PC\'s performance',
-                href: '/troubleshooting',
-              },
-            ].map((service, index) => (
-              <motion.div
-                key={service.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className="card group flex flex-col"
-              >
-                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-electric/20 to-volt/20 flex items-center justify-center mb-6 group-hover:from-electric/30 group-hover:to-volt/30 transition-colors">
-                  <service.icon className="w-7 h-7 text-electric" />
+          <AnimatedSection>
+            <div className="grid md:grid-cols-3 gap-8">
+              {[
+                {
+                  icon: Wrench,
+                  title: 'Custom PC Building',
+                  description: 'You pick the parts, we build it right',
+                  href: '/services',
+                },
+                {
+                  icon: AlertCircle,
+                  title: 'Troubleshooting & Repair',
+                  description: 'Diagnostics, fixes, and virus removal',
+                  href: '/troubleshooting',
+                },
+                {
+                  icon: TrendingUp,
+                  title: 'Upgrades & Optimization',
+                  description: 'Boost your existing PC\'s performance',
+                  href: '/troubleshooting',
+                },
+              ].map((service) => (
+                <div key={service.title} className="card group flex flex-col">
+                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-electric/20 to-volt/20 flex items-center justify-center mb-6 group-hover:from-electric/30 group-hover:to-volt/30 transition-colors">
+                    <service.icon className="w-7 h-7 text-electric" />
+                  </div>
+                  <h3 className="font-display text-xl font-semibold mb-2 text-pearl">
+                    {service.title}
+                  </h3>
+                  <p className="text-silver text-sm mb-6 flex-grow">
+                    {service.description}
+                  </p>
+                  <Link href={service.href} className="inline-flex items-center gap-2 text-electric hover:text-volt transition-colors">
+                    Learn More
+                    <ChevronRight className="w-4 h-4" />
+                  </Link>
                 </div>
-                <h3 className="font-display text-xl font-semibold mb-2 text-pearl">
-                  {service.title}
-                </h3>
-                <p className="text-silver text-sm mb-6 flex-grow">
-                  {service.description}
-                </p>
-                <Link href={service.href} className="inline-flex items-center gap-2 text-electric hover:text-volt transition-colors">
-                  Learn More
-                  <ChevronRight className="w-4 h-4" />
-                </Link>
-              </motion.div>
-            ))}
-          </div>
+              ))}
+            </div>
+          </AnimatedSection>
         </div>
       </section>
 
       {/* Use Cases Section */}
       <section className="py-24 bg-obsidian">
         <div className="max-w-7xl mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
+          <AnimatedSection className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-display font-bold mb-4 text-pearl">
               We Build for Every <span className="gradient-text">Purpose</span>
             </h2>
             <p className="text-silver text-lg max-w-2xl mx-auto">
               Whatever your use case, we have the expertise to assemble it perfectly.
             </p>
-          </motion.div>
+          </AnimatedSection>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {useCases.map((useCase, index) => (
-              <motion.div
-                key={useCase.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className="card group"
-              >
-                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-electric/20 to-volt/20 flex items-center justify-center mb-6 group-hover:from-electric/30 group-hover:to-volt/30 transition-opacity">
-                  <useCase.icon className="w-7 h-7 text-electric" />
+          <AnimatedSection>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {useCases.map((useCase) => (
+                <div key={useCase.title} className="card group">
+                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-electric/20 to-volt/20 flex items-center justify-center mb-6 group-hover:from-electric/30 group-hover:to-volt/30 transition-colors">
+                    <useCase.icon className="w-7 h-7 text-electric" />
+                  </div>
+                  <h3 className="font-display text-xl font-semibold mb-2 text-pearl">
+                    {useCase.title}
+                  </h3>
+                  <p className="text-silver text-sm">
+                    {useCase.description}
+                  </p>
                 </div>
-                <h3 className="font-display text-xl font-semibold mb-2 text-pearl">
-                  {useCase.title}
-                </h3>
-                <p className="text-silver text-sm">
-                  {useCase.description}
-                </p>
-              </motion.div>
-            ))}
-          </div>
+              ))}
+            </div>
+          </AnimatedSection>
         </div>
       </section>
 
       {/* Build Gallery Teaser Section */}
       <section className="py-24 bg-obsidian">
         <div className="max-w-7xl mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
+          <AnimatedSection className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-display font-bold mb-4 text-pearl">
               Featured <span className="gradient-text">Builds</span>
             </h2>
             <p className="text-silver text-lg max-w-2xl mx-auto">
-              Check out some of the amazing systems we've assembled.
+              Check out some of the amazing systems we&apos;ve assembled.
             </p>
-          </motion.div>
+          </AnimatedSection>
 
-          <div className="grid md:grid-cols-4 gap-6 mb-10">
-            {[
-              { name: 'Gaming Powerhouse', specs: '4070 Ti, 7800X3D' },
-              { name: 'Creator Workstation', specs: 'RTX 4080, 7950X' },
-              { name: 'Esports Machine', specs: '4070, 7700X' },
-              { name: 'Budget 1080p', specs: '4060 Ti, 5700X3D' },
-            ].map((build, index) => (
-              <motion.div
-                key={build.name}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className="card group cursor-pointer"
-              >
-                <div className="w-full h-48 bg-gradient-to-br from-steel/30 to-obsidian rounded-lg flex items-center justify-center mb-4 group-hover:from-electric/20 group-hover:to-volt/20 transition-colors">
-                  <ImageIcon className="w-12 h-12 text-steel" />
+          <AnimatedSection>
+            <div className="grid md:grid-cols-4 gap-6 mb-10">
+              {[
+                { name: 'Gaming Powerhouse', specs: '4070 Ti, 7800X3D' },
+                { name: 'Creator Workstation', specs: 'RTX 4080, 7950X' },
+                { name: 'Esports Machine', specs: '4070, 7700X' },
+                { name: 'Budget 1080p', specs: '4060 Ti, 5700X3D' },
+              ].map((build) => (
+                <div key={build.name} className="card group cursor-pointer">
+                  <div className="w-full h-48 bg-gradient-to-br from-steel/30 to-obsidian rounded-lg flex items-center justify-center mb-4 group-hover:from-electric/20 group-hover:to-volt/20 transition-colors">
+                    <ImageIcon className="w-12 h-12 text-steel" />
+                  </div>
+                  <h3 className="font-display text-lg font-semibold text-pearl mb-1">
+                    {build.name}
+                  </h3>
+                  <p className="text-sm text-silver">
+                    {build.specs}
+                  </p>
                 </div>
-                <h3 className="font-display text-lg font-semibold text-pearl mb-1">
-                  {build.name}
-                </h3>
-                <p className="text-sm text-silver">
-                  {build.specs}
-                </p>
-              </motion.div>
-            ))}
-          </div>
+              ))}
+            </div>
+          </AnimatedSection>
 
           <div className="text-center">
             <Link href="/gallery" className="inline-flex items-center gap-2 text-electric hover:text-volt transition-colors text-lg font-semibold">
@@ -372,58 +301,48 @@ export default function HomeContent() {
       {/* Why Choose Us Section */}
       <section className="py-24">
         <div className="max-w-7xl mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
+          <AnimatedSection className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-display font-bold mb-4 text-pearl">
               Why Choose <span className="gradient-text">Inspire</span>?
             </h2>
             <p className="text-silver text-lg max-w-2xl mx-auto">
               We&apos;re not just builders—we&apos;re enthusiasts who care about every detail.
             </p>
-          </motion.div>
+          </AnimatedSection>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[
-              {
-                icon: Wrench,
-                title: 'Expert Assembly',
-                description: 'Years of experience building everything from budget rigs to high-end enthusiast systems.',
-              },
-              {
-                icon: Shield,
-                title: 'Workmanship Warranty',
-                description: 'Our builds are backed by a warranty covering any assembly-related issues.',
-              },
-              {
-                icon: Zap,
-                title: 'Thorough Testing',
-                description: 'Every build is stress-tested and benchmarked before it leaves our workshop.',
-              },
-            ].map((feature, index) => (
-              <motion.div
-                key={feature.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className="card group"
-              >
-                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-electric/20 to-volt/20 flex items-center justify-center mb-6 group-hover:from-electric/30 group-hover:to-volt/30 transition-colors">
-                  <feature.icon className="w-7 h-7 text-electric" />
+          <AnimatedSection>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {[
+                {
+                  icon: Wrench,
+                  title: 'Expert Assembly',
+                  description: 'Years of experience building everything from budget rigs to high-end enthusiast systems.',
+                },
+                {
+                  icon: Shield,
+                  title: 'Workmanship Warranty',
+                  description: 'Our builds are backed by a warranty covering any assembly-related issues.',
+                },
+                {
+                  icon: Zap,
+                  title: 'Thorough Testing',
+                  description: 'Every build is stress-tested and benchmarked before it leaves our workshop.',
+                },
+              ].map((feature) => (
+                <div key={feature.title} className="card group">
+                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-electric/20 to-volt/20 flex items-center justify-center mb-6 group-hover:from-electric/30 group-hover:to-volt/30 transition-colors">
+                    <feature.icon className="w-7 h-7 text-electric" />
+                  </div>
+                  <h3 className="font-display text-xl font-semibold mb-3 text-pearl">
+                    {feature.title}
+                  </h3>
+                  <p className="text-silver text-sm leading-relaxed">
+                    {feature.description}
+                  </p>
                 </div>
-                <h3 className="font-display text-xl font-semibold mb-3 text-pearl">
-                  {feature.title}
-                </h3>
-                <p className="text-silver text-sm leading-relaxed">
-                  {feature.description}
-                </p>
-              </motion.div>
-            ))}
-          </div>
+              ))}
+            </div>
+          </AnimatedSection>
         </div>
       </section>
 
@@ -433,32 +352,25 @@ export default function HomeContent() {
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-gradient-to-b from-electric/20 to-transparent rounded-full blur-[100px]" />
         </div>
 
-        <div className="relative max-w-4xl mx-auto px-6 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <h2 className="text-3xl md:text-4xl font-display font-bold mb-6 text-pearl">
-              Ready to Get <span className="gradient-text">Started</span>?
-            </h2>
-            <p className="text-silver text-lg max-w-2xl mx-auto mb-10">
-              Whether you're building a custom PC, need troubleshooting help, or want to upgrade your existing system, we're here to help.
-            </p>
-            <div className="flex flex-wrap justify-center gap-4">
-              <Link href="/order" className="btn-primary">
-                <span className="flex items-center gap-2">
-                  Book a Service
-                  <ChevronRight className="w-4 h-4" />
-                </span>
-              </Link>
-              <Link href="/contact" className="btn-secondary">
-                Contact Us
-              </Link>
-            </div>
-          </motion.div>
-        </div>
+        <AnimatedSection className="relative max-w-4xl mx-auto px-6 text-center">
+          <h2 className="text-3xl md:text-4xl font-display font-bold mb-6 text-pearl">
+            Ready to Get <span className="gradient-text">Started</span>?
+          </h2>
+          <p className="text-silver text-lg max-w-2xl mx-auto mb-10">
+            Whether you&apos;re building a custom PC, need troubleshooting help, or want to upgrade your existing system, we&apos;re here to help.
+          </p>
+          <div className="flex flex-wrap justify-center gap-4">
+            <Link href="/order" className="btn-primary">
+              <span className="flex items-center gap-2">
+                Book a Service
+                <ChevronRight className="w-4 h-4" />
+              </span>
+            </Link>
+            <Link href="/contact" className="btn-secondary">
+              Contact Us
+            </Link>
+          </div>
+        </AnimatedSection>
       </section>
     </div>
   )

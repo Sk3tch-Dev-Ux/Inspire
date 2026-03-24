@@ -1,7 +1,5 @@
-'use client'
-
-import { motion } from 'framer-motion'
 import Link from 'next/link'
+import AnimatedSection from '@/components/AnimatedSection'
 import {
   Wrench,
   Zap,
@@ -138,27 +136,6 @@ const commonIssues = [
   },
 ]
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-    },
-  },
-}
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.5,
-    },
-  },
-}
-
 export default function TroubleshootingContent() {
   return (
     <div className="pt-20">
@@ -170,19 +147,14 @@ export default function TroubleshootingContent() {
         </div>
 
         <div className="relative max-w-7xl mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center max-w-3xl mx-auto"
-          >
+          <AnimatedSection className="text-center max-w-3xl mx-auto">
             <h1 className="text-4xl md:text-5xl font-display font-bold mb-6 text-pearl">
               Troubleshooting & <span className="gradient-text">Repair Services</span>
             </h1>
             <p className="text-silver text-lg">
               Your PC is having issues? We diagnose problems, troubleshoot software and hardware, and perform upgrades. Ship your computer to us or drop it off, and we'll get it running again.
             </p>
-          </motion.div>
+          </AnimatedSection>
         </div>
       </section>
 
@@ -190,47 +162,42 @@ export default function TroubleshootingContent() {
       <section className="py-24 bg-obsidian">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {services.map((service, index) => (
-              <motion.div
-                key={service.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className="card group h-full flex flex-col"
-              >
-                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-electric/20 to-volt/20 flex items-center justify-center mb-6 group-hover:from-electric/30 group-hover:to-volt/30 transition-colors">
-                  <service.icon className="w-7 h-7 text-electric" />
-                </div>
+            {services.map((service) => (
+              <AnimatedSection key={service.title}>
+                <div className="card group h-full flex flex-col">
+                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-electric/20 to-volt/20 flex items-center justify-center mb-6 group-hover:from-electric/30 group-hover:to-volt/30 transition-colors">
+                    <service.icon className="w-7 h-7 text-electric" />
+                  </div>
 
-                <h3 className="font-display text-xl font-semibold mb-3 text-pearl">
-                  {service.title}
-                </h3>
+                  <h3 className="font-display text-xl font-semibold mb-3 text-pearl">
+                    {service.title}
+                  </h3>
 
-                <p className="text-silver text-sm mb-6">
-                  {service.description}
-                </p>
+                  <p className="text-silver text-sm mb-6">
+                    {service.description}
+                  </p>
 
-                <ul className="space-y-2 mb-6 flex-grow">
-                  {service.features.map((feature) => (
-                    <li key={feature} className="flex items-center gap-2 text-sm text-pearl">
-                      <CheckCircle className="w-4 h-4 text-volt shrink-0" />
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
+                  <ul className="space-y-2 mb-6 flex-grow">
+                    {service.features.map((feature) => (
+                      <li key={feature} className="flex items-center gap-2 text-sm text-pearl">
+                        <CheckCircle className="w-4 h-4 text-volt shrink-0" />
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
 
-                <div className="pt-4 border-t border-steel">
-                  <div className="flex items-baseline justify-between">
-                    <div>
-                      <span className="text-2xl font-display font-bold gradient-text">
-                        {service.price}
-                      </span>
+                  <div className="pt-4 border-t border-steel">
+                    <div className="flex items-baseline justify-between">
+                      <div>
+                        <span className="text-2xl font-display font-bold gradient-text">
+                          {service.price}
+                        </span>
+                      </div>
+                      <span className="text-xs text-silver">{service.turnaround}</span>
                     </div>
-                    <span className="text-xs text-silver">{service.turnaround}</span>
                   </div>
                 </div>
-              </motion.div>
+              </AnimatedSection>
             ))}
           </div>
         </div>
@@ -239,64 +206,46 @@ export default function TroubleshootingContent() {
       {/* Common Issues Section */}
       <section className="py-24">
         <div className="max-w-7xl mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
+          <AnimatedSection className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-display font-bold mb-4 text-pearl">
               Common Issues We <span className="gradient-text">Fix</span>
             </h2>
             <p className="text-silver text-lg max-w-2xl mx-auto">
               Experiencing one of these problems? We can help.
             </p>
-          </motion.div>
+          </AnimatedSection>
 
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={containerVariants}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-          >
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {commonIssues.map((issue) => (
-              <motion.div
-                key={issue.title}
-                variants={itemVariants}
-                className="card group"
-              >
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-electric/20 to-volt/20 flex items-center justify-center mb-4 group-hover:from-electric/30 group-hover:to-volt/30 transition-colors">
-                  <issue.icon className="w-6 h-6 text-electric" />
+              <AnimatedSection key={issue.title}>
+                <div className="card group">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-electric/20 to-volt/20 flex items-center justify-center mb-4 group-hover:from-electric/30 group-hover:to-volt/30 transition-colors">
+                    <issue.icon className="w-6 h-6 text-electric" />
+                  </div>
+                  <h3 className="font-display text-lg font-semibold mb-2 text-pearl">
+                    {issue.title}
+                  </h3>
+                  <p className="text-silver text-sm">
+                    {issue.description}
+                  </p>
                 </div>
-                <h3 className="font-display text-lg font-semibold mb-2 text-pearl">
-                  {issue.title}
-                </h3>
-                <p className="text-silver text-sm">
-                  {issue.description}
-                </p>
-              </motion.div>
+              </AnimatedSection>
             ))}
-          </motion.div>
+          </div>
         </div>
       </section>
 
       {/* How It Works Section */}
       <section className="py-24 bg-obsidian">
         <div className="max-w-7xl mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
+          <AnimatedSection className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-display font-bold mb-4 text-pearl">
               How It <span className="gradient-text">Works</span>
             </h2>
             <p className="text-silver text-lg max-w-2xl mx-auto">
               Getting your PC fixed is simple and straightforward.
             </p>
-          </motion.div>
+          </AnimatedSection>
 
           <div className="grid md:grid-cols-4 gap-8">
             {[
@@ -304,15 +253,8 @@ export default function TroubleshootingContent() {
               { step: '02', title: 'Drop Off or Ship', desc: 'Bring your computer to us or ship it. We inspect everything and provide a diagnosis.' },
               { step: '03', title: 'We Diagnose & Fix', desc: 'Our experts troubleshoot, diagnose, and perform all necessary repairs and upgrades.' },
               { step: '04', title: 'Pick Up or Ship Back', desc: 'Your fixed PC is ready. Pick it up or we\'ll ship it back to you with full testing.' },
-            ].map((item, index) => (
-              <motion.div
-                key={item.step}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className="text-center"
-              >
+            ].map((item) => (
+              <AnimatedSection key={item.step} className="text-center">
                 <div className="text-5xl font-display font-bold gradient-text mb-4">
                   {item.step}
                 </div>
@@ -322,7 +264,7 @@ export default function TroubleshootingContent() {
                 <p className="text-silver text-sm">
                   {item.desc}
                 </p>
-              </motion.div>
+              </AnimatedSection>
             ))}
           </div>
         </div>
@@ -332,12 +274,7 @@ export default function TroubleshootingContent() {
       <section className="py-24">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-            >
+            <AnimatedSection>
               <h2 className="text-3xl md:text-4xl font-display font-bold mb-6 text-pearl">
                 Why Choose <span className="gradient-text">Inspire</span>
               </h2>
@@ -359,15 +296,9 @@ export default function TroubleshootingContent() {
                   </li>
                 ))}
               </ul>
-            </motion.div>
+            </AnimatedSection>
 
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="gradient-border"
-            >
+            <AnimatedSection className="gradient-border">
               <div className="bg-obsidian p-8 rounded-xl">
                 <h3 className="text-2xl font-display font-semibold mb-6 text-pearl">Our Process</h3>
                 <div className="space-y-4">
@@ -412,7 +343,7 @@ export default function TroubleshootingContent() {
                   </div>
                 </div>
               </div>
-            </motion.div>
+            </AnimatedSection>
           </div>
         </div>
       </section>
@@ -424,12 +355,7 @@ export default function TroubleshootingContent() {
         </div>
 
         <div className="relative max-w-4xl mx-auto px-6 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
+          <AnimatedSection>
             <h2 className="text-3xl md:text-4xl font-display font-bold mb-6 text-pearl">
               Having PC <span className="gradient-text">Problems?</span>
             </h2>
@@ -445,7 +371,7 @@ export default function TroubleshootingContent() {
                 View All Services
               </Link>
             </div>
-          </motion.div>
+          </AnimatedSection>
         </div>
       </section>
     </div>

@@ -1,7 +1,5 @@
-'use client'
-
-import { motion } from 'framer-motion'
 import Link from 'next/link'
+import AnimatedSection from '@/components/AnimatedSection'
 import {
   Wrench,
   ListChecks,
@@ -14,8 +12,6 @@ import {
   Zap,
   AlertTriangle,
   Shield,
-  RotateCcw,
-  Flame
 } from 'lucide-react'
 
 const services = [
@@ -117,19 +113,14 @@ export default function ServicesContent() {
         </div>
 
         <div className="relative max-w-7xl mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center max-w-3xl mx-auto"
-          >
+          <AnimatedSection className="text-center max-w-3xl mx-auto">
             <h1 className="text-4xl md:text-5xl font-display font-bold mb-6 text-pearl">
               Our <span className="gradient-text">Services</span>
             </h1>
             <p className="text-silver text-lg">
               Custom PC building, troubleshooting, repairs, and upgrades. We offer a complete range of services to keep your PC running perfectly.
             </p>
-          </motion.div>
+          </AnimatedSection>
         </div>
       </section>
 
@@ -137,13 +128,9 @@ export default function ServicesContent() {
       <section className="py-24 bg-obsidian">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {services.map((service, index) => (
-              <motion.div
+            {services.map((service) => (
+              <AnimatedSection
                 key={service.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
                 className="card group h-full flex flex-col"
               >
                 <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-electric/20 to-volt/20 flex items-center justify-center mb-6 group-hover:from-electric/30 group-hover:to-volt/30 transition-colors">
@@ -180,7 +167,7 @@ export default function ServicesContent() {
                     <span className="text-xs text-silver">{service.turnaround}</span>
                   </div>
                 </div>
-              </motion.div>
+              </AnimatedSection>
             ))}
           </div>
         </div>
@@ -189,19 +176,14 @@ export default function ServicesContent() {
       {/* Troubleshooting & Repair Services Section */}
       <section className="py-24">
         <div className="max-w-7xl mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
+          <AnimatedSection className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-display font-bold mb-4 text-pearl">
               Troubleshooting & <span className="gradient-text">Repair Services</span>
             </h2>
             <p className="text-silver text-lg max-w-2xl mx-auto">
               Having PC problems? We offer comprehensive diagnostics, repairs, and optimization services.
             </p>
-          </motion.div>
+          </AnimatedSection>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
             {[
@@ -247,13 +229,9 @@ export default function ServicesContent() {
                 price: '$79',
                 turnaround: '1-2 business days',
               },
-            ].map((service, index) => (
-              <motion.div
+            ].map((service) => (
+              <AnimatedSection
                 key={service.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
                 className="card group h-full flex flex-col bg-obsidian"
               >
                 <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-electric/20 to-volt/20 flex items-center justify-center mb-6 group-hover:from-electric/30 group-hover:to-volt/30 transition-colors">
@@ -276,7 +254,7 @@ export default function ServicesContent() {
                     <span className="text-xs text-silver">{service.turnaround}</span>
                   </div>
                 </div>
-              </motion.div>
+              </AnimatedSection>
             ))}
           </div>
 
@@ -293,12 +271,7 @@ export default function ServicesContent() {
       <section className="py-24">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-            >
+            <AnimatedSection>
               <h2 className="text-3xl md:text-4xl font-display font-bold mb-6 text-pearl">
                 Build Based on <span className="gradient-text">Budget</span>
               </h2>
@@ -345,14 +318,9 @@ export default function ServicesContent() {
                 Request a Build Plan
                 <ArrowRight className="w-4 h-4" />
               </Link>
-            </motion.div>
+            </AnimatedSection>
 
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-            >
+            <AnimatedSection>
               <div className="gradient-border">
                 <div className="bg-obsidian p-8 rounded-xl">
                   <div className="flex items-center gap-3 mb-6">
@@ -389,7 +357,7 @@ export default function ServicesContent() {
                   </p>
                 </div>
               </div>
-            </motion.div>
+            </AnimatedSection>
           </div>
         </div>
       </section>
@@ -397,19 +365,14 @@ export default function ServicesContent() {
       {/* Process Section */}
       <section className="py-24 bg-obsidian">
         <div className="max-w-7xl mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
+          <AnimatedSection className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-display font-bold mb-4 text-pearl">
               The Build <span className="gradient-text">Process</span>
             </h2>
             <p className="text-silver text-lg max-w-2xl mx-auto">
               Here&apos;s what happens when you choose Inspire for your build.
             </p>
-          </motion.div>
+          </AnimatedSection>
 
           <div className="grid md:grid-cols-4 gap-8">
             {[
@@ -417,13 +380,9 @@ export default function ServicesContent() {
               { step: '02', title: 'Parts Arrival', desc: 'Ship your parts to us or drop them off. We inspect everything on arrival.' },
               { step: '03', title: 'Assembly', desc: 'Expert assembly with attention to cable management, thermals, and aesthetics.' },
               { step: '04', title: 'Testing', desc: 'Stress testing, benchmarking, and burn-in to ensure stability.' },
-            ].map((item, index) => (
-              <motion.div
+            ].map((item) => (
+              <AnimatedSection
                 key={item.step}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
                 className="text-center"
               >
                 <div className="text-5xl font-display font-bold gradient-text mb-4">
@@ -435,7 +394,7 @@ export default function ServicesContent() {
                 <p className="text-silver text-sm">
                   {item.desc}
                 </p>
-              </motion.div>
+              </AnimatedSection>
             ))}
           </div>
         </div>
@@ -448,12 +407,7 @@ export default function ServicesContent() {
         </div>
 
         <div className="relative max-w-4xl mx-auto px-6 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
+          <AnimatedSection>
             <h2 className="text-3xl md:text-4xl font-display font-bold mb-6 text-pearl">
               Ready to Get <span className="gradient-text">Started</span>?
             </h2>
@@ -468,7 +422,7 @@ export default function ServicesContent() {
                 Contact Us
               </Link>
             </div>
-          </motion.div>
+          </AnimatedSection>
         </div>
       </section>
     </div>

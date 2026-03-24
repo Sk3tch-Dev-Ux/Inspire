@@ -1,7 +1,5 @@
-'use client'
-
-import { motion } from 'framer-motion'
 import Link from 'next/link'
+import AnimatedSection from '@/components/AnimatedSection'
 import {
   Shield,
   Check,
@@ -59,27 +57,6 @@ const faqs = [
   },
 ]
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-    },
-  },
-}
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.5,
-    },
-  },
-}
-
 export default function WarrantyContent() {
   return (
     <div className="pt-20">
@@ -91,46 +68,30 @@ export default function WarrantyContent() {
         </div>
 
         <div className="relative max-w-7xl mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center max-w-3xl mx-auto"
-          >
+          <AnimatedSection className="text-center max-w-3xl mx-auto">
             <h1 className="section-title mb-6">
               Workmanship <span className="gradient-text">Warranty</span>
             </h1>
             <p className="section-subtitle">
               Every build is backed by our commitment to quality. If we made a mistake, we&apos;ll make it right.
             </p>
-          </motion.div>
+          </AnimatedSection>
         </div>
       </section>
 
       {/* Warranty Tiers */}
       <section className="py-24 bg-obsidian">
         <div className="max-w-7xl mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
+          <AnimatedSection className="text-center mb-16">
             <h2 className="section-title mb-4">
               Warranty <span className="gradient-text">Options</span>
             </h2>
             <p className="section-subtitle mx-auto">
               Choose the coverage that&apos;s right for you.
             </p>
-          </motion.div>
+          </AnimatedSection>
 
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={containerVariants}
-            className="grid grid-cols-1 md:grid-cols-3 gap-8"
-          >
+          <AnimatedSection className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               {
                 name: 'Standard',
@@ -167,9 +128,8 @@ export default function WarrantyContent() {
                 popular: false,
               },
             ].map((tier) => (
-              <motion.div
+              <div
                 key={tier.name}
-                variants={itemVariants}
                 className={`card relative h-full flex flex-col ${
                   tier.popular ? 'ring-2 ring-electric' : ''
                 }`}
@@ -197,34 +157,23 @@ export default function WarrantyContent() {
                     </li>
                   ))}
                 </ul>
-              </motion.div>
+              </div>
             ))}
-          </motion.div>
+          </AnimatedSection>
         </div>
       </section>
 
       {/* Coverage Details */}
       <section className="py-24">
         <div className="max-w-7xl mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
+          <AnimatedSection className="text-center mb-16">
             <h2 className="section-title mb-4">
               What&apos;s <span className="gradient-text">Covered</span>
             </h2>
-          </motion.div>
+          </AnimatedSection>
 
           <div className="grid md:grid-cols-2 gap-8">
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="p-8 bg-obsidian rounded-xl border border-volt/30"
-            >
+            <AnimatedSection className="p-8 bg-obsidian rounded-xl border border-volt/30">
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-10 h-10 rounded-lg bg-volt/20 flex items-center justify-center">
                   <Check className="w-5 h-5 text-volt" />
@@ -239,15 +188,9 @@ export default function WarrantyContent() {
                   </li>
                 ))}
               </ul>
-            </motion.div>
+            </AnimatedSection>
 
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="p-8 bg-obsidian rounded-xl border border-coral/30"
-            >
+            <AnimatedSection className="p-8 bg-obsidian rounded-xl border border-coral/30">
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-10 h-10 rounded-lg bg-coral/20 flex items-center justify-center">
                   <X className="w-5 h-5 text-coral" />
@@ -262,7 +205,7 @@ export default function WarrantyContent() {
                   </li>
                 ))}
               </ul>
-            </motion.div>
+            </AnimatedSection>
           </div>
         </div>
       </section>
@@ -270,33 +213,24 @@ export default function WarrantyContent() {
       {/* Claim Process */}
       <section className="py-24 bg-obsidian">
         <div className="max-w-7xl mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
+          <AnimatedSection className="text-center mb-16">
             <h2 className="section-title mb-4">
               Warranty <span className="gradient-text">Claim Process</span>
             </h2>
             <p className="section-subtitle mx-auto">
               Simple steps to get your issue resolved.
             </p>
-          </motion.div>
+          </AnimatedSection>
 
-          <div className="grid md:grid-cols-4 gap-8">
+          <AnimatedSection className="grid md:grid-cols-4 gap-8">
             {[
               { step: '01', title: 'Contact Us', desc: 'Email or call us with a description of the issue.' },
               { step: '02', title: 'Troubleshoot', desc: 'We\'ll work with you to diagnose the problem.' },
               { step: '03', title: 'Ship or Drop Off', desc: 'Send the PC to us or bring it to our workshop.' },
               { step: '04', title: 'Repair & Return', desc: 'We\'ll fix the issue and ship it back to you.' },
-            ].map((item, index) => (
-              <motion.div
+            ].map((item) => (
+              <div
                 key={item.step}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
                 className="text-center"
               >
                 <div className="text-5xl font-display font-bold gradient-text mb-4">
@@ -308,37 +242,25 @@ export default function WarrantyContent() {
                 <p className="text-silver text-sm">
                   {item.desc}
                 </p>
-              </motion.div>
+              </div>
             ))}
-          </div>
+          </AnimatedSection>
         </div>
       </section>
 
       {/* FAQ */}
       <section className="py-24">
         <div className="max-w-4xl mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
+          <AnimatedSection className="text-center mb-16">
             <h2 className="section-title mb-4">
               Frequently Asked <span className="gradient-text">Questions</span>
             </h2>
-          </motion.div>
+          </AnimatedSection>
 
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={containerVariants}
-            className="space-y-6"
-          >
+          <AnimatedSection className="space-y-6">
             {faqs.map((faq) => (
-              <motion.div
+              <div
                 key={faq.q}
-                variants={itemVariants}
                 className="p-6 bg-obsidian rounded-xl border border-steel"
               >
                 <div className="flex items-start gap-3">
@@ -348,35 +270,27 @@ export default function WarrantyContent() {
                     <p className="text-silver text-sm">{faq.a}</p>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             ))}
-          </motion.div>
+          </AnimatedSection>
         </div>
       </section>
 
       {/* Contact */}
       <section className="py-24 bg-obsidian">
         <div className="max-w-4xl mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-12"
-          >
+          <AnimatedSection className="text-center mb-12">
             <h2 className="section-title mb-4">
               Need to File a <span className="gradient-text">Claim</span>?
             </h2>
             <p className="section-subtitle mx-auto">
               Contact us and we&apos;ll get you sorted out.
             </p>
-          </motion.div>
+          </AnimatedSection>
 
-          <div className="grid md:grid-cols-2 gap-6">
-            <motion.a
+          <AnimatedSection className="grid md:grid-cols-2 gap-6">
+            <a
               href="mailto:support@inspirepc.com"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
               className="p-6 bg-midnight rounded-xl border border-steel hover:border-electric/50 transition-colors flex items-center gap-4"
             >
               <div className="w-12 h-12 rounded-xl bg-electric/20 flex items-center justify-center">
@@ -386,14 +300,10 @@ export default function WarrantyContent() {
                 <h3 className="font-display font-semibold text-pearl">Email Support</h3>
                 <p className="text-silver text-sm">support@inspirepc.com</p>
               </div>
-            </motion.a>
+            </a>
 
-            <motion.a
+            <a
               href="tel:+13303148860"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.1 }}
               className="p-6 bg-midnight rounded-xl border border-steel hover:border-electric/50 transition-colors flex items-center gap-4"
             >
               <div className="w-12 h-12 rounded-xl bg-volt/20 flex items-center justify-center">
@@ -403,8 +313,8 @@ export default function WarrantyContent() {
                 <h3 className="font-display font-semibold text-pearl">Phone Support</h3>
                 <p className="text-silver text-sm">(330) 314-8860</p>
               </div>
-            </motion.a>
-          </div>
+            </a>
+          </AnimatedSection>
         </div>
       </section>
 
@@ -415,12 +325,7 @@ export default function WarrantyContent() {
         </div>
 
         <div className="relative max-w-4xl mx-auto px-6 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
+          <AnimatedSection>
             <h2 className="section-title mb-6">
               Ready to Get <span className="gradient-text">Started</span>?
             </h2>
@@ -431,7 +336,7 @@ export default function WarrantyContent() {
               Book Your Build
               <ChevronRight className="w-4 h-4" />
             </Link>
-          </motion.div>
+          </AnimatedSection>
         </div>
       </section>
     </div>

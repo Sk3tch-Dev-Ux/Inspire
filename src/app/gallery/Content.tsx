@@ -9,6 +9,7 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
+import AnimatedSection from '@/components/AnimatedSection'
 import {
   Monitor,
   Cpu,
@@ -163,12 +164,7 @@ export default function GalleryContent() {
         </div>
 
         <div className="relative max-w-7xl mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center max-w-3xl mx-auto"
-          >
+          <AnimatedSection className="text-center max-w-3xl mx-auto">
             <h1 className="text-4xl md:text-5xl font-display font-bold mb-6 text-pearl">
               Our <span className="gradient-text">Build Gallery</span>
             </h1>
@@ -176,7 +172,7 @@ export default function GalleryContent() {
               Explore our portfolio of custom PC builds. From high-end gaming rigs to professional workstations,
               we bring your vision to life with expert craftsmanship and attention to detail.
             </p>
-          </motion.div>
+          </AnimatedSection>
         </div>
       </section>
 
@@ -289,14 +285,7 @@ export default function GalleryContent() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {stats.map((stat, index) => (
-              <motion.div
-                key={stat.label}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className="text-center"
-              >
+              <AnimatedSection key={stat.label} className="text-center">
                 <div className="flex items-center justify-center mb-2">
                   {index === 0 && <Award className="w-8 h-8 text-electric mr-3" />}
                   {index === 1 && <Smile className="w-8 h-8 text-volt mr-3" />}
@@ -306,7 +295,7 @@ export default function GalleryContent() {
                   </span>
                 </div>
                 <p className="text-silver font-medium">{stat.description}</p>
-              </motion.div>
+              </AnimatedSection>
             ))}
           </div>
         </div>
@@ -319,12 +308,7 @@ export default function GalleryContent() {
         </div>
 
         <div className="relative max-w-4xl mx-auto px-6 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
+          <AnimatedSection>
             <h2 className="text-3xl md:text-4xl font-display font-bold mb-6 text-pearl">
               Ready to See Your <span className="gradient-text">Dream Build Here</span>?
             </h2>
@@ -336,7 +320,7 @@ export default function GalleryContent() {
               Start Your Build Journey
               <ArrowRight className="w-5 h-5" />
             </Link>
-          </motion.div>
+          </AnimatedSection>
         </div>
       </section>
     </div>
