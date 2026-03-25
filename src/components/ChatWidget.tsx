@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect, KeyboardEvent } from 'react'
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
+import ReactMarkdown from 'react-markdown'
 import { MessageCircle, X, Send, Loader2, LogIn } from 'lucide-react'
 import { useAuth } from './AuthProvider'
 
@@ -150,7 +151,13 @@ export default function ChatWidget() {
                       : 'bg-steel/30 text-pearl rounded-bl-md'
                   }`}
                 >
-                  {msg.content}
+                  {msg.role === 'assistant' ? (
+                    <div className="chat-markdown">
+                      <ReactMarkdown>{msg.content}</ReactMarkdown>
+                    </div>
+                  ) : (
+                    msg.content
+                  )}
                 </div>
               </div>
             ))}
