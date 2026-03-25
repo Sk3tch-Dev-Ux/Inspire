@@ -33,9 +33,32 @@ export async function middleware(request: NextRequest) {
     }
   }
 
+  // Protect /account/* routes
+  if (pathname.startsWith('/account')) {
+    const token = request.cookies.get('user_token')?.value;
+
+    if (!token) {
+      return NextResponse.redirect(new URL('/login', request.url));
+    }
+
+    try {
+      const secret = process.env.USER_JWT_SECRET;
+      if (!secret) {
+        return NextResponse.redirect(new URL('/login', request.url));
+      }
+      const encoded = new TextEncoder().encode(secret);
+      await jwtVerify(token, encoded);
+      return NextResponse.next();
+    } catch {
+      const response = NextResponse.redirect(new URL('/login', request.url));
+      response.cookies.delete('user_token');
+      return response;
+    }
+  }
+
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ['/admin/:path*'],
+  matcher: ['/admin/:path*', '/account/:path*'],
 };

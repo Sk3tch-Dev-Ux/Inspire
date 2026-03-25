@@ -133,6 +133,30 @@ export function contactNotificationHtml(contact: ContactData): string {
   `);
 }
 
+export function welcomeEmailHtml(data: { name: string; email: string }): string {
+  return wrapper(`
+    <h1 style="color:#00d4ff;font-size:22px;margin:0 0 8px;">Welcome to Inspire PC!</h1>
+    <p style="color:#8a8a9a;margin:0 0 24px;">Hi ${data.name}, thanks for creating an account.</p>
+
+    <p style="color:#e8e8ec;margin:0 0 16px;">With your account you can:</p>
+
+    <ul style="padding-left:20px;margin:0 0 24px;">
+      <li style="color:#e8e8ec;padding:4px 0;">Track your order status in real time</li>
+      <li style="color:#e8e8ec;padding:4px 0;">View your complete order history</li>
+      <li style="color:#e8e8ec;padding:4px 0;">Chat with our AI assistant for quick answers</li>
+      <li style="color:#e8e8ec;padding:4px 0;">Get build updates and notifications</li>
+    </ul>
+
+    <div style="text-align:center;margin-bottom:16px;">
+      <a href="https://inspirepc.com/account" style="display:inline-block;padding:14px 32px;background:linear-gradient(135deg,#00d4ff,#00ff88);color:#0a0a0f;border-radius:12px;text-decoration:none;font-weight:600;">
+        View Your Dashboard
+      </a>
+    </div>
+
+    <p style="color:#8a8a9a;font-size:13px;margin:16px 0 0;">Ready to get started? <a href="https://inspirepc.com/order" style="color:#00d4ff;text-decoration:none;">Book a build</a> today.</p>
+  `);
+}
+
 export function paymentConfirmationHtml(order: OrderData): string {
   const total = order.totalCents ? `$${(order.totalCents / 100).toFixed(2)}` : 'N/A';
   return wrapper(`

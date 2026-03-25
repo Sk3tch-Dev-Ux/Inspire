@@ -3,7 +3,8 @@ import { DM_Sans, Space_Grotesk } from 'next/font/google';
 import './globals.css';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
-import FloatingContact from '@/components/FloatingContact';
+import ChatWidget from '@/components/ChatWidget';
+import AuthProvider from '@/components/AuthProvider';
 
 const dmSans = DM_Sans({
   subsets: ['latin'],
@@ -102,10 +103,12 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-screen bg-midnight antialiased">
-        <Navigation />
-        <main>{children}</main>
-        <Footer />
-        <FloatingContact />
+        <AuthProvider>
+          <Navigation />
+          <main>{children}</main>
+          <Footer />
+          <ChatWidget />
+        </AuthProvider>
       </body>
     </html>
   );

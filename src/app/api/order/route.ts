@@ -3,6 +3,7 @@ import { query } from '@/lib/db';
 import { sanitize } from '@/lib/sanitize';
 import { rateLimit } from '@/lib/rate-limit';
 import { sendOrderConfirmation, sendOrderNotification } from '@/lib/email';
+import { getUserFromToken } from '@/lib/user-auth';
 
 export async function POST(request: NextRequest) {
   try {
@@ -44,10 +45,13 @@ export async function POST(request: NextRequest) {
 
     const orderId = `INS-${Date.now()}`;
 
+    // Check if user is authenticated to link order
+    const userPayload = await getUserFromToken().catch(() => null);
+
     await query(
-      `INSERT INTO orders (order_id, service, addons, has_own_parts, budget_range, use_case, pcpartpicker_url, parts_list, name, email, phone, address, city, state, zip, notes)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16)`,
-      [orderId, service, JSON.stringify(addons), hasOwnParts, budgetRange, useCase, pcpartpickerUrl, partsList, name, email, phone, address, city, state, zip, notes]
+      `INSERT INTO orders (order_id, service, addons, has_own_parts, budget_range, use_case, pcpartpicker_url, parts_list, name, email, phone, address, city, state, zip, notes, user_id)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17)`,
+      [orderId, service, JSON.stringify(addons), hasOwnParts, budgetRange, useCase, pcpartpickerUrl, partsList, name, email, phone, address, city, state, zip, notes, userPayload?.sub || null]
     );
 
     try {

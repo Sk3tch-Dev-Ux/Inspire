@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { query } from '@/lib/db';
 import { rateLimit } from '@/lib/rate-limit';
+import { getUserFromToken } from '@/lib/user-auth';
 
 export async function POST(request: NextRequest) {
   try {
@@ -32,16 +33,20 @@ export async function POST(request: NextRequest) {
       .map(([component, id]) => `${component}: ${id}`)
       .join(', ');
 
+    // Check if user is authenticated to link order
+    const userPayload = await getUserFromToken().catch(() => null);
+    const userId = userPayload?.sub || null;
+
     // Update existing order with payment status, or insert if no existing order
     if (existingOrderId) {
       await query(
-        `UPDATE orders SET status = 'awaiting_payment', total_cents = $1, updated_at = NOW() WHERE order_id = $2`,
-        [totalCents, orderId]
+        `UPDATE orders SET status = 'awaiting_payment', total_cents = $1, user_id = COALESCE(user_id, $3), updated_at = NOW() WHERE order_id = $2`,
+        [totalCents, orderId, userId]
       );
     } else {
       await query(
-        `INSERT INTO orders (order_id, service, name, email, phone, address, city, state, zip, notes, status, total_cents)
-         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,'awaiting_payment',$11)`,
+        `INSERT INTO orders (order_id, service, name, email, phone, address, city, state, zip, notes, status, total_cents, user_id)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,'awaiting_payment',$11,$12)`,
         [
           orderId,
           `${tier?.charAt(0).toUpperCase()}${tier?.slice(1)} Build`,
@@ -54,6 +59,7 @@ export async function POST(request: NextRequest) {
           customerInfo?.zip || '',
           customerInfo?.notes || '',
           totalCents,
+          userId,
         ]
       );
     }

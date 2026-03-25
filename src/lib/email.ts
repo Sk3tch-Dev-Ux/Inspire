@@ -5,6 +5,7 @@ import {
   contactAutoReplyHtml,
   contactNotificationHtml,
   paymentConfirmationHtml,
+  welcomeEmailHtml,
 } from './email-templates';
 
 function getResend() {
@@ -77,6 +78,17 @@ export async function sendContactNotification(contact: ContactData) {
     to: SUPPORT,
     subject: `New Contact: ${contact.subject} from ${contact.name}`,
     html: contactNotificationHtml(contact),
+  });
+}
+
+export async function sendWelcomeEmail(data: { name: string; email: string }) {
+  const resend = getResend();
+  if (!resend) return console.log('RESEND_API_KEY not set, skipping email');
+  return resend.emails.send({
+    from: FROM,
+    to: data.email,
+    subject: 'Welcome to Inspire PC!',
+    html: welcomeEmailHtml(data),
   });
 }
 
