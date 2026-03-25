@@ -140,27 +140,64 @@ export default function OrderContent() {
     setErrorMessage('')
 
     try {
-      const response = await fetch('/api/order', {
+      // Step 1: Save the order to the database
+      const orderResponse = await fetch('/api/order', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       })
 
-      if (!response.ok) {
-        const errorData = await response.json()
+      if (!orderResponse.ok) {
+        const errorData = await orderResponse.json()
         throw new Error(errorData.error || 'Failed to submit order')
       }
 
-      const data = await response.json()
-      setSubmitStatus('success')
-      console.log('Order submitted successfully:', data)
+      const orderData = await orderResponse.json()
 
-      // Redirect to success page after a short delay
-      setTimeout(() => {
-        router.push('/order/success')
-      }, 500)
+      // Step 2: Create Stripe Checkout session and redirect
+      const total = calculateTotal() + (!formData.hasOwnParts && formData.service !== 'planning' ? 49 : 0)
+
+      const checkoutResponse = await fetch('/api/create-checkout-session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          tier: formData.service,
+          selections: {
+            addons: formData.addons,
+            hasOwnParts: formData.hasOwnParts,
+            budgetRange: formData.budgetRange,
+            useCase: formData.useCase,
+            partsList: formData.partsList,
+            pcpartpickerUrl: formData.pcpartpickerUrl,
+          },
+          customerInfo: {
+            firstName: formData.name.split(' ')[0],
+            lastName: formData.name.split(' ').slice(1).join(' '),
+            email: formData.email,
+            phone: formData.phone,
+            address: formData.address,
+            city: formData.city,
+            state: formData.state,
+            zip: formData.zip,
+            notes: formData.notes,
+          },
+          total,
+          orderId: orderData.orderId,
+        }),
+      })
+
+      if (!checkoutResponse.ok) {
+        const errorData = await checkoutResponse.json()
+        throw new Error(errorData.error || 'Failed to create payment session')
+      }
+
+      const { url } = await checkoutResponse.json()
+
+      if (url) {
+        window.location.href = url
+      } else {
+        throw new Error('No checkout URL returned')
+      }
     } catch (error) {
       setSubmitStatus('error')
       setErrorMessage(error instanceof Error ? error.message : 'Failed to submit order. Please try again.')
@@ -675,12 +712,12 @@ export default function OrderContent() {
                 {isSubmitting ? (
                   <>
                     <Loader2 className="w-4 h-4 animate-spin" />
-                    Submitting...
+                    Processing...
                   </>
                 ) : (
                   <>
-                    Submit Order
-                    <Check className="w-4 h-4" />
+                    Proceed to Payment
+                    <ChevronRight className="w-4 h-4" />
                   </>
                 )}
               </button>

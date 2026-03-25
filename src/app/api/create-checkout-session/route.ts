@@ -23,33 +23,40 @@ export async function POST(request: NextRequest) {
     });
 
     const body = await request.json();
-    const { tier, selections, customerInfo, total } = body;
+    const { tier, selections, customerInfo, total, orderId: existingOrderId } = body;
 
-    const orderId = `INS-${Date.now()}`;
+    const orderId = existingOrderId || `INS-${Date.now()}`;
     const totalCents = Math.round(total * 100);
 
     const componentList = Object.entries(selections || {})
       .map(([component, id]) => `${component}: ${id}`)
       .join(', ');
 
-    // Insert order into DB with awaiting_payment status
-    await query(
-      `INSERT INTO orders (order_id, service, name, email, phone, address, city, state, zip, notes, status, total_cents)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,'awaiting_payment',$11)`,
-      [
-        orderId,
-        `${tier?.charAt(0).toUpperCase()}${tier?.slice(1)} Build`,
-        customerInfo?.firstName ? `${customerInfo.firstName} ${customerInfo.lastName}` : 'N/A',
-        customerInfo?.email || '',
-        customerInfo?.phone || '',
-        customerInfo?.address || '',
-        customerInfo?.city || '',
-        customerInfo?.state || '',
-        customerInfo?.zip || '',
-        customerInfo?.notes || '',
-        totalCents,
-      ]
-    );
+    // Update existing order with payment status, or insert if no existing order
+    if (existingOrderId) {
+      await query(
+        `UPDATE orders SET status = 'awaiting_payment', total_cents = $1, updated_at = NOW() WHERE order_id = $2`,
+        [totalCents, orderId]
+      );
+    } else {
+      await query(
+        `INSERT INTO orders (order_id, service, name, email, phone, address, city, state, zip, notes, status, total_cents)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,'awaiting_payment',$11)`,
+        [
+          orderId,
+          `${tier?.charAt(0).toUpperCase()}${tier?.slice(1)} Build`,
+          customerInfo?.firstName ? `${customerInfo.firstName} ${customerInfo.lastName}` : 'N/A',
+          customerInfo?.email || '',
+          customerInfo?.phone || '',
+          customerInfo?.address || '',
+          customerInfo?.city || '',
+          customerInfo?.state || '',
+          customerInfo?.zip || '',
+          customerInfo?.notes || '',
+          totalCents,
+        ]
+      );
+    }
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
