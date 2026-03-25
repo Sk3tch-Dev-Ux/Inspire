@@ -29,6 +29,18 @@
   html {
     scroll-behavior: smooth;
   }
+
+  /* Global focus-visible styles for keyboard navigation */
+  *:focus-visible {
+    outline: 2px solid var(--color-electric);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  /* Remove default outline for mouse users */
+  *:focus:not(:focus-visible) {
+    outline: none;
+  }
   
   body {
     font-family: var(--font-sans);

@@ -6,7 +6,7 @@
 
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 import AnimatedSection from '@/components/AnimatedSection'
@@ -243,6 +243,51 @@ const stats = [
 export default function GalleryContent() {
   const [activeCategory, setActiveCategory] = useState<BuildCategory>('All')
   const [selectedBuild, setSelectedBuild] = useState<Build | null>(null)
+  const modalRef = useRef<HTMLDivElement>(null)
+  const previousFocusRef = useRef<HTMLElement | null>(null)
+
+  const closeModal = useCallback(() => {
+    setSelectedBuild(null)
+    previousFocusRef.current?.focus()
+  }, [])
+
+  const openModal = useCallback((build: Build) => {
+    previousFocusRef.current = document.activeElement as HTMLElement
+    setSelectedBuild(build)
+  }, [])
+
+  // Focus trap and escape key for modal
+  useEffect(() => {
+    if (!selectedBuild) return
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        closeModal()
+        return
+      }
+      if (e.key === 'Tab' && modalRef.current) {
+        const focusable = modalRef.current.querySelectorAll<HTMLElement>(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        )
+        const first = focusable[0]
+        const last = focusable[focusable.length - 1]
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault()
+          last.focus()
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault()
+          first.focus()
+        }
+      }
+    }
+
+    document.addEventListener('keydown', handleKeyDown)
+    // Focus the close button on open
+    const closeBtn = modalRef.current?.querySelector<HTMLElement>('button')
+    closeBtn?.focus()
+
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [selectedBuild, closeModal])
 
   const filteredBuilds =
     activeCategory === 'All'
@@ -255,13 +300,17 @@ export default function GalleryContent() {
       {selectedBuild && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center p-4"
-          onClick={() => setSelectedBuild(null)}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="modal-title"
+          onClick={closeModal}
         >
           {/* Backdrop */}
           <div className="absolute inset-0 bg-midnight/80 backdrop-blur-sm" />
 
           {/* Modal */}
           <div
+            ref={modalRef}
             className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto bg-obsidian border border-steel rounded-2xl"
             onClick={(e) => e.stopPropagation()}
           >
@@ -272,7 +321,8 @@ export default function GalleryContent() {
                 {selectedBuild.icon}
               </div>
               <button
-                onClick={() => setSelectedBuild(null)}
+                onClick={closeModal}
+                aria-label="Close build details"
                 className="absolute top-4 right-4 w-10 h-10 rounded-full bg-midnight/60 border border-steel flex items-center justify-center text-pearl hover:bg-midnight/80 transition-colors"
               >
                 <X className="w-5 h-5" />
@@ -282,7 +332,7 @@ export default function GalleryContent() {
             {/* Content */}
             <div className="p-8">
               <div className="flex items-center gap-3 mb-2">
-                <h2 className="text-2xl font-display font-bold text-pearl">{selectedBuild.name}</h2>
+                <h2 id="modal-title" className="text-2xl font-display font-bold text-pearl">{selectedBuild.name}</h2>
                 <span className="px-3 py-1 text-xs font-medium text-electric bg-electric/10 rounded-full border border-electric/30">
                   {selectedBuild.category}
                 </span>
@@ -315,7 +365,7 @@ export default function GalleryContent() {
               <Link
                 href="/order"
                 className="btn-primary w-full text-center inline-block"
-                onClick={() => setSelectedBuild(null)}
+                onClick={closeModal}
               >
                 Build Something Like This
               </Link>
@@ -424,7 +474,7 @@ export default function GalleryContent() {
 
                   {/* View Build Button */}
                   <button
-                    onClick={() => setSelectedBuild(build)}
+                    onClick={() => openModal(build)}
                     className="flex items-center gap-2 text-electric font-medium text-sm group/btn hover:gap-3 transition-all duration-300"
                   >
                     View Details

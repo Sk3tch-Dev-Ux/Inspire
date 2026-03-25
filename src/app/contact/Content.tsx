@@ -161,6 +161,7 @@ export default function ContactContent() {
                     value={formData.name}
                     onChange={handleInputChange}
                     required
+                    aria-required="true"
                     className="input-field w-full"
                     placeholder="John Doe"
                   />
@@ -178,6 +179,7 @@ export default function ContactContent() {
                     value={formData.email}
                     onChange={handleInputChange}
                     required
+                    aria-required="true"
                     className="input-field w-full"
                     placeholder="john@example.com"
                   />
@@ -210,6 +212,7 @@ export default function ContactContent() {
                     value={formData.subject}
                     onChange={handleInputChange}
                     required
+                    aria-required="true"
                     className="input-field w-full"
                   >
                     <option value="">Select a subject...</option>
@@ -233,6 +236,7 @@ export default function ContactContent() {
                     value={formData.message}
                     onChange={handleInputChange}
                     required
+                    aria-required="true"
                     rows={5}
                     className="input-field w-full resize-none"
                     placeholder="Tell us more about your inquiry..."
@@ -241,13 +245,13 @@ export default function ContactContent() {
 
                 {/* Status Messages */}
                 {status === 'success' && (
-                  <div className="p-4 rounded-lg bg-green-900/20 border border-green-500/50 text-green-400">
+                  <div role="alert" aria-live="polite" className="p-4 rounded-lg bg-green-900/20 border border-green-500/50 text-green-400">
                     {statusMessage}
                   </div>
                 )}
 
                 {status === 'error' && (
-                  <div className="p-4 rounded-lg bg-red-900/20 border border-red-500/50 text-red-400">
+                  <div role="alert" aria-live="assertive" className="p-4 rounded-lg bg-red-900/20 border border-red-500/50 text-red-400">
                     {statusMessage}
                   </div>
                 )}

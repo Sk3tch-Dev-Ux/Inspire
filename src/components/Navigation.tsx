@@ -61,12 +61,14 @@ export default function Navigation() {
               <div className="relative" ref={menuRef}>
                 <button
                   onClick={() => setShowUserMenu(!showUserMenu)}
+                  aria-label="Account menu"
+                  aria-expanded={showUserMenu}
                   className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-steel/30 transition-colors"
                 >
                   {user.avatar_url ? (
                     <img
                       src={user.avatar_url}
-                      alt=""
+                      alt={`${user.name || 'User'} avatar`}
                       className="w-8 h-8 rounded-full"
                     />
                   ) : (
@@ -138,6 +140,8 @@ export default function Navigation() {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsOpen(!isOpen)}
+            aria-label={isOpen ? 'Close navigation menu' : 'Open navigation menu'}
+            aria-expanded={isOpen}
             className="md:hidden p-2 rounded-lg hover:bg-steel/30 transition-colors"
           >
             {isOpen ? (

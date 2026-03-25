@@ -230,7 +230,14 @@ export default function OrderContent() {
         </motion.div>
 
         {/* Progress Steps */}
-        <div className="flex items-center justify-center mb-12">
+        <div
+          className="flex items-center justify-center mb-12"
+          role="progressbar"
+          aria-valuenow={step}
+          aria-valuemin={1}
+          aria-valuemax={3}
+          aria-label={`Step ${step} of 3: ${['Service', 'Details', 'Contact'][step - 1]}`}
+        >
           {[1, 2, 3].map((s, index) => (
             <div key={s} className="flex items-center">
               <div
@@ -239,6 +246,7 @@ export default function OrderContent() {
                     ? 'bg-gradient-to-r from-electric to-volt text-midnight'
                     : 'bg-steel text-silver'
                 }`}
+                aria-hidden="true"
               >
                 {step > s ? <Check className="w-5 h-5" /> : s}
               </div>
@@ -247,6 +255,7 @@ export default function OrderContent() {
                   className={`w-20 h-1 mx-2 rounded transition-colors ${
                     step > s ? 'bg-gradient-to-r from-electric to-volt' : 'bg-steel'
                   }`}
+                  aria-hidden="true"
                 />
               )}
             </div>
@@ -254,10 +263,15 @@ export default function OrderContent() {
         </div>
 
         {/* Step Labels */}
-        <div className="flex justify-center gap-16 mb-12 text-sm">
+        <div className="flex justify-center gap-16 mb-12 text-sm" aria-hidden="true">
           <span className={step >= 1 ? 'text-pearl' : 'text-silver'}>Service</span>
           <span className={step >= 2 ? 'text-pearl' : 'text-silver'}>Details</span>
           <span className={step >= 3 ? 'text-pearl' : 'text-silver'}>Contact</span>
+        </div>
+
+        {/* Screen reader step announcement */}
+        <div className="sr-only" aria-live="polite">
+          Step {step} of 3: {['Service', 'Details', 'Contact'][step - 1]}
         </div>
 
         <AnimatePresence mode="wait">
@@ -723,6 +737,8 @@ export default function OrderContent() {
               </button>
               {submitStatus === 'error' && (
                 <motion.div
+                  role="alert"
+                  aria-live="assertive"
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
                   className="text-red-400 text-sm bg-red-950/30 px-4 py-2 rounded-lg border border-red-800/50"
