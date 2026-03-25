@@ -3,6 +3,7 @@ import { DM_Sans, Space_Grotesk } from 'next/font/google';
 import './globals.css';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
+import FloatingContact from '@/components/FloatingContact';
 
 const dmSans = DM_Sans({
   subsets: ['latin'],
@@ -104,6 +105,7 @@ export default function RootLayout({
         <Navigation />
         <main>{children}</main>
         <Footer />
+        <FloatingContact />
       </body>
     </html>
   );

@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import AnimatedSection from '@/components/AnimatedSection'
+import CounterSection from '@/components/CounterSection'
 import {
   Wrench,
   Zap,
@@ -14,7 +15,11 @@ import {
   ListChecks,
   AlertCircle,
   TrendingUp,
-  Image as ImageIcon
+  Image as ImageIcon,
+  Star,
+  MapPin,
+  FlaskConical,
+  Quote
 } from 'lucide-react'
 
 const processSteps = [
@@ -63,6 +68,51 @@ const useCases = [
   },
 ]
 
+const testimonials = [
+  {
+    name: 'Marcus T.',
+    buildType: 'Gaming Build',
+    rating: 5,
+    text: 'Sent my parts in on Monday, had a fully built and tested system by Thursday. Cable management was immaculate. Highly recommend.',
+  },
+  {
+    name: 'Sarah K.',
+    buildType: 'Workstation Build',
+    rating: 5,
+    text: 'I was nervous about shipping expensive components but the team was professional from start to finish. My workstation runs flawlessly.',
+  },
+  {
+    name: 'James R.',
+    buildType: 'Budget Gaming PC',
+    rating: 5,
+    text: 'As a first-time builder I had no idea where to start. Their budget planning service picked perfect parts and the build quality was top notch.',
+  },
+  {
+    name: 'Emily D.',
+    buildType: 'Content Creator PC',
+    rating: 5,
+    text: 'Render times cut in half compared to my old prebuilt. The stress testing they do before shipping gave me total confidence in the system.',
+  },
+  {
+    name: 'Chris M.',
+    buildType: 'Express Build',
+    rating: 5,
+    text: 'Needed a rush build for a project deadline. They turned it around in under 48 hours and it was perfect. Worth every penny of the express fee.',
+  },
+  {
+    name: 'Alex P.',
+    buildType: 'PC Upgrade',
+    rating: 5,
+    text: 'Brought my old PC in for a full upgrade. New CPU, GPU, and cooling. Feels like a brand new machine and they even cleaned up the old wiring.',
+  },
+]
+
+const trustBadges = [
+  { icon: Shield, label: '30-Day Warranty' },
+  { icon: FlaskConical, label: 'Stress Tested' },
+  { icon: Wrench, label: 'Expert Assembly' },
+]
+
 export default function HomeContent() {
   return (
     <div className="pt-20">
@@ -89,12 +139,12 @@ export default function HomeContent() {
                 <span className="gradient-text">Expertise</span>
               </h1>
 
-              <p className="text-lg md:text-xl text-silver mb-10 max-w-2xl">
-                Custom PC building, troubleshooting & diagnostics, or upgrading your existing system. We handle it all with expert craftsmanship and attention to detail.
+              <p className="text-lg md:text-xl text-silver mb-10 max-w-xl">
+                Send us your components. We build, test, and ship back a system you can trust.
               </p>
 
-              <div className="flex flex-wrap gap-4">
-                <Link href="/order" className="btn-primary">
+              <div className="flex flex-wrap gap-4 mb-8">
+                <Link href="/order" className="btn-primary text-base px-8 py-4">
                   <span className="flex items-center gap-2">
                     Book a Build
                     <ChevronRight className="w-4 h-4" />
@@ -103,6 +153,24 @@ export default function HomeContent() {
                 <Link href="/troubleshooting" className="btn-secondary">
                   Get PC Help
                 </Link>
+              </div>
+
+              {/* Trust Badges */}
+              <div className="flex flex-wrap gap-3 mb-4">
+                {trustBadges.map((badge) => (
+                  <div
+                    key={badge.label}
+                    className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-steel/30 border border-steel/50 text-xs text-silver"
+                  >
+                    <badge.icon className="w-3.5 h-3.5 text-electric" />
+                    {badge.label}
+                  </div>
+                ))}
+              </div>
+
+              <div className="flex items-center gap-1.5 text-xs text-silver/70">
+                <MapPin className="w-3.5 h-3.5" />
+                Locally owned in Girard, OH
               </div>
             </div>
 
@@ -134,6 +202,9 @@ export default function HomeContent() {
           </div>
         </div>
       </section>
+
+      {/* Trust Counters */}
+      <CounterSection />
 
       {/* How It Works Section */}
       <section className="py-24 bg-obsidian">
@@ -339,6 +410,44 @@ export default function HomeContent() {
                   <p className="text-silver text-sm leading-relaxed">
                     {feature.description}
                   </p>
+                </div>
+              ))}
+            </div>
+          </AnimatedSection>
+        </div>
+      </section>
+
+      {/* Testimonials Section */}
+      <section className="py-24 bg-obsidian">
+        <div className="max-w-7xl mx-auto px-6">
+          <AnimatedSection className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-display font-bold mb-4 text-pearl">
+              What Our Clients <span className="gradient-text">Say</span>
+            </h2>
+            <p className="text-silver text-lg max-w-2xl mx-auto">
+              Don&apos;t just take our word for it—hear from our satisfied customers.
+            </p>
+          </AnimatedSection>
+
+          <AnimatedSection>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {testimonials.map((testimonial) => (
+                <div key={testimonial.name} className="card relative">
+                  <Quote className="w-8 h-8 text-electric/20 absolute top-6 right-6" />
+                  <div className="flex gap-0.5 mb-4">
+                    {Array.from({ length: testimonial.rating }).map((_, i) => (
+                      <Star key={i} className="w-4 h-4 text-amber fill-amber" />
+                    ))}
+                  </div>
+                  <p className="text-silver text-sm leading-relaxed mb-6">
+                    &ldquo;{testimonial.text}&rdquo;
+                  </p>
+                  <div>
+                    <p className="font-display font-semibold text-pearl text-sm">
+                      {testimonial.name}
+                    </p>
+                    <p className="text-xs text-silver">{testimonial.buildType}</p>
+                  </div>
                 </div>
               ))}
             </div>

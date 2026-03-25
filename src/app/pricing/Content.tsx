@@ -4,7 +4,9 @@ import {
   Check,
   Wrench,
   Zap,
-  HelpCircle
+  HelpCircle,
+  Clock,
+  MessageCircle
 } from 'lucide-react'
 
 const services = [
@@ -23,7 +25,7 @@ const services = [
       'Driver installation',
       'Build photos',
     ],
-    popular: true,
+    popular: false,
   },
   {
     name: 'Express Build',
@@ -38,7 +40,7 @@ const services = [
       'Extended stress testing (4+ hours)',
       'Detailed benchmark report',
     ],
-    popular: false,
+    popular: true,
   },
 ]
 
@@ -136,9 +138,10 @@ export default function PricingContent() {
                     {service.description}
                   </p>
 
-                  <p className="text-xs text-silver mb-6">
-                    Turnaround: {service.turnaround}
-                  </p>
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-steel/30 border border-steel/50 text-xs text-silver mb-6">
+                    <Clock className="w-3.5 h-3.5 text-electric" />
+                    {service.turnaround}
+                  </div>
 
                   <div className="mb-6">
                     <span className="text-4xl font-display font-bold gradient-text">
@@ -163,6 +166,24 @@ export default function PricingContent() {
                   </Link>
                 </div>
               ))}
+            </div>
+          </AnimatedSection>
+
+          {/* Not Sure CTA */}
+          <AnimatedSection>
+            <div className="mt-10 p-6 bg-midnight rounded-2xl border border-steel/50 flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-electric/20 to-volt/20 flex items-center justify-center shrink-0">
+                  <MessageCircle className="w-5 h-5 text-electric" />
+                </div>
+                <div>
+                  <p className="font-display font-semibold text-pearl">Not sure which tier is right?</p>
+                  <p className="text-sm text-silver">We&apos;ll help you figure out the best option for your build.</p>
+                </div>
+              </div>
+              <Link href="/contact" className="btn-secondary whitespace-nowrap">
+                Get in Touch
+              </Link>
             </div>
           </AnimatedSection>
         </div>
