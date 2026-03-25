@@ -37,6 +37,7 @@ CREATE TABLE IF NOT EXISTS contacts (
     phone TEXT,
     subject TEXT NOT NULL,
     message TEXT NOT NULL,
+    read_at TIMESTAMPTZ,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
