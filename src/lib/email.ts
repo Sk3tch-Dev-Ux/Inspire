@@ -6,6 +6,7 @@ import {
   contactNotificationHtml,
   paymentConfirmationHtml,
   welcomeEmailHtml,
+  orderStatusUpdateHtml,
 } from './email-templates';
 
 function getResend() {
@@ -89,6 +90,42 @@ export async function sendWelcomeEmail(data: { name: string; email: string }) {
     to: data.email,
     subject: 'Welcome to Inspire PC!',
     html: welcomeEmailHtml(data),
+  });
+}
+
+interface StatusUpdateData {
+  orderId: string;
+  name: string;
+  email: string;
+  service: string;
+  oldStatus: string;
+  newStatus: string;
+  trackingNumber?: string | null;
+  carrier?: string | null;
+  estimatedDelivery?: string | null;
+  adminNotes?: string | null;
+}
+
+const statusSubjects: Record<string, string> = {
+  confirmed: 'Order Confirmed',
+  in_progress: 'Build Started',
+  completed: 'Build Complete',
+  shipped: 'Your PC Has Shipped',
+  delivered: 'PC Delivered',
+  ready_for_pickup: 'Ready for Pickup',
+  cancelled: 'Order Cancelled',
+  refunded: 'Refund Processed',
+};
+
+export async function sendOrderStatusUpdate(data: StatusUpdateData) {
+  const resend = getResend();
+  if (!resend) return console.log('RESEND_API_KEY not set, skipping email');
+  const subject = statusSubjects[data.newStatus] || 'Order Update';
+  return resend.emails.send({
+    from: FROM,
+    to: data.email,
+    subject: `${subject} - ${data.orderId}`,
+    html: orderStatusUpdateHtml(data),
   });
 }
 

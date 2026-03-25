@@ -157,6 +157,130 @@ export function welcomeEmailHtml(data: { name: string; email: string }): string 
   `);
 }
 
+interface StatusUpdateData {
+  orderId: string;
+  name: string;
+  email: string;
+  service: string;
+  oldStatus: string;
+  newStatus: string;
+  trackingNumber?: string | null;
+  carrier?: string | null;
+  estimatedDelivery?: string | null;
+  adminNotes?: string | null;
+}
+
+const statusMessages: Record<string, { title: string; color: string; message: string }> = {
+  confirmed: {
+    title: 'Order Confirmed!',
+    color: '#00d4ff',
+    message: "We've confirmed your order and are preparing to begin work.",
+  },
+  in_progress: {
+    title: 'Build In Progress!',
+    color: '#00d4ff',
+    message: "Great news — we've started building your PC! We'll update you as we make progress.",
+  },
+  completed: {
+    title: 'Build Complete!',
+    color: '#00ff88',
+    message: 'Your PC build is complete and has passed all quality checks.',
+  },
+  shipped: {
+    title: 'Your PC Has Shipped!',
+    color: '#00ff88',
+    message: "Your PC is on its way! Here are your shipping details.",
+  },
+  delivered: {
+    title: 'PC Delivered!',
+    color: '#00ff88',
+    message: "Your PC has been delivered. We hope you love it!",
+  },
+  ready_for_pickup: {
+    title: 'Ready for Pickup!',
+    color: '#00ff88',
+    message: 'Your PC build is ready! You can pick it up at your earliest convenience.',
+  },
+  cancelled: {
+    title: 'Order Cancelled',
+    color: '#ff6b6b',
+    message: "Your order has been cancelled. If you didn't request this, please contact us immediately.",
+  },
+  refunded: {
+    title: 'Refund Processed',
+    color: '#ffaa00',
+    message: 'A refund has been processed for your order. Please allow 5-10 business days for the refund to appear.',
+  },
+};
+
+export function orderStatusUpdateHtml(data: StatusUpdateData): string {
+  const info = statusMessages[data.newStatus] || {
+    title: 'Order Update',
+    color: '#00d4ff',
+    message: `Your order status has been updated to: ${data.newStatus.replace(/_/g, ' ')}.`,
+  };
+
+  let trackingHtml = '';
+  if (data.trackingNumber && (data.newStatus === 'shipped' || data.newStatus === 'delivered')) {
+    const carrierUrls: Record<string, string> = {
+      ups: `https://www.ups.com/track?tracknum=${data.trackingNumber}`,
+      fedex: `https://www.fedex.com/fedextrack/?trknbr=${data.trackingNumber}`,
+      usps: `https://tools.usps.com/go/TrackConfirmAction?tLabels=${data.trackingNumber}`,
+    };
+    const trackingUrl = data.carrier ? carrierUrls[data.carrier.toLowerCase()] : null;
+
+    trackingHtml = `
+      <div style="background:#0a0a0f;border-radius:8px;padding:16px;margin:20px 0;">
+        <p style="color:#8a8a9a;margin:0 0 4px;font-size:13px;">TRACKING DETAILS</p>
+        <table style="width:100%;border-collapse:collapse;">
+          ${data.carrier ? `<tr><td style="color:#8a8a9a;padding:6px 0;">Carrier</td><td style="color:#e8e8ec;padding:6px 0;text-align:right;text-transform:uppercase;">${data.carrier}</td></tr>` : ''}
+          <tr><td style="color:#8a8a9a;padding:6px 0;">Tracking #</td><td style="color:#00d4ff;padding:6px 0;text-align:right;font-weight:600;">${data.trackingNumber}</td></tr>
+          ${data.estimatedDelivery ? `<tr><td style="color:#8a8a9a;padding:6px 0;">Est. Delivery</td><td style="color:#e8e8ec;padding:6px 0;text-align:right;">${new Date(data.estimatedDelivery).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}</td></tr>` : ''}
+        </table>
+        ${trackingUrl ? `<div style="text-align:center;margin-top:12px;"><a href="${trackingUrl}" style="display:inline-block;padding:10px 24px;background:linear-gradient(135deg,#00d4ff,#00ff88);color:#0a0a0f;border-radius:8px;text-decoration:none;font-weight:600;font-size:14px;">Track Your Package</a></div>` : ''}
+      </div>
+    `;
+  }
+
+  let notesHtml = '';
+  if (data.adminNotes) {
+    notesHtml = `
+      <div style="background:#0a0a0f;border-radius:8px;padding:16px;margin:16px 0;">
+        <p style="color:#8a8a9a;margin:0 0 4px;font-size:13px;">NOTE FROM OUR TEAM</p>
+        <p style="color:#e8e8ec;margin:0;">${data.adminNotes}</p>
+      </div>
+    `;
+  }
+
+  return wrapper(`
+    <h1 style="color:${info.color};font-size:22px;margin:0 0 8px;">${info.title}</h1>
+    <p style="color:#8a8a9a;margin:0 0 24px;">Hi ${data.name}, here's an update on your order.</p>
+
+    <div style="background:#0a0a0f;border-radius:8px;padding:16px;margin-bottom:20px;">
+      <table style="width:100%;border-collapse:collapse;">
+        <tr><td style="color:#8a8a9a;padding:6px 0;">Order</td>
+            <td style="color:#00d4ff;padding:6px 0;text-align:right;font-weight:600;">${data.orderId}</td></tr>
+        <tr><td style="color:#8a8a9a;padding:6px 0;">Service</td>
+            <td style="color:#e8e8ec;padding:6px 0;text-align:right;">${data.service}</td></tr>
+        <tr><td style="color:#8a8a9a;padding:6px 0;">Status</td>
+            <td style="color:${info.color};padding:6px 0;text-align:right;font-weight:600;text-transform:capitalize;">${data.newStatus.replace(/_/g, ' ')}</td></tr>
+      </table>
+    </div>
+
+    <p style="color:#e8e8ec;margin:0 0 8px;">${info.message}</p>
+    ${trackingHtml}
+    ${notesHtml}
+
+    <div style="text-align:center;margin:24px 0 16px;">
+      <a href="https://inspirepc.com/account/orders/${data.orderId}" style="display:inline-block;padding:14px 32px;background:linear-gradient(135deg,#00d4ff,#00ff88);color:#0a0a0f;border-radius:12px;text-decoration:none;font-weight:600;">
+        View Order Details
+      </a>
+    </div>
+
+    <p style="color:#8a8a9a;font-size:13px;margin:16px 0 0;">Questions? Reply to this email or call (330) 314-8860.</p>
+  `);
+}
+
 export function paymentConfirmationHtml(order: OrderData): string {
   const total = order.totalCents ? `$${(order.totalCents / 100).toFixed(2)}` : 'N/A';
   return wrapper(`

@@ -9,6 +9,10 @@ import {
   ChevronLeft,
   ChevronRight,
   ExternalLink,
+  Truck,
+  MapPin,
+  Bell,
+  Check,
 } from 'lucide-react'
 
 interface Order {
@@ -30,6 +34,13 @@ interface Order {
   zip: string
   notes: string
   status: string
+  tracking_number: string | null
+  carrier: string | null
+  shipping_method: string | null
+  estimated_delivery: string | null
+  admin_notes: string | null
+  shipped_at: string | null
+  delivered_at: string | null
   stripe_session_id: string
   stripe_payment_intent_id: string
   total_cents: number
@@ -37,8 +48,10 @@ interface Order {
   updated_at: string
 }
 
-const STATUSES = ['all', 'pending', 'awaiting_payment', 'paid', 'confirmed', 'in_progress', 'completed', 'shipped', 'cancelled', 'refunded', 'payment_failed']
-const UPDATABLE_STATUSES = ['pending', 'awaiting_payment', 'paid', 'confirmed', 'in_progress', 'completed', 'shipped', 'cancelled']
+const STATUSES = ['all', 'pending', 'awaiting_payment', 'paid', 'confirmed', 'in_progress', 'completed', 'shipped', 'delivered', 'ready_for_pickup', 'cancelled', 'refunded', 'payment_failed']
+const UPDATABLE_STATUSES = ['pending', 'awaiting_payment', 'paid', 'confirmed', 'in_progress', 'completed', 'shipped', 'delivered', 'ready_for_pickup', 'cancelled']
+const CARRIERS = ['', 'UPS', 'FedEx', 'USPS', 'DHL', 'Other']
+const SHIPPING_METHODS = ['local_pickup', 'standard_shipping', 'express_shipping']
 
 const statusColors: Record<string, string> = {
   pending: 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30',
@@ -48,6 +61,8 @@ const statusColors: Record<string, string> = {
   in_progress: 'bg-electric/20 text-electric border-electric/30',
   completed: 'bg-volt/20 text-volt border-volt/30',
   shipped: 'bg-green-500/20 text-green-400 border-green-500/30',
+  delivered: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
+  ready_for_pickup: 'bg-teal-500/20 text-teal-400 border-teal-500/30',
   cancelled: 'bg-steel/30 text-silver border-steel',
   refunded: 'bg-coral/20 text-coral border-coral/30',
   payment_failed: 'bg-red-500/20 text-red-400 border-red-500/30',
@@ -99,19 +114,20 @@ export default function AdminOrdersPage() {
     setSearch(searchInput)
   }
 
-  const updateStatus = async (orderId: string, newStatus: string) => {
+  const updateOrder = async (orderId: string, updates: Record<string, unknown>) => {
     setUpdatingStatus(orderId)
     try {
       const res = await fetch(`/api/admin/orders/${orderId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status: newStatus }),
+        body: JSON.stringify(updates),
       })
       if (res.ok) {
-        setOrders(prev => prev.map(o => o.order_id === orderId ? { ...o, status: newStatus } : o))
+        const data = await res.json()
+        setOrders(prev => prev.map(o => o.order_id === orderId ? { ...o, ...data.order } : o))
       }
     } catch (error) {
-      console.error('Failed to update status:', error)
+      console.error('Failed to update order:', error)
     } finally {
       setUpdatingStatus(null)
     }
@@ -179,7 +195,7 @@ export default function AdminOrdersPage() {
                     order={order}
                     expanded={expandedOrder === order.order_id}
                     onToggle={() => setExpandedOrder(expandedOrder === order.order_id ? null : order.order_id)}
-                    onUpdateStatus={updateStatus}
+                    onUpdateOrder={updateOrder}
                     updating={updatingStatus === order.order_id}
                   />
                 ))}
@@ -219,15 +235,38 @@ function OrderRow({
   order,
   expanded,
   onToggle,
-  onUpdateStatus,
+  onUpdateOrder,
   updating,
 }: {
   order: Order
   expanded: boolean
   onToggle: () => void
-  onUpdateStatus: (id: string, status: string) => void
+  onUpdateOrder: (id: string, updates: Record<string, unknown>) => void
   updating: boolean
 }) {
+  const [trackingNumber, setTrackingNumber] = useState(order.tracking_number || '')
+  const [carrier, setCarrier] = useState(order.carrier || '')
+  const [shippingMethod, setShippingMethod] = useState(order.shipping_method || 'local_pickup')
+  const [estimatedDelivery, setEstimatedDelivery] = useState(order.estimated_delivery?.split('T')[0] || '')
+  const [adminNotes, setAdminNotes] = useState(order.admin_notes || '')
+  const [pendingStatus, setPendingStatus] = useState(order.status)
+  const [notifyCustomer, setNotifyCustomer] = useState(true)
+  const [saved, setSaved] = useState(false)
+
+  const handleSave = () => {
+    onUpdateOrder(order.order_id, {
+      status: pendingStatus,
+      tracking_number: trackingNumber,
+      carrier,
+      shipping_method: shippingMethod,
+      estimated_delivery: estimatedDelivery || null,
+      admin_notes: adminNotes,
+      notify: notifyCustomer,
+    })
+    setSaved(true)
+    setTimeout(() => setSaved(false), 2000)
+  }
+
   return (
     <>
       <tr className="hover:bg-steel/10 transition-colors cursor-pointer" onClick={onToggle}>
@@ -237,7 +276,12 @@ function OrderRow({
           <div className="text-xs text-silver">{order.email}</div>
         </td>
         <td className="px-4 py-3 text-sm text-pearl capitalize">{order.service}</td>
-        <td className="px-4 py-3"><StatusBadge status={order.status} /></td>
+        <td className="px-4 py-3">
+          <div className="flex items-center gap-2">
+            <StatusBadge status={order.status} />
+            {order.tracking_number && <Truck className="w-3.5 h-3.5 text-volt" />}
+          </div>
+        </td>
         <td className="px-4 py-3 text-sm text-pearl">
           {order.total_cents ? `$${(order.total_cents / 100).toFixed(2)}` : '—'}
         </td>
@@ -299,25 +343,114 @@ function OrderRow({
               {/* Notes */}
               {order.notes && (
                 <div className="md:col-span-2">
-                  <h4 className="text-xs font-semibold text-silver uppercase tracking-wider mb-2">Notes</h4>
+                  <h4 className="text-xs font-semibold text-silver uppercase tracking-wider mb-2">Customer Notes</h4>
                   <p className="text-sm text-pearl bg-obsidian p-4 rounded-lg border border-steel">{order.notes}</p>
                 </div>
               )}
 
-              {/* Status Update */}
-              <div className="md:col-span-2 flex items-center gap-4 pt-4 border-t border-steel">
-                <span className="text-sm text-silver">Update Status:</span>
-                <select
-                  value={order.status}
-                  onChange={(e) => onUpdateStatus(order.order_id, e.target.value)}
+              {/* Shipping & Tracking Section */}
+              <div className="md:col-span-2 pt-4 border-t border-steel">
+                <h4 className="text-xs font-semibold text-silver uppercase tracking-wider mb-4 flex items-center gap-2">
+                  <Truck className="w-4 h-4" />
+                  Shipping & Tracking
+                </h4>
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs text-silver mb-1">Fulfillment Method</label>
+                    <select
+                      value={shippingMethod}
+                      onChange={(e) => setShippingMethod(e.target.value)}
+                      className="input-field text-sm w-full"
+                    >
+                      {SHIPPING_METHODS.map(m => (
+                        <option key={m} value={m}>{m.replace(/_/g, ' ')}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-xs text-silver mb-1">Carrier</label>
+                    <select
+                      value={carrier}
+                      onChange={(e) => setCarrier(e.target.value)}
+                      className="input-field text-sm w-full"
+                    >
+                      {CARRIERS.map(c => (
+                        <option key={c} value={c}>{c || 'Select carrier...'}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-xs text-silver mb-1">Tracking Number</label>
+                    <input
+                      type="text"
+                      value={trackingNumber}
+                      onChange={(e) => setTrackingNumber(e.target.value)}
+                      placeholder="Enter tracking number..."
+                      className="input-field text-sm w-full"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-silver mb-1">Estimated Delivery</label>
+                    <input
+                      type="date"
+                      value={estimatedDelivery}
+                      onChange={(e) => setEstimatedDelivery(e.target.value)}
+                      className="input-field text-sm w-full"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Admin Notes */}
+              <div className="md:col-span-2">
+                <label className="block text-xs text-silver mb-1">Admin Notes (included in customer email)</label>
+                <textarea
+                  value={adminNotes}
+                  onChange={(e) => setAdminNotes(e.target.value)}
+                  placeholder="Optional note to customer (e.g. 'Your build is looking great! Cable management is done.')"
+                  rows={2}
+                  className="input-field text-sm w-full resize-none"
+                />
+              </div>
+
+              {/* Status Update + Save */}
+              <div className="md:col-span-2 flex flex-wrap items-center gap-4 pt-4 border-t border-steel">
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-silver">Status:</span>
+                  <select
+                    value={pendingStatus}
+                    onChange={(e) => setPendingStatus(e.target.value)}
+                    className="input-field text-sm"
+                  >
+                    {UPDATABLE_STATUSES.map(s => (
+                      <option key={s} value={s}>{s.replace(/_/g, ' ')}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <label className="flex items-center gap-2 text-sm cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={notifyCustomer}
+                    onChange={(e) => setNotifyCustomer(e.target.checked)}
+                    className="w-4 h-4 rounded border-steel bg-obsidian accent-electric"
+                  />
+                  <Bell className="w-3.5 h-3.5 text-silver" />
+                  <span className="text-silver">Notify customer</span>
+                </label>
+
+                <button
+                  onClick={handleSave}
                   disabled={updating}
-                  className="input-field text-sm"
+                  className="btn-primary px-6 py-2 text-sm flex items-center gap-2"
                 >
-                  {UPDATABLE_STATUSES.map(s => (
-                    <option key={s} value={s}>{s.replace(/_/g, ' ')}</option>
-                  ))}
-                </select>
-                {updating && <Loader2 className="w-4 h-4 text-electric animate-spin" />}
+                  {updating ? (
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                  ) : saved ? (
+                    <Check className="w-4 h-4" />
+                  ) : null}
+                  <span>{saved ? 'Saved!' : 'Save & Update'}</span>
+                </button>
 
                 {order.stripe_session_id && (
                   <span className="text-xs text-silver ml-auto">

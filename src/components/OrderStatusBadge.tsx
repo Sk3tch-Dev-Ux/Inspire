@@ -6,6 +6,8 @@ const statusConfig: Record<string, { label: string; color: string; bg: string }>
   in_progress: { label: 'In Progress', color: 'text-volt', bg: 'bg-volt/10 border-volt/30' },
   completed: { label: 'Completed', color: 'text-volt', bg: 'bg-volt/10 border-volt/30' },
   shipped: { label: 'Shipped', color: 'text-volt', bg: 'bg-volt/10 border-volt/30' },
+  delivered: { label: 'Delivered', color: 'text-volt', bg: 'bg-volt/10 border-volt/30' },
+  ready_for_pickup: { label: 'Ready for Pickup', color: 'text-electric', bg: 'bg-electric/10 border-electric/30' },
   cancelled: { label: 'Cancelled', color: 'text-coral', bg: 'bg-coral/10 border-coral/30' },
   refunded: { label: 'Refunded', color: 'text-coral', bg: 'bg-coral/10 border-coral/30' },
   payment_failed: { label: 'Payment Failed', color: 'text-coral', bg: 'bg-coral/10 border-coral/30' },
