@@ -58,7 +58,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const session = await stripe.checkout.sessions.create({
+    const email = customerInfo?.email?.trim();
+    const isValidEmail = email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+    const sessionParams: Stripe.Checkout.SessionCreateParams = {
       payment_method_types: ['card'],
       line_items: [
         {
@@ -76,7 +79,6 @@ export async function POST(request: NextRequest) {
       mode: 'payment',
       success_url: `${request.headers.get('origin')}/order/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${request.headers.get('origin')}/order?cancelled=true`,
-      customer_email: customerInfo?.email,
       shipping_address_collection: {
         allowed_countries: ['US', 'CA'],
       },
@@ -87,7 +89,13 @@ export async function POST(request: NextRequest) {
         customerName: customerInfo?.firstName ? `${customerInfo.firstName} ${customerInfo.lastName}` : '',
         customerPhone: customerInfo?.phone || '',
       },
-    });
+    };
+
+    if (isValidEmail) {
+      sessionParams.customer_email = email;
+    }
+
+    const session = await stripe.checkout.sessions.create(sessionParams);
 
     // Update order with stripe session ID
     await query(
