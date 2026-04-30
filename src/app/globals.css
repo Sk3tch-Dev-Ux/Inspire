@@ -1,191 +1,232 @@
 @import "tailwindcss";
 
+/* ─────────────────────────────────────────────────────────────
+   INSPIRE DEVELOPMENT — Brand Tokens (Phase 1)
+   White / Black / Orange brand for Discord, web, and game-script
+   work. Dark-first by default; light variant exists but the hero,
+   portfolio, and showcase pages live on black so orange does its
+   electric thing.
+   ───────────────────────────────────────────────────────────── */
 @theme {
-  --font-sans: var(--font-body), "DM Sans", system-ui, sans-serif;
+  /* Type system. layout.tsx wires next/font/google to these vars. */
+  --font-sans: var(--font-body), "Inter", system-ui, sans-serif;
   --font-display: var(--font-display), "Space Grotesk", system-ui, sans-serif;
-  
-  --color-midnight: #0a0a0f;
-  --color-obsidian: #12121a;
-  --color-slate-deep: #1a1a24;
-  --color-steel: #2a2a3a;
-  --color-silver: #8a8a9a;
-  --color-pearl: #e8e8ec;
-  
-  --color-electric: #00d4ff;
-  --color-electric-dim: #00a8cc;
-  --color-volt: #00ff88;
-  --color-amber: #ffaa00;
-  --color-coral: #ff6b6b;
-  
-  --color-gradient-start: #00d4ff;
-  --color-gradient-end: #00ff88;
+  --font-mono: var(--font-mono), "JetBrains Mono", ui-monospace, "SF Mono", monospace;
+
+  /* Surface scale — slightly warm blacks so orange reads as
+     electric, not garish. Bone is a slightly warm off-white. */
+  --color-ink: #0A0A0A;        /* primary background */
+  --color-carbon: #1A1A1A;     /* card / panel surface */
+  --color-steel: #2D2D2D;      /* borders, dividers, inactive */
+  --color-mute: #7A7A7A;       /* secondary text, metadata */
+  --color-bone: #FAFAF7;       /* primary text on dark; bg on light */
+  --color-pure: #FFFFFF;       /* highest contrast text only */
+
+  /* Brand orange. Three steps for hover/pressed/glow. */
+  --color-flame: #FF6B1A;      /* PRIMARY — buttons, links, accents */
+  --color-flame-glow: #FF8742; /* lighter — gradients, hovers */
+  --color-ember: #CC4A00;      /* deeper — pressed, secondary */
+
+  /* Aliases kept around so legacy components keep compiling
+     during the rebuild. Each maps a deprecated token to its
+     closest new equivalent so the visual palette converges. */
+  --color-midnight: var(--color-ink);
+  --color-obsidian: var(--color-carbon);
+  --color-slate-deep: var(--color-carbon);
+  --color-silver: var(--color-mute);
+  --color-pearl: var(--color-bone);
+  --color-electric: var(--color-flame);
+  --color-electric-dim: var(--color-ember);
+  --color-volt: var(--color-flame-glow);
+  --color-amber: var(--color-flame);
+  --color-coral: var(--color-flame);
+  --color-gradient-start: var(--color-flame);
+  --color-gradient-end: var(--color-flame-glow);
 }
 
 @layer base {
   * {
     box-sizing: border-box;
   }
-  
+
   html {
     scroll-behavior: smooth;
   }
 
-  /* Global focus-visible styles for keyboard navigation */
+  /* Keyboard focus styling — orange ring, never the default blue. */
   *:focus-visible {
-    outline: 2px solid var(--color-electric);
+    outline: 2px solid var(--color-flame);
     outline-offset: 2px;
     border-radius: 4px;
   }
 
-  /* Remove default outline for mouse users */
   *:focus:not(:focus-visible) {
     outline: none;
   }
-  
+
   body {
     font-family: var(--font-sans);
-    background-color: var(--color-midnight);
-    color: var(--color-pearl);
+    background-color: var(--color-ink);
+    color: var(--color-bone);
     line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
   }
-  
+
   ::selection {
-    background-color: var(--color-electric);
-    color: var(--color-midnight);
+    background-color: var(--color-flame);
+    color: var(--color-ink);
   }
 }
 
 @layer components {
+  /* Headline gradient — orange to lighter orange. Slight diagonal. */
   .gradient-text {
-    background: linear-gradient(135deg, var(--color-electric) 0%, var(--color-volt) 100%);
+    background: linear-gradient(135deg, var(--color-flame) 0%, var(--color-flame-glow) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
-  
+
+  /* Subtle bordered card with a hairline gradient outline. */
   .gradient-border {
     position: relative;
-    background: var(--color-obsidian);
+    background: var(--color-carbon);
     border-radius: 16px;
   }
-  
+
   .gradient-border::before {
     content: "";
     position: absolute;
     inset: 0;
     padding: 1px;
     border-radius: 16px;
-    background: linear-gradient(135deg, var(--color-electric), var(--color-volt));
+    background: linear-gradient(135deg, var(--color-flame), var(--color-flame-glow));
     mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     mask-composite: xor;
     -webkit-mask-composite: xor;
     pointer-events: none;
   }
-  
+
+  /* Primary button — solid orange on ink with a faint glow on hover. */
   .btn-primary {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 14px 32px;
+    padding: 14px 28px;
     font-weight: 600;
     font-size: 15px;
-    letter-spacing: 0.02em;
-    color: var(--color-midnight);
-    background: linear-gradient(135deg, var(--color-electric) 0%, var(--color-volt) 100%);
-    border-radius: 12px;
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
+    letter-spacing: 0.01em;
+    color: var(--color-ink);
+    background: var(--color-flame);
+    border-radius: 10px;
+    transition: background 150ms ease, box-shadow 200ms ease, transform 150ms ease;
+    cursor: pointer;
   }
-  
-  .btn-primary::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, var(--color-volt) 0%, var(--color-electric) 100%);
-    opacity: 0;
-    transition: opacity 0.3s ease;
+
+  .btn-primary:hover {
+    background: var(--color-flame-glow);
+    box-shadow: 0 0 24px rgba(255, 107, 26, 0.35);
   }
-  
-  .btn-primary:hover::before {
-    opacity: 1;
+
+  .btn-primary:active {
+    background: var(--color-ember);
+    transform: translateY(1px);
   }
-  
-  .btn-primary span {
-    position: relative;
-    z-index: 1;
-  }
-  
+
+  /* Secondary button — outline only, fills with orange on hover. */
   .btn-secondary {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 14px 32px;
+    padding: 13px 27px;
     font-weight: 600;
     font-size: 15px;
-    letter-spacing: 0.02em;
-    color: var(--color-pearl);
+    letter-spacing: 0.01em;
+    color: var(--color-bone);
     background: transparent;
     border: 1px solid var(--color-steel);
-    border-radius: 12px;
-    transition: all 0.3s ease;
+    border-radius: 10px;
+    transition: border-color 150ms ease, color 150ms ease;
+    cursor: pointer;
   }
-  
+
   .btn-secondary:hover {
-    border-color: var(--color-electric);
-    color: var(--color-electric);
+    border-color: var(--color-flame);
+    color: var(--color-flame);
   }
-  
+
+  /* Surface card with hover lift + subtle orange glow. */
   .card {
-    background: var(--color-obsidian);
+    background: var(--color-carbon);
     border: 1px solid var(--color-steel);
-    border-radius: 20px;
-    padding: 32px;
-    transition: all 0.4s ease;
+    border-radius: 16px;
+    padding: 28px;
+    transition: border-color 200ms ease, transform 200ms ease, box-shadow 250ms ease;
   }
-  
+
   .card:hover {
-    border-color: var(--color-electric);
-    transform: translateY(-4px);
-    box-shadow: 0 20px 40px rgba(0, 212, 255, 0.1);
+    border-color: var(--color-flame);
+    transform: translateY(-3px);
+    box-shadow: 0 14px 30px rgba(255, 107, 26, 0.10);
   }
-  
+
+  /* Form input — dark surface, orange focus ring. */
   .input-field {
     width: 100%;
-    padding: 16px 20px;
-    background: var(--color-slate-deep);
+    padding: 14px 18px;
+    background: var(--color-carbon);
     border: 1px solid var(--color-steel);
-    border-radius: 12px;
-    color: var(--color-pearl);
+    border-radius: 10px;
+    color: var(--color-bone);
     font-size: 15px;
-    transition: all 0.3s ease;
+    font-family: var(--font-sans);
+    transition: border-color 150ms ease, box-shadow 200ms ease;
   }
-  
+
   .input-field:focus {
     outline: none;
-    border-color: var(--color-electric);
-    box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.15);
+    border-color: var(--color-flame);
+    box-shadow: 0 0 0 3px rgba(255, 107, 26, 0.18);
   }
-  
+
   .input-field::placeholder {
-    color: var(--color-silver);
+    color: var(--color-mute);
   }
-  
+
+  /* Display-font section title — large, tight letterspacing, gradient option. */
   .section-title {
     font-family: var(--font-display);
-    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-size: clamp(2.25rem, 5vw, 3.75rem);
     font-weight: 700;
-    line-height: 1.1;
+    line-height: 1.05;
     letter-spacing: -0.02em;
   }
-  
+
   .section-subtitle {
-    font-size: 1.125rem;
-    color: var(--color-silver);
+    font-size: 1.0625rem;
+    color: var(--color-mute);
     max-width: 600px;
     line-height: 1.7;
   }
-  
+
+  /* Mono-style spec badge — for service-tier descriptors:
+     "Discord bot · DayZ script · Rust mod" type strings.    */
+  .spec-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--color-flame);
+    background: rgba(255, 107, 26, 0.08);
+    border: 1px solid rgba(255, 107, 26, 0.25);
+    border-radius: 6px;
+    letter-spacing: 0.02em;
+  }
+
+  /* Markdown styling for the AI chat widget. */
   .chat-markdown p {
     margin: 0 0 8px;
   }
@@ -195,7 +236,7 @@
   }
 
   .chat-markdown strong {
-    color: var(--color-electric);
+    color: var(--color-flame);
     font-weight: 600;
   }
 
@@ -210,26 +251,28 @@
   }
 
   .chat-markdown a {
-    color: var(--color-electric);
+    color: var(--color-flame);
     text-decoration: underline;
     text-underline-offset: 2px;
   }
 
   .chat-markdown a:hover {
-    color: var(--color-volt);
+    color: var(--color-flame-glow);
   }
 
   .chat-markdown code {
-    background: var(--color-midnight);
+    background: var(--color-ink);
     padding: 1px 5px;
     border-radius: 4px;
+    font-family: var(--font-mono);
     font-size: 0.85em;
   }
 
+  /* Faint orange aura — drop behind hero elements. */
   .glow-effect {
     position: relative;
   }
-  
+
   .glow-effect::after {
     content: "";
     position: absolute;
@@ -238,7 +281,7 @@
     transform: translate(-50%, -50%);
     width: 200%;
     height: 200%;
-    background: radial-gradient(circle, rgba(0, 212, 255, 0.15) 0%, transparent 60%);
+    background: radial-gradient(circle, rgba(255, 107, 26, 0.16) 0%, transparent 60%);
     pointer-events: none;
     z-index: -1;
   }
@@ -273,7 +316,7 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--color-obsidian);
+  background: var(--color-carbon);
 }
 
 ::-webkit-scrollbar-thumb {
@@ -282,5 +325,5 @@
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-silver);
+  background: var(--color-flame);
 }

@@ -1,112 +1,144 @@
+/**
+ * Inspire Development — Logo (Phase 1 brand kit)
+ *
+ * Three variants:
+ *   - "wordmark" (default): full lockup, "inspire⚡ DEVELOPMENT", with the
+ *     bolt replacing the dot of the `i` in `inspire`. Use in header/nav.
+ *   - "mark": just the bolt on a rounded-square ink background — for
+ *     favicons, Discord avatars, app tile icons.
+ *   - "inline": single-line "inspire⚡ Development" without the stacked
+ *     DEVELOPMENT subtitle — for compact contexts like the footer.
+ *
+ * Sizing scales the whole thing — pick `sm` for inline contexts,
+ * `md` for nav, `lg` for hero treatments. The bolt is hand-drawn,
+ * not the lightning emoji, so it always renders identically across
+ * platforms.
+ *
+ * Backwards compatibility: existing call sites pass `showWordmark`,
+ * which is honored as a fallback (true → wordmark, false → mark).
+ */
+
 interface LogoProps {
-  showWordmark?: boolean;
-  size?: 'sm' | 'md' | 'lg';
+  variant?: 'wordmark' | 'mark' | 'inline';
+  size?: 'sm' | 'md' | 'lg' | 'xl';
   className?: string;
+  /** Force light background colors for use on white. Defaults to dark. */
+  onLight?: boolean;
+  /** Legacy: pre-rebrand prop. true ≡ wordmark, false ≡ mark. */
+  showWordmark?: boolean;
 }
 
-const sizes = {
-  sm: { icon: 28, text: 'text-lg', gap: 'gap-2' },
-  md: { icon: 36, text: 'text-xl', gap: 'gap-2.5' },
-  lg: { icon: 48, text: 'text-3xl', gap: 'gap-3' },
-};
+const SIZES = {
+  sm: { wordmark: 'text-xl', subtitle: 'text-[9px]', bolt: 18, mark: 28 },
+  md: { wordmark: 'text-2xl', subtitle: 'text-[10px]', bolt: 22, mark: 36 },
+  lg: { wordmark: 'text-4xl', subtitle: 'text-xs', bolt: 32, mark: 56 },
+  xl: { wordmark: 'text-6xl', subtitle: 'text-sm', bolt: 48, mark: 88 },
+} as const;
 
-export default function Logo({ showWordmark = true, size = 'md', className = '' }: LogoProps) {
-  const s = sizes[size];
-
+/**
+ * The brand bolt. Custom-drawn lightning — chunky, slight forward slant,
+ * single fill. Renders inline so it can replace the dot of the `i`.
+ */
+function Bolt({
+  size = 22,
+  className = '',
+  style,
+}: {
+  size?: number;
+  className?: string;
+  style?: React.CSSProperties;
+}) {
   return (
-    <div className={`flex items-center ${s.gap} ${className}`}>
-      <svg
-        width={s.icon}
-        height={s.icon}
-        viewBox="0 0 48 48"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        aria-hidden="true"
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+      className={className}
+      style={style}
+    >
+      <path d="M14.2 2.2 L5.4 13.6 L11.2 13.6 L9.8 21.8 L18.6 10.4 L12.8 10.4 L14.2 2.2 Z" />
+    </svg>
+  );
+}
+
+export default function Logo({
+  variant,
+  size = 'md',
+  className = '',
+  onLight = false,
+  showWordmark,
+}: LogoProps) {
+  // Resolve variant: explicit `variant` wins. Else derive from the
+  // legacy `showWordmark` (true → wordmark, false → mark). Default
+  // to wordmark.
+  const v: 'wordmark' | 'mark' | 'inline' =
+    variant ?? (showWordmark === false ? 'mark' : 'wordmark');
+
+  const s = SIZES[size];
+
+  const textClass = onLight ? 'text-ink' : 'text-bone';
+  const subtitleClass = 'text-mute';
+
+  if (v === 'mark') {
+    // Square-tile mark for app icons, Discord avatars, favicons.
+    const px = s.mark;
+    return (
+      <div
+        className={`inline-flex items-center justify-center rounded-xl bg-ink ${className}`}
+        style={{ width: px, height: px }}
+        aria-label="Inspire Development"
       >
-        <defs>
-          <linearGradient id="logo-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#00d4ff" />
-            <stop offset="100%" stopColor="#7c3aed" />
-          </linearGradient>
-          <linearGradient id="logo-gradient-reverse" x1="100%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="#00d4ff" />
-            <stop offset="100%" stopColor="#7c3aed" />
-          </linearGradient>
-        </defs>
+        <Bolt size={Math.round(px * 0.55)} className="text-flame" />
+      </div>
+    );
+  }
 
-        {/* Outer rounded square frame */}
-        <rect
-          x="2"
-          y="2"
-          width="44"
-          height="44"
-          rx="10"
-          stroke="url(#logo-gradient)"
-          strokeWidth="2.5"
-          fill="none"
-        />
-
-        {/* CPU die / central processor */}
-        <rect
-          x="14"
-          y="14"
-          width="20"
-          height="20"
-          rx="3"
-          fill="url(#logo-gradient)"
-          opacity="0.15"
-        />
-        <rect
-          x="14"
-          y="14"
-          width="20"
-          height="20"
-          rx="3"
-          stroke="url(#logo-gradient)"
-          strokeWidth="1.5"
-          fill="none"
-        />
-
-        {/* Inner chip detail */}
-        <rect
-          x="19"
-          y="19"
-          width="10"
-          height="10"
-          rx="1.5"
-          fill="url(#logo-gradient)"
-          opacity="0.4"
-        />
-
-        {/* Circuit pins - top */}
-        <line x1="20" y1="14" x2="20" y2="7" stroke="url(#logo-gradient)" strokeWidth="1.5" strokeLinecap="round" />
-        <line x1="24" y1="14" x2="24" y2="5" stroke="url(#logo-gradient)" strokeWidth="1.5" strokeLinecap="round" />
-        <line x1="28" y1="14" x2="28" y2="7" stroke="url(#logo-gradient)" strokeWidth="1.5" strokeLinecap="round" />
-
-        {/* Circuit pins - bottom */}
-        <line x1="20" y1="34" x2="20" y2="41" stroke="url(#logo-gradient)" strokeWidth="1.5" strokeLinecap="round" />
-        <line x1="24" y1="34" x2="24" y2="43" stroke="url(#logo-gradient)" strokeWidth="1.5" strokeLinecap="round" />
-        <line x1="28" y1="34" x2="28" y2="41" stroke="url(#logo-gradient)" strokeWidth="1.5" strokeLinecap="round" />
-
-        {/* Circuit pins - left */}
-        <line x1="14" y1="20" x2="7" y2="20" stroke="url(#logo-gradient)" strokeWidth="1.5" strokeLinecap="round" />
-        <line x1="14" y1="24" x2="5" y2="24" stroke="url(#logo-gradient)" strokeWidth="1.5" strokeLinecap="round" />
-        <line x1="14" y1="28" x2="7" y2="28" stroke="url(#logo-gradient)" strokeWidth="1.5" strokeLinecap="round" />
-
-        {/* Circuit pins - right */}
-        <line x1="34" y1="20" x2="41" y2="20" stroke="url(#logo-gradient)" strokeWidth="1.5" strokeLinecap="round" />
-        <line x1="34" y1="24" x2="43" y2="24" stroke="url(#logo-gradient)" strokeWidth="1.5" strokeLinecap="round" />
-        <line x1="34" y1="28" x2="41" y2="28" stroke="url(#logo-gradient)" strokeWidth="1.5" strokeLinecap="round" />
-      </svg>
-
-      {showWordmark && (
-        <span className={`${s.text} font-bold tracking-wider`}>
-          <span className="bg-gradient-to-r from-[#00d4ff] to-[#7c3aed] bg-clip-text text-transparent">
-            INSPIRE
+  if (v === 'inline') {
+    return (
+      <div className={`inline-flex items-baseline gap-1 font-display font-bold ${className}`}>
+        <span className={`${s.wordmark} tracking-tight ${textClass}`}>
+          insp
+          <span className="relative inline-block" style={{ width: '0.5em' }}>
+            <span aria-hidden="true">i</span>
+            <Bolt
+              size={s.bolt}
+              className="absolute left-1/2 -translate-x-1/2 text-flame"
+              style={{ top: `-${s.bolt * 0.4}px` }}
+            />
           </span>
-          <span className="text-pearl font-light ml-1">PC</span>
+          re
         </span>
-      )}
+        <span className={`text-base font-medium ${subtitleClass}`}>Development</span>
+      </div>
+    );
+  }
+
+  // Default: stacked wordmark for header/nav use.
+  return (
+    <div
+      className={`inline-flex flex-col leading-none ${className}`}
+      aria-label="Inspire Development"
+    >
+      <span className={`font-display font-bold ${s.wordmark} tracking-tight ${textClass}`}>
+        insp
+        <span className="relative inline-block" style={{ width: '0.5em' }}>
+          <span aria-hidden="true">i</span>
+          <Bolt
+            size={s.bolt}
+            className="absolute left-1/2 -translate-x-1/2 text-flame"
+            style={{ top: `-${s.bolt * 0.4}px` }}
+          />
+        </span>
+        re
+      </span>
+      <span
+        className={`font-sans font-medium uppercase ${s.subtitle} tracking-[0.25em] mt-0.5 ${subtitleClass}`}
+      >
+        Development
+      </span>
     </div>
   );
 }
