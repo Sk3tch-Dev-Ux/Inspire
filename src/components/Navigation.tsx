@@ -9,9 +9,8 @@ import { useAuth } from './AuthProvider'
 
 const navLinks = [
   { href: '/services', label: 'Services' },
-  { href: '/troubleshooting', label: 'Repairs' },
+  { href: '/portfolio', label: 'Portfolio' },
   { href: '/pricing', label: 'Pricing' },
-  { href: '/gallery', label: 'Gallery' },
   { href: '/about', label: 'About' },
   { href: '/contact', label: 'Contact' },
 ]
@@ -129,9 +128,9 @@ export default function Navigation() {
               </Link>
             ) : null}
 
-            <Link href="/order" className="btn-primary">
+            <Link href="/quote" className="btn-primary">
               <span className="flex items-center gap-2">
-                Build Your PC
+                Get a Quote
                 <ChevronRight className="w-4 h-4" />
               </span>
             </Link>
@@ -209,11 +208,11 @@ export default function Navigation() {
               ) : null}
 
               <Link
-                href="/order"
+                href="/quote"
                 onClick={() => setIsOpen(false)}
                 className="block w-full btn-primary mt-4 text-center"
               >
-                <span>Build Your PC</span>
+                <span>Get a Quote</span>
               </Link>
             </div>
           </motion.div>

@@ -1,486 +1,397 @@
-import Link from 'next/link'
-import AnimatedSection from '@/components/AnimatedSection'
-import CounterSection from '@/components/CounterSection'
+import Link from 'next/link';
 import {
-  Wrench,
-  Zap,
-  Shield,
-  CheckCircle,
-  ChevronRight,
-  Monitor,
+  ArrowRight,
+  Bot,
+  Code2,
   Gamepad2,
-  Briefcase,
-  Palette,
-  Package,
-  ListChecks,
-  AlertCircle,
-  TrendingUp,
-  Image as ImageIcon,
+  LayoutDashboard,
+  Quote,
   Star,
-  MapPin,
-  FlaskConical,
-  Quote
-} from 'lucide-react'
+  Terminal,
+  CheckCircle,
+  MessageSquare,
+  Zap,
+} from 'lucide-react';
+import AnimatedSection from '@/components/AnimatedSection';
+import ServiceCard from '@/components/ServiceCard';
+import PortfolioCard from '@/components/PortfolioCard';
+
+/**
+ * Inspire Development — Homepage (Phase 2)
+ *
+ * Sections, top to bottom:
+ *   1. Hero — positioning + dual CTA
+ *   2. Trust strip — quick credibility (years, projects, response time)
+ *   3. Services — 4 ServiceCards covering the four pillars
+ *   4. Recent work — 3 PortfolioCards (placeholder data; swap in real
+ *      work as it's published from /admin)
+ *   5. How it works — 3-step process for service engagements
+ *   6. Testimonials — keep as a section, neutral placeholder copy
+ *   7. Final CTA — Discord invite + "Get a Quote"
+ *
+ * The homepage is a server component; interactive bits like the chat
+ * widget live in the global layout. Animation wrappers (AnimatedSection)
+ * provide reveal-on-scroll for sections.
+ */
+
+const services = [
+  {
+    title: 'Discord Bots',
+    description:
+      'Custom commands, moderation, role management, music, ticketing, in-game integrations. Self-hosted on your infrastructure or mine.',
+    icon: Bot,
+    priceMode: 'hourly' as const,
+    price: 60,
+    specs: ['discord.js', 'TypeScript', 'self-hosted'],
+    href: '/services/discord-bots',
+    badge: 'POPULAR',
+  },
+  {
+    title: 'Discord Layouts',
+    description:
+      'Full server setup or audit + redesign. Categories, channels, roles, permissions, welcome flows, ticket systems — done in a day.',
+    icon: LayoutDashboard,
+    priceMode: 'fixed' as const,
+    price: 300,
+    specs: ['1-day delivery', 'roles · perms', 'ticket system'],
+    href: '/services/discord-layouts',
+  },
+  {
+    title: 'Custom Websites',
+    description:
+      'Marketing sites, web apps, dashboards. Next.js, React, TypeScript, Tailwind. Built fast, deployed on day one, iterated weekly.',
+    icon: Code2,
+    priceMode: 'hourly' as const,
+    price: 75,
+    specs: ['Next.js', 'TypeScript', 'Tailwind'],
+    href: '/services/web',
+  },
+  {
+    title: 'Game Scripts',
+    description:
+      'Custom scripts and mods for Rust, DayZ, and FiveM. New game modes, server-side events, admin tools, economy systems.',
+    icon: Gamepad2,
+    priceMode: 'hourly' as const,
+    price: 80,
+    specs: ['Rust', 'DayZ', 'FiveM'],
+    href: '/services/game-scripts',
+  },
+];
+
+// Portfolio placeholders — replace via /admin once real work is added.
+const recentWork = [
+  {
+    slug: 'rust-server-shop-bot',
+    title: 'Rust Server Shop Bot',
+    category: 'Discord Bot' as const,
+    outcome:
+      'In-game shop, role-based pricing, Steam OAuth — replaced their previous $200/mo SaaS with a one-time $1,200 build.',
+    imageUrl: '/images/portfolio/placeholder-1.svg',
+    techStack: ['discord.js', 'Postgres', 'Steam API'],
+  },
+  {
+    slug: 'gaming-community-layout',
+    title: 'Gaming Community Server',
+    category: 'Discord Layout' as const,
+    outcome:
+      '1,200-member community, full restructure: 8 categories, 40+ channels, role-gated regions, automated onboarding.',
+    imageUrl: '/images/portfolio/placeholder-2.svg',
+    techStack: ['Discord', 'Tickets.bot', 'Carl-bot'],
+  },
+  {
+    slug: 'dayz-trader-mod',
+    title: 'DayZ Custom Trader',
+    category: 'DayZ' as const,
+    outcome:
+      'Server-side trader mod with dynamic pricing, faction discounts, and a web dashboard for the server admin.',
+    imageUrl: '/images/portfolio/placeholder-3.svg',
+    techStack: ['Enscript', 'C#', 'PostgreSQL'],
+  },
+];
 
 const processSteps = [
   {
-    icon: ListChecks,
-    title: '1. Plan Your Build',
-    description: 'Choose your parts yourself, or let us create a PC Part Picker list based on your budget.',
+    step: '01',
+    icon: MessageSquare,
+    title: 'Tell me what you need',
+    description:
+      'Discord DM, contact form, or jump on a 15-minute call. Bring screenshots, links, half-baked ideas — whatever you have.',
   },
   {
-    icon: Package,
-    title: '2. Send Your Parts',
-    description: 'Ship your components to us or drop them off at our workshop.',
-  },
-  {
-    icon: Wrench,
-    title: '3. We Build It',
-    description: 'Expert assembly with meticulous cable management and thorough testing.',
-  },
-  {
+    step: '02',
     icon: Zap,
-    title: '4. Ready to Go',
-    description: 'Pick up your completed build or have it shipped directly to you.',
-  },
-]
-
-const useCases = [
-  {
-    icon: Gamepad2,
-    title: 'Gaming',
-    description: 'From budget 1080p builds to 4K powerhouses.',
+    title: 'Quote within 24 hours',
+    description:
+      'Hourly rate for small jobs, flat fee for known scope, custom estimate for bigger projects. No "discovery calls" or sales fluff.',
   },
   {
-    icon: Briefcase,
-    title: 'Workstation',
-    description: 'Professional systems for demanding workflows.',
+    step: '03',
+    icon: CheckCircle,
+    title: 'Built and shipped',
+    description:
+      'Most projects start the same week. You see progress in your own Discord channel. Pay on completion, or weekly for ongoing work.',
   },
-  {
-    icon: Palette,
-    title: 'Content Creation',
-    description: 'Optimized for editing, rendering, and streaming.',
-  },
-  {
-    icon: Monitor,
-    title: 'Home & Office',
-    description: 'Reliable everyday computers built to last.',
-  },
-]
+];
 
 const testimonials = [
   {
     name: 'Marcus T.',
-    buildType: 'Gaming Build',
+    role: 'Discord Server Owner — 800 members',
+    text:
+      "Replaced our old custom bot in two days. Everything we asked for, plus suggestions I hadn't thought of. Documentation included.",
     rating: 5,
-    text: 'Sent my parts in on Monday, had a fully built and tested system by Thursday. Cable management was immaculate. Highly recommend.',
   },
   {
-    name: 'Sarah K.',
-    buildType: 'Workstation Build',
+    name: 'Sarah J.',
+    role: 'Rust Server Admin',
+    text:
+      'Custom raid alerts + a Discord bridge for in-game events. My players actually log into Discord now to follow what is happening.',
     rating: 5,
-    text: 'I was nervous about shipping expensive components but the team was professional from start to finish. My workstation runs flawlessly.',
   },
   {
-    name: 'James R.',
-    buildType: 'Budget Gaming PC',
+    name: 'David K.',
+    role: 'FiveM Roleplay Server',
+    text:
+      "Hourly billing meant I could test ideas cheaply. Three small features later, and our community is more active than it's been in a year.",
     rating: 5,
-    text: 'As a first-time builder I had no idea where to start. Their budget planning service picked perfect parts and the build quality was top notch.',
   },
-  {
-    name: 'Emily D.',
-    buildType: 'Content Creator PC',
-    rating: 5,
-    text: 'Render times cut in half compared to my old prebuilt. The stress testing they do before shipping gave me total confidence in the system.',
-  },
-  {
-    name: 'Chris M.',
-    buildType: 'Express Build',
-    rating: 5,
-    text: 'Needed a rush build for a project deadline. They turned it around in under 48 hours and it was perfect. Worth every penny of the express fee.',
-  },
-  {
-    name: 'Alex P.',
-    buildType: 'PC Upgrade',
-    rating: 5,
-    text: 'Brought my old PC in for a full upgrade. New CPU, GPU, and cooling. Feels like a brand new machine and they even cleaned up the old wiring.',
-  },
-]
-
-const trustBadges = [
-  { icon: Shield, label: '30-Day Warranty' },
-  { icon: FlaskConical, label: 'Stress Tested' },
-  { icon: Wrench, label: 'Expert Assembly' },
-]
+];
 
 export default function HomeContent() {
   return (
-    <div className="pt-20">
-      {/* Hero Section */}
-      <section className="relative min-h-[90vh] flex items-center overflow-hidden">
-        {/* Background Effects */}
-        <div className="absolute inset-0">
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-electric/20 rounded-full blur-[128px]" />
-          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-volt/10 rounded-full blur-[128px]" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,var(--color-midnight)_70%)]" />
+    <div className="flex flex-col">
+      {/* ─── Hero ─────────────────────────────────────────────── */}
+      <section className="relative overflow-hidden border-b border-steel/60 bg-ink">
+        {/* subtle grid pattern */}
+        <div
+          className="absolute inset-0 bg-grid-pattern opacity-50"
+          style={{ backgroundSize: '32px 32px' }}
+          aria-hidden="true"
+        />
+        {/* radial glow behind hero */}
+        <div
+          className="pointer-events-none absolute left-1/2 top-1/3 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full"
+          style={{
+            background:
+              'radial-gradient(circle, rgba(255, 107, 26, 0.15) 0%, transparent 60%)',
+          }}
+          aria-hidden="true"
+        />
+
+        <div className="relative mx-auto max-w-6xl px-6 pt-32 pb-24 sm:pt-40 sm:pb-32">
+          <div className="flex flex-col items-start gap-8">
+            <span className="spec-tag">
+              <Terminal size={12} />
+              available · usually replies within 4 hours
+            </span>
+
+            <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl font-bold leading-[1.05] tracking-tight text-bone max-w-4xl">
+              Discord bots, websites, and game scripts —{' '}
+              <span className="gradient-text">built by a developer who plays the games</span>.
+            </h1>
+
+            <p className="max-w-2xl text-lg sm:text-xl text-mute leading-relaxed">
+              Custom development for community owners and server admins.
+              Hourly rates posted publicly. Quotes within 24 hours. Most
+              projects start the same week.
+            </p>
+
+            <div className="flex flex-col sm:flex-row gap-3">
+              <Link href="/quote" className="btn-primary">
+                <span className="flex items-center gap-2">
+                  Get a Quote
+                  <ArrowRight size={18} />
+                </span>
+              </Link>
+              <Link href="/portfolio" className="btn-secondary">
+                See Recent Work
+              </Link>
+            </div>
+          </div>
         </div>
 
-        <div className="relative max-w-7xl mx-auto px-6 py-24 w-full">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            {/* Left Column — Text */}
-            <div>
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-steel/50 border border-steel mb-8">
-                <span className="w-2 h-2 rounded-full bg-volt" />
-                <span className="text-sm text-silver">Professional PC Assembly Service</span>
+        {/* Trust strip — three credibility chips at the bottom */}
+        <div className="relative border-t border-steel/60 bg-carbon/40">
+          <div className="mx-auto grid max-w-6xl grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-steel/50">
+            {[
+              { value: '6+', label: 'Years building Discord & game tooling' },
+              { value: '40+', label: 'Projects shipped for community owners' },
+              { value: '24h', label: 'Quote turnaround on every request' },
+            ].map((stat) => (
+              <div key={stat.label} className="px-6 py-6 text-center">
+                <div className="font-display text-3xl font-bold text-flame">
+                  {stat.value}
+                </div>
+                <div className="mt-1 text-xs uppercase tracking-[0.2em] text-mute">
+                  {stat.label}
+                </div>
               </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
-              <h1 className="text-4xl md:text-6xl font-display font-bold mb-6 text-pearl">
-                Your Parts, Our{' '}
-                <span className="gradient-text">Expertise</span>
-              </h1>
-
-              <p className="text-lg md:text-xl text-silver mb-10 max-w-xl">
-                Send us your components. We build, test, and ship back a system you can trust.
+      {/* ─── Services ─────────────────────────────────────────── */}
+      <section className="border-b border-steel/60 bg-ink py-20 sm:py-28">
+        <div className="mx-auto max-w-6xl px-6">
+          <AnimatedSection>
+            <div className="mb-12 flex flex-col gap-4">
+              <span className="spec-tag w-fit">what i build</span>
+              <h2 className="section-title text-bone">
+                Four things, done well.
+              </h2>
+              <p className="section-subtitle">
+                I focus on what I&rsquo;m good at. If you need something here,
+                I&rsquo;m your developer. If you need something else,
+                I&rsquo;ll tell you who does it better.
               </p>
-
-              <div className="flex flex-wrap gap-4 mb-8">
-                <Link href="/order" className="btn-primary text-base px-8 py-4">
-                  <span className="flex items-center gap-2">
-                    Book a Build
-                    <ChevronRight className="w-4 h-4" />
-                  </span>
-                </Link>
-                <Link href="/troubleshooting" className="btn-secondary">
-                  Get PC Help
-                </Link>
-              </div>
-
-              {/* Trust Badges */}
-              <div className="flex flex-wrap gap-3 mb-4">
-                {trustBadges.map((badge) => (
-                  <div
-                    key={badge.label}
-                    className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-steel/30 border border-steel/50 text-xs text-silver"
-                  >
-                    <badge.icon className="w-3.5 h-3.5 text-electric" />
-                    {badge.label}
-                  </div>
-                ))}
-              </div>
-
-              <div className="flex items-center gap-1.5 text-xs text-silver/70">
-                <MapPin className="w-3.5 h-3.5" />
-                Locally owned in Girard, OH
-              </div>
             </div>
+          </AnimatedSection>
 
-            {/* Right Column — Services Card */}
-            <div className="hidden lg:block">
-              <div className="w-full max-w-sm ml-auto rounded-3xl bg-gradient-to-br from-steel/50 to-obsidian border border-steel overflow-hidden relative">
-                <div className="absolute inset-0 bg-gradient-to-br from-electric/10 to-volt/10" />
-                <div className="relative p-8">
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-electric to-volt flex items-center justify-center">
-                      <Zap className="w-6 h-6 text-midnight" />
-                    </div>
-                    <div>
-                      <p className="text-xs text-silver">Our Services</p>
-                      <p className="font-display font-semibold text-pearl">We Offer</p>
-                    </div>
-                  </div>
-                  <div className="space-y-3">
-                    {['Custom PC Building', 'Troubleshooting', 'Hardware Diagnostics', 'Component Upgrades', 'Performance Optimization'].map((service) => (
-                      <div key={service} className="flex items-center gap-2 text-sm">
-                        <CheckCircle className="w-4 h-4 text-volt" />
-                        <span className="text-pearl">{service}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            {services.map((s) => (
+              <ServiceCard key={s.title} {...s} />
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Trust Counters */}
-      <CounterSection />
-
-      {/* How It Works Section */}
-      <section className="py-24 bg-obsidian">
-        <div className="max-w-7xl mx-auto px-6">
-          <AnimatedSection className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-display font-bold mb-4 text-pearl">
-              How It <span className="gradient-text">Works</span>
-            </h2>
-            <p className="text-silver text-lg max-w-2xl mx-auto">
-              A simple process to get your PC built by professionals.
-            </p>
-          </AnimatedSection>
-
+      {/* ─── Recent Work ──────────────────────────────────────── */}
+      <section className="border-b border-steel/60 bg-carbon/30 py-20 sm:py-28">
+        <div className="mx-auto max-w-6xl px-6">
           <AnimatedSection>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {processSteps.map((step) => (
-                <div key={step.title} className="card group">
-                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-electric/20 to-volt/20 flex items-center justify-center mb-6 group-hover:from-electric/30 group-hover:to-volt/30 transition-colors">
-                    <step.icon className="w-7 h-7 text-electric" />
-                  </div>
-                  <h3 className="font-display text-xl font-semibold mb-3 text-pearl">
-                    {step.title}
-                  </h3>
-                  <p className="text-silver text-sm leading-relaxed">
-                    {step.description}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </AnimatedSection>
-        </div>
-      </section>
-
-      {/* Services Overview Section */}
-      <section className="py-24">
-        <div className="max-w-7xl mx-auto px-6">
-          <AnimatedSection className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-display font-bold mb-4 text-pearl">
-              What We <span className="gradient-text">Offer</span>
-            </h2>
-            <p className="text-silver text-lg max-w-2xl mx-auto">
-              From building custom PCs to fixing problems and boosting performance, we&apos;ve got all your PC needs covered.
-            </p>
-          </AnimatedSection>
-
-          <AnimatedSection>
-            <div className="grid md:grid-cols-3 gap-8">
-              {[
-                {
-                  icon: Wrench,
-                  title: 'Custom PC Building',
-                  description: 'You pick the parts, we build it right',
-                  href: '/services',
-                },
-                {
-                  icon: AlertCircle,
-                  title: 'Troubleshooting & Repair',
-                  description: 'Diagnostics, fixes, and virus removal',
-                  href: '/troubleshooting',
-                },
-                {
-                  icon: TrendingUp,
-                  title: 'Upgrades & Optimization',
-                  description: 'Boost your existing PC\'s performance',
-                  href: '/troubleshooting',
-                },
-              ].map((service) => (
-                <div key={service.title} className="card group flex flex-col">
-                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-electric/20 to-volt/20 flex items-center justify-center mb-6 group-hover:from-electric/30 group-hover:to-volt/30 transition-colors">
-                    <service.icon className="w-7 h-7 text-electric" />
-                  </div>
-                  <h3 className="font-display text-xl font-semibold mb-2 text-pearl">
-                    {service.title}
-                  </h3>
-                  <p className="text-silver text-sm mb-6 flex-grow">
-                    {service.description}
-                  </p>
-                  <Link href={service.href} className="inline-flex items-center gap-2 text-electric hover:text-volt transition-colors">
-                    Learn More
-                    <ChevronRight className="w-4 h-4" />
-                  </Link>
-                </div>
-              ))}
-            </div>
-          </AnimatedSection>
-        </div>
-      </section>
-
-      {/* Use Cases Section */}
-      <section className="py-24 bg-obsidian">
-        <div className="max-w-7xl mx-auto px-6">
-          <AnimatedSection className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-display font-bold mb-4 text-pearl">
-              We Build for Every <span className="gradient-text">Purpose</span>
-            </h2>
-            <p className="text-silver text-lg max-w-2xl mx-auto">
-              Whatever your use case, we have the expertise to assemble it perfectly.
-            </p>
-          </AnimatedSection>
-
-          <AnimatedSection>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {useCases.map((useCase) => (
-                <div key={useCase.title} className="card group">
-                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-electric/20 to-volt/20 flex items-center justify-center mb-6 group-hover:from-electric/30 group-hover:to-volt/30 transition-colors">
-                    <useCase.icon className="w-7 h-7 text-electric" />
-                  </div>
-                  <h3 className="font-display text-xl font-semibold mb-2 text-pearl">
-                    {useCase.title}
-                  </h3>
-                  <p className="text-silver text-sm">
-                    {useCase.description}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </AnimatedSection>
-        </div>
-      </section>
-
-      {/* Build Gallery Teaser Section */}
-      <section className="py-24 bg-obsidian">
-        <div className="max-w-7xl mx-auto px-6">
-          <AnimatedSection className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-display font-bold mb-4 text-pearl">
-              Featured <span className="gradient-text">Builds</span>
-            </h2>
-            <p className="text-silver text-lg max-w-2xl mx-auto">
-              Check out some of the amazing systems we&apos;ve assembled.
-            </p>
-          </AnimatedSection>
-
-          <AnimatedSection>
-            <div className="grid md:grid-cols-4 gap-6 mb-10">
-              {[
-                { name: 'Gaming Powerhouse', specs: '4070 Ti, 7800X3D' },
-                { name: 'Creator Workstation', specs: 'RTX 4080, 7950X' },
-                { name: 'Esports Machine', specs: '4070, 7700X' },
-                { name: 'Budget 1080p', specs: '4060 Ti, 5700X3D' },
-              ].map((build) => (
-                <div key={build.name} className="card group cursor-pointer">
-                  <div className="w-full h-48 bg-gradient-to-br from-steel/30 to-obsidian rounded-lg flex items-center justify-center mb-4 group-hover:from-electric/20 group-hover:to-volt/20 transition-colors">
-                    <ImageIcon className="w-12 h-12 text-steel" />
-                  </div>
-                  <h3 className="font-display text-lg font-semibold text-pearl mb-1">
-                    {build.name}
-                  </h3>
-                  <p className="text-sm text-silver">
-                    {build.specs}
-                  </p>
-                </div>
-              ))}
+            <div className="mb-12 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+              <div className="flex flex-col gap-4">
+                <span className="spec-tag w-fit">recent work</span>
+                <h2 className="section-title text-bone">
+                  Real projects, real outcomes.
+                </h2>
+              </div>
+              <Link
+                href="/portfolio"
+                className="inline-flex items-center gap-1.5 text-sm font-semibold text-flame hover:text-flame-glow transition-colors"
+              >
+                See all projects
+                <ArrowRight size={16} />
+              </Link>
             </div>
           </AnimatedSection>
 
-          <div className="text-center">
-            <Link href="/gallery" className="inline-flex items-center gap-2 text-electric hover:text-volt transition-colors text-lg font-semibold">
-              View Full Gallery
-              <ChevronRight className="w-5 h-5" />
-            </Link>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {recentWork.map((p) => (
+              <PortfolioCard key={p.slug} {...p} />
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Why Choose Us Section */}
-      <section className="py-24">
-        <div className="max-w-7xl mx-auto px-6">
-          <AnimatedSection className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-display font-bold mb-4 text-pearl">
-              Why Choose <span className="gradient-text">Inspire</span>?
-            </h2>
-            <p className="text-silver text-lg max-w-2xl mx-auto">
-              We&apos;re not just builders—we&apos;re enthusiasts who care about every detail.
-            </p>
+      {/* ─── How It Works ─────────────────────────────────────── */}
+      <section className="border-b border-steel/60 bg-ink py-20 sm:py-28">
+        <div className="mx-auto max-w-6xl px-6">
+          <AnimatedSection>
+            <div className="mb-12 text-center">
+              <span className="spec-tag">process</span>
+              <h2 className="section-title text-bone mt-4">
+                Three steps. No sales pitch.
+              </h2>
+            </div>
           </AnimatedSection>
 
-          <AnimatedSection>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {[
-                {
-                  icon: Wrench,
-                  title: 'Expert Assembly',
-                  description: 'Years of experience building everything from budget rigs to high-end enthusiast systems.',
-                },
-                {
-                  icon: Shield,
-                  title: 'Workmanship Warranty',
-                  description: 'Our builds are backed by a warranty covering any assembly-related issues.',
-                },
-                {
-                  icon: Zap,
-                  title: 'Thorough Testing',
-                  description: 'Every build is stress-tested and benchmarked before it leaves our workshop.',
-                },
-              ].map((feature) => (
-                <div key={feature.title} className="card group">
-                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-electric/20 to-volt/20 flex items-center justify-center mb-6 group-hover:from-electric/30 group-hover:to-volt/30 transition-colors">
-                    <feature.icon className="w-7 h-7 text-electric" />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {processSteps.map((s) => {
+              const Icon = s.icon;
+              return (
+                <div
+                  key={s.step}
+                  className="relative rounded-xl border border-steel bg-carbon p-6"
+                >
+                  <div className="absolute -top-3 left-6 px-3 py-0.5 rounded-md bg-flame text-ink font-mono text-xs font-bold">
+                    {s.step}
                   </div>
-                  <h3 className="font-display text-xl font-semibold mb-3 text-pearl">
-                    {feature.title}
+                  <div className="mt-4 flex h-12 w-12 items-center justify-center rounded-lg bg-flame/10 text-flame mb-4">
+                    <Icon size={22} strokeWidth={1.5} />
+                  </div>
+                  <h3 className="font-display text-xl font-bold text-bone mb-2">
+                    {s.title}
                   </h3>
-                  <p className="text-silver text-sm leading-relaxed">
-                    {feature.description}
+                  <p className="text-sm leading-relaxed text-mute">
+                    {s.description}
                   </p>
                 </div>
-              ))}
-            </div>
-          </AnimatedSection>
+              );
+            })}
+          </div>
         </div>
       </section>
 
-      {/* Testimonials Section */}
-      <section className="py-24 bg-obsidian">
-        <div className="max-w-7xl mx-auto px-6">
-          <AnimatedSection className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-display font-bold mb-4 text-pearl">
-              What Our Clients <span className="gradient-text">Say</span>
-            </h2>
-            <p className="text-silver text-lg max-w-2xl mx-auto">
-              Don&apos;t just take our word for it—hear from our satisfied customers.
-            </p>
-          </AnimatedSection>
-
+      {/* ─── Testimonials ─────────────────────────────────────── */}
+      <section className="border-b border-steel/60 bg-carbon/30 py-20 sm:py-28">
+        <div className="mx-auto max-w-6xl px-6">
           <AnimatedSection>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {testimonials.map((testimonial) => (
-                <div key={testimonial.name} className="card relative">
-                  <Quote className="w-8 h-8 text-electric/20 absolute top-6 right-6" />
-                  <div className="flex gap-0.5 mb-4">
-                    {Array.from({ length: testimonial.rating }).map((_, i) => (
-                      <Star key={i} className="w-4 h-4 text-amber fill-amber" />
-                    ))}
-                  </div>
-                  <p className="text-silver text-sm leading-relaxed mb-6">
-                    &ldquo;{testimonial.text}&rdquo;
-                  </p>
-                  <div>
-                    <p className="font-display font-semibold text-pearl text-sm">
-                      {testimonial.name}
-                    </p>
-                    <p className="text-xs text-silver">{testimonial.buildType}</p>
-                  </div>
-                </div>
-              ))}
+            <div className="mb-12 flex flex-col gap-4 text-center">
+              <span className="spec-tag mx-auto w-fit">what clients say</span>
+              <h2 className="section-title text-bone">
+                Built for builders, by a builder.
+              </h2>
             </div>
           </AnimatedSection>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            {testimonials.map((t) => (
+              <figure
+                key={t.name}
+                className="relative rounded-xl border border-steel bg-carbon p-6"
+              >
+                <Quote className="absolute right-5 top-5 text-flame/30" size={28} />
+                <div className="flex gap-0.5 mb-4">
+                  {Array.from({ length: t.rating }).map((_, i) => (
+                    <Star
+                      key={i}
+                      size={14}
+                      className="fill-flame text-flame"
+                    />
+                  ))}
+                </div>
+                <blockquote className="text-bone leading-relaxed mb-4">
+                  &ldquo;{t.text}&rdquo;
+                </blockquote>
+                <figcaption>
+                  <div className="font-semibold text-bone text-sm">{t.name}</div>
+                  <div className="text-xs text-mute mt-0.5">{t.role}</div>
+                </figcaption>
+              </figure>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-24 relative overflow-hidden">
-        <div className="absolute inset-0">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-gradient-to-b from-electric/20 to-transparent rounded-full blur-[100px]" />
-        </div>
-
-        <AnimatedSection className="relative max-w-4xl mx-auto px-6 text-center">
-          <h2 className="text-3xl md:text-4xl font-display font-bold mb-6 text-pearl">
-            Ready to Get <span className="gradient-text">Started</span>?
+      {/* ─── Final CTA ────────────────────────────────────────── */}
+      <section className="bg-ink py-20 sm:py-28">
+        <div className="mx-auto max-w-3xl px-6 text-center">
+          <h2 className="section-title text-bone">
+            Got something you want{' '}
+            <span className="gradient-text">built</span>?
           </h2>
-          <p className="text-silver text-lg max-w-2xl mx-auto mb-10">
-            Whether you&apos;re building a custom PC, need troubleshooting help, or want to upgrade your existing system, we&apos;re here to help.
+          <p className="mx-auto mt-5 max-w-xl text-lg text-mute">
+            Quote within 24 hours, every time. If I can&rsquo;t take the job,
+            I&rsquo;ll tell you immediately and point you to someone who can.
           </p>
-          <div className="flex flex-wrap justify-center gap-4">
-            <Link href="/order" className="btn-primary">
+          <div className="mt-10 flex flex-col sm:flex-row gap-3 justify-center">
+            <Link href="/quote" className="btn-primary">
               <span className="flex items-center gap-2">
-                Book a Service
-                <ChevronRight className="w-4 h-4" />
+                Start a Project
+                <ArrowRight size={18} />
               </span>
             </Link>
             <Link href="/contact" className="btn-secondary">
-              Contact Us
+              <span className="flex items-center gap-2">
+                <MessageSquare size={16} />
+                Or just say hi
+              </span>
             </Link>
           </div>
-        </AnimatedSection>
+        </div>
       </section>
     </div>
-  )
+  );
 }
