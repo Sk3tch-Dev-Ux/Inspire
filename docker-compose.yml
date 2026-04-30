@@ -38,7 +38,12 @@ services:
       postgres:
         condition: service_healthy
     healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/"]
+      # 127.0.0.1 explicitly — Alpine's resolver picks ::1 (IPv6) for
+      # `localhost` first, but Next.js binds to 0.0.0.0 (IPv4 only) per
+      # HOSTNAME=0.0.0.0 above, so IPv6 connections refuse. The container
+      # is functionally healthy with that mismatch, just flagged
+      # "unhealthy" in `docker ps`. This forces the IPv4 path.
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:3000/"]
       interval: 30s
       timeout: 10s
       retries: 3
