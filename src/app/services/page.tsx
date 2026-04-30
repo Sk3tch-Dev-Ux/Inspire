@@ -3,7 +3,9 @@ import ServicesContent from './Content';
 
 export const metadata: Metadata = {
   title: 'Services',
-  description: 'Professional PC building, troubleshooting, repairs, and upgrades. Expert assembly, component upgrades, and system optimization services.',
+  description:
+    'Discord bots, Discord layouts, custom websites, and game scripts (Rust, DayZ, FiveM). Hourly rates posted publicly. Quotes within 24 hours.',
+  alternates: { canonical: '/services' },
 };
 
 export default function ServicesPage() {
