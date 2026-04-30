@@ -46,12 +46,21 @@ export const metadata: Metadata = {
     url: 'https://inspirepc.com',
     siteName: 'Inspire Development',
     type: 'website',
+    images: [
+      {
+        url: '/og-banner.svg',
+        width: 1200,
+        height: 630,
+        alt: 'Inspire Development — Discord bots, websites, and game scripts',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Inspire Development',
     description:
       'Discord bots, websites, and game scripts. Built by a developer who plays the games.',
+    images: ['/og-banner.svg'],
   },
   robots: {
     index: true,

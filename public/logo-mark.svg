@@ -1,0 +1,24 @@
+<svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Inspire Development brand mark — large square version
+       intended for app icons, Discord avatars, social profile pics. -->
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1A1A1A"/>
+      <stop offset="100%" stop-color="#0A0A0A"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="40%" r="50%">
+      <stop offset="0%" stop-color="#FF6B1A" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#FF6B1A" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Rounded ink tile -->
+  <rect width="256" height="256" rx="56" fill="url(#bg)"/>
+  <!-- Subtle flame glow under the bolt -->
+  <rect width="256" height="256" rx="56" fill="url(#glow)"/>
+  <!-- Hairline orange border -->
+  <rect x="2" y="2" width="252" height="252" rx="55" stroke="#FF6B1A" stroke-opacity="0.15" stroke-width="2" fill="none"/>
+
+  <!-- The bolt, scaled to fill ~55% of the tile, slightly forward-leaning -->
+  <path d="M156 42 L74 144 L124 144 L107 210 L188 108 L138 108 L156 42 Z" fill="#FF6B1A"/>
+</svg>

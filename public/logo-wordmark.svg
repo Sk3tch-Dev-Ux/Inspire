@@ -1,0 +1,35 @@
+<svg width="640" height="200" viewBox="0 0 640 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Inspire Development full wordmark — for emails, business cards,
+       OG image overlays, anywhere you need the brand as a static asset.
+       Transparent background so it can drop onto ink, white, or whatever. -->
+
+  <!-- "inspire" — display sans, bold. The dot of the `i` (4th char) is
+       replaced by the flame bolt. -->
+  <text
+    x="20"
+    y="120"
+    font-family="'Space Grotesk', system-ui, -apple-system, sans-serif"
+    font-size="124"
+    font-weight="700"
+    letter-spacing="-3"
+    fill="#FAFAF7"
+  >insp<tspan fill="#FAFAF7">i</tspan>re</text>
+
+  <!-- Bolt floating above the third "i" (positioned where the dot would
+       sit). Adjust X to align with whatever font is rendering. -->
+  <path
+    d="M310 27 L286 60 L301 60 L295 88 L319 55 L304 55 L310 27 Z"
+    fill="#FF6B1A"
+  />
+
+  <!-- Tracked-out "DEVELOPMENT" subtitle below -->
+  <text
+    x="22"
+    y="170"
+    font-family="'Inter', system-ui, -apple-system, sans-serif"
+    font-size="22"
+    font-weight="500"
+    letter-spacing="6"
+    fill="#7A7A7A"
+  >DEVELOPMENT</text>
+</svg>

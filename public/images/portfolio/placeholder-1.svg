@@ -1,0 +1,78 @@
+<svg width="1280" height="800" viewBox="0 0 1280 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Portfolio placeholder #1 — Discord Bot.
+       Stylized terminal window with chat-style command output, orange
+       brackets, mono everywhere. Reads as "developer artifact" without
+       requiring a real screenshot. -->
+
+  <defs>
+    <linearGradient id="bg1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0A0A0A"/>
+      <stop offset="100%" stop-color="#141414"/>
+    </linearGradient>
+    <radialGradient id="glow1" cx="80%" cy="20%" r="60%">
+      <stop offset="0%" stop-color="#FF6B1A" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#FF6B1A" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid1" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0 L0 0 L0 40" fill="none" stroke="#FF6B1A" stroke-opacity="0.04" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <rect width="1280" height="800" fill="url(#bg1)"/>
+  <rect width="1280" height="800" fill="url(#grid1)"/>
+  <rect width="1280" height="800" fill="url(#glow1)"/>
+
+  <!-- Terminal window mock -->
+  <g transform="translate(180, 180)">
+    <rect width="920" height="440" rx="14" fill="#1A1A1A" stroke="#2D2D2D" stroke-width="1.5"/>
+    <!-- Title bar -->
+    <rect width="920" height="44" rx="14" fill="#0F0F0F"/>
+    <rect y="32" width="920" height="12" fill="#0F0F0F"/>
+    <circle cx="22" cy="22" r="6" fill="#FF6B1A"/>
+    <circle cx="44" cy="22" r="6" fill="#2D2D2D"/>
+    <circle cx="66" cy="22" r="6" fill="#2D2D2D"/>
+    <text x="460" y="28" font-family="ui-monospace, monospace" font-size="13" font-weight="500" fill="#7A7A7A" text-anchor="middle">discord-bot.ts — running</text>
+
+    <!-- Body content, simulated bot interaction -->
+    <g font-family="ui-monospace, monospace" font-size="18" font-weight="500">
+      <text x="32" y="98" fill="#FF6B1A">$</text>
+      <text x="56" y="98" fill="#FAFAF7">!shop list</text>
+
+      <text x="32" y="138" fill="#7A7A7A">→ matched 3 items in inventory</text>
+
+      <text x="32" y="178" fill="#FAFAF7">┌──────────────────────────────────┐</text>
+      <text x="32" y="208" fill="#FAFAF7">│ </text>
+      <text x="58" y="208" fill="#FF6B1A">M4A1</text>
+      <text x="160" y="208" fill="#FAFAF7">  ×1   </text>
+      <text x="240" y="208" fill="#FF8742">$2,400</text>
+      <text x="368" y="208" fill="#FAFAF7"> │</text>
+
+      <text x="32" y="238" fill="#FAFAF7">│ </text>
+      <text x="58" y="238" fill="#FF6B1A">Vodnik</text>
+      <text x="160" y="238" fill="#FAFAF7"> ×1   </text>
+      <text x="240" y="238" fill="#FF8742">$8,500</text>
+      <text x="368" y="238" fill="#FAFAF7"> │</text>
+
+      <text x="32" y="268" fill="#FAFAF7">│ </text>
+      <text x="58" y="268" fill="#FF6B1A">MedKit</text>
+      <text x="160" y="268" fill="#FAFAF7"> ×3   </text>
+      <text x="240" y="268" fill="#FF8742">$120</text>
+      <text x="368" y="268" fill="#FAFAF7"> │</text>
+      <text x="32" y="298" fill="#FAFAF7">└──────────────────────────────────┘</text>
+
+      <text x="32" y="348" fill="#FF6B1A">$</text>
+      <text x="56" y="348" fill="#FAFAF7">!shop buy MedKit</text>
+
+      <text x="32" y="388" fill="#7A7A7A">✓ purchased · delivering to player...</text>
+    </g>
+
+    <!-- Cursor -->
+    <rect x="32" y="408" width="11" height="22" fill="#FF6B1A" opacity="0.85"/>
+  </g>
+
+  <!-- Category marker top-left -->
+  <g font-family="ui-monospace, monospace" font-size="14" font-weight="500" fill="#FF6B1A">
+    <rect x="64" y="64" width="170" height="34" rx="6" fill="#FF6B1A" fill-opacity="0.08" stroke="#FF6B1A" stroke-opacity="0.25"/>
+    <text x="148" y="86" text-anchor="middle">⚡ Discord Bot</text>
+  </g>
+</svg>

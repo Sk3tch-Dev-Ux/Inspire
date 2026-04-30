@@ -1,0 +1,96 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Inspire Development social-share banner (1200x630).
+       Used as og:image / twitter:image. SVG works in modern previewers;
+       export to PNG via any rasterizer if your platform doesn't render SVG. -->
+
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0A0A0A"/>
+      <stop offset="100%" stop-color="#141414"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="65%" cy="50%" r="55%">
+      <stop offset="0%" stop-color="#FF6B1A" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#FF6B1A" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0 L0 0 L0 40" fill="none" stroke="#FF6B1A" stroke-opacity="0.04" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <!-- Background stack: ink, grid, radial flame glow -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+
+  <!-- Top-right bolt mark, smaller, as accent -->
+  <g transform="translate(1080, 60)">
+    <rect width="64" height="64" rx="14" fill="#1A1A1A" stroke="#FF6B1A" stroke-opacity="0.25" stroke-width="1"/>
+    <path d="M40 12 L20 38 L33 38 L29 53 L49 27 L36 27 L40 12 Z" fill="#FF6B1A"/>
+  </g>
+
+  <!-- Wordmark, large, left-anchored -->
+  <text
+    x="80"
+    y="290"
+    font-family="'Space Grotesk', system-ui, sans-serif"
+    font-size="120"
+    font-weight="700"
+    letter-spacing="-3"
+    fill="#FAFAF7"
+  >inspire</text>
+
+  <!-- Bolt over the dot of the "i" in inspire -->
+  <path
+    d="M380 188 L355 222 L370 222 L364 252 L389 218 L374 218 L380 188 Z"
+    fill="#FF6B1A"
+  />
+
+  <!-- Tagline -->
+  <text
+    x="82"
+    y="350"
+    font-family="'Inter', system-ui, sans-serif"
+    font-size="32"
+    font-weight="500"
+    letter-spacing="0"
+    fill="#FAFAF7"
+  >Discord bots, websites, and game scripts.</text>
+  <text
+    x="82"
+    y="395"
+    font-family="'Inter', system-ui, sans-serif"
+    font-size="22"
+    font-weight="400"
+    fill="#7A7A7A"
+  >Built by a developer who plays the games.</text>
+
+  <!-- Mono-style spec chips along the bottom -->
+  <g font-family="'JetBrains Mono', ui-monospace, monospace" font-size="18" font-weight="500" fill="#FF6B1A">
+    <rect x="80" y="500" width="118" height="34" rx="6" fill="#FF6B1A" fill-opacity="0.08" stroke="#FF6B1A" stroke-opacity="0.25"/>
+    <text x="98" y="523">Discord</text>
+
+    <rect x="208" y="500" width="78" height="34" rx="6" fill="#FF6B1A" fill-opacity="0.08" stroke="#FF6B1A" stroke-opacity="0.25"/>
+    <text x="221" y="523">Web</text>
+
+    <rect x="296" y="500" width="78" height="34" rx="6" fill="#FF6B1A" fill-opacity="0.08" stroke="#FF6B1A" stroke-opacity="0.25"/>
+    <text x="312" y="523">Rust</text>
+
+    <rect x="384" y="500" width="78" height="34" rx="6" fill="#FF6B1A" fill-opacity="0.08" stroke="#FF6B1A" stroke-opacity="0.25"/>
+    <text x="398" y="523">DayZ</text>
+
+    <rect x="472" y="500" width="92" height="34" rx="6" fill="#FF6B1A" fill-opacity="0.08" stroke="#FF6B1A" stroke-opacity="0.25"/>
+    <text x="488" y="523">FiveM</text>
+  </g>
+
+  <!-- Tracked subtitle bottom-right -->
+  <text
+    x="1120"
+    y="595"
+    font-family="'Inter', system-ui, sans-serif"
+    font-size="14"
+    font-weight="500"
+    letter-spacing="4"
+    fill="#7A7A7A"
+    text-anchor="end"
+  >INSPIRE DEVELOPMENT</text>
+</svg>
