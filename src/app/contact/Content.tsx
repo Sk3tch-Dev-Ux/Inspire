@@ -2,14 +2,80 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Mail, Phone, MapPin, Clock, Send } from 'lucide-react';
-import AnimatedSection from '@/components/AnimatedSection';
+import {
+  Mail,
+  MessageSquare,
+  Send,
+  CheckCircle,
+  AlertCircle,
+  Loader2,
+  Clock,
+  ArrowRight,
+} from 'lucide-react';
+
+/**
+ * /contact — Phase 7.
+ *
+ * Two paths to reach me, ranked by preference for this audience:
+ *   1. Discord (most natural for this customer profile)
+ *   2. Email (works for those who don't live in Discord)
+ *   3. Form (for people who don't have either ready)
+ *
+ * The form POSTs to /api/contact (same backend the old PC site used —
+ * we keep the wiring, replace the framing). Success / error states
+ * inline below the submit button so the user never wonders what
+ * happened.
+ */
+
+const CONTACT_CHANNELS = [
+  {
+    icon: MessageSquare,
+    title: 'Discord (preferred)',
+    value: 'discord.gg/inspire-dev',
+    href: 'https://discord.gg/inspire-dev',
+    description:
+      'Server has a #hire-me channel — DM me there. Replies within 4 hours during business days.',
+    primary: true,
+  },
+  {
+    icon: Mail,
+    title: 'Email',
+    value: 'hello@inspirepc.com',
+    href: 'mailto:hello@inspirepc.com',
+    description:
+      "Best for documents, longer briefs, or when Discord isn't your thing. Same response window.",
+  },
+  {
+    icon: Clock,
+    title: 'Office hours',
+    value: 'Mon — Fri, 9 AM – 6 PM ET',
+    description:
+      "I check messages outside hours but won't quote work or commit to scope until next business day.",
+  },
+];
+
+interface FormState {
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+}
+
+const SUBJECT_OPTIONS = [
+  'Discord bot',
+  'Discord server setup',
+  'Marketing website',
+  'Web app',
+  'Rust script / mod',
+  'DayZ script / mod',
+  'FiveM resource',
+  "I'm not sure yet",
+];
 
 export default function ContactContent() {
-  const [formData, setFormData] = useState({
+  const [form, setForm] = useState<FormState>({
     name: '',
     email: '',
-    phone: '',
     subject: '',
     message: '',
   });
@@ -17,310 +83,264 @@ export default function ContactContent() {
   const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [statusMessage, setStatusMessage] = useState('');
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+  function update<K extends keyof FormState>(field: K, value: FormState[K]) {
+    setForm((prev) => ({ ...prev, [field]: value }));
+  }
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  async function submit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setLoading(true);
     setStatus('idle');
 
     try {
-      const response = await fetch('/api/contact', {
+      const res = await fetch('/api/contact', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
       });
+      const data = await res.json().catch(() => ({}));
 
-      const data = await response.json();
-
-      if (response.ok) {
-        setStatus('success');
-        setStatusMessage(data.message || 'Message sent successfully!');
-        setFormData({
-          name: '',
-          email: '',
-          phone: '',
-          subject: '',
-          message: '',
-        });
-        // Clear success message after 5 seconds
-        setTimeout(() => setStatus('idle'), 5000);
-      } else {
+      if (!res.ok) {
         setStatus('error');
-        setStatusMessage(data.error || 'Failed to send message. Please try again.');
+        setStatusMessage(
+          data.error || 'Failed to send. Try Discord or email instead.'
+        );
+        setLoading(false);
+        return;
       }
-    } catch (error) {
+
+      setStatus('success');
+      setStatusMessage(
+        data.message ||
+          "Got it — replying within 4 hours during business days."
+      );
+      setForm({ name: '', email: '', subject: '', message: '' });
+      setTimeout(() => setStatus('idle'), 6000);
+    } catch {
       setStatus('error');
-      setStatusMessage('An error occurred. Please try again later.');
+      setStatusMessage('Network error. Try Discord or email instead.');
     } finally {
       setLoading(false);
     }
-  };
-
-  const contactInfo = [
-    {
-      icon: Mail,
-      title: 'Email',
-      value: 'support@inspirepc.com',
-      description: 'We typically respond within 24 hours',
-    },
-    {
-      icon: Phone,
-      title: 'Phone',
-      value: '(330) 314-8860',
-      description: 'Call or text anytime',
-    },
-    {
-      icon: MapPin,
-      title: 'Location',
-      value: 'Girard, OH 44420',
-      description: 'Serving the Mahoning Valley & shipping nationwide',
-    },
-    {
-      icon: Clock,
-      title: 'Business Hours',
-      value: 'Mon-Fri 9am-6pm',
-      description: 'Saturday 10am-4pm',
-    },
-  ];
+  }
 
   return (
-    <div className="min-h-screen bg-midnight">
-      {/* Hero Section */}
-      <AnimatedSection className="section relative overflow-hidden pt-20 pb-12">
-        <div className="absolute inset-0 opacity-20 pointer-events-none">
-          <div className="absolute top-20 left-10 w-72 h-72 bg-electric rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-pulse" />
-          <div className="absolute bottom-0 right-20 w-96 h-96 bg-volt rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-pulse" />
-        </div>
+    <div className="flex flex-col">
+      {/* Hero */}
+      <section className="relative overflow-hidden border-b border-steel/60 bg-ink">
+        <div
+          className="absolute inset-0 bg-grid-pattern opacity-50"
+          style={{ backgroundSize: '32px 32px' }}
+          aria-hidden="true"
+        />
+        <div
+          className="pointer-events-none absolute right-0 top-0 h-[500px] w-[500px] rounded-full"
+          style={{
+            background:
+              'radial-gradient(circle, rgba(255, 107, 26, 0.14) 0%, transparent 60%)',
+          }}
+          aria-hidden="true"
+        />
 
-        <div className="relative max-w-6xl mx-auto px-6">
-          <div className="text-center mb-12">
-            <h1 className="section-title gradient-text mb-4">Get In Touch</h1>
-            <p className="section-subtitle text-silver">
-              Have questions about our PC building services? We'd love to hear from you.
+        <div className="relative mx-auto max-w-6xl px-6 pt-32 pb-16 sm:pt-40 sm:pb-20">
+          <nav className="mb-8 flex items-center gap-2 text-sm text-mute">
+            <Link href="/" className="hover:text-flame transition-colors">
+              Home
+            </Link>
+            <span className="text-steel">/</span>
+            <span className="text-flame">Contact</span>
+          </nav>
+
+          <div className="flex flex-col gap-6 max-w-3xl">
+            <span className="spec-tag w-fit">replies within 4 hours</span>
+            <h1 className="font-display text-5xl sm:text-6xl font-bold leading-[1.05] tracking-tight text-bone">
+              Three ways to{' '}
+              <span className="gradient-text">reach me</span>.
+            </h1>
+            <p className="text-lg sm:text-xl text-mute leading-relaxed">
+              Discord, email, or the form below. Whichever works for you. If
+              you&rsquo;re asking for a quote, the form below routes
+              straight into my queue with the right metadata so I can
+              respond faster.
             </p>
           </div>
         </div>
-      </AnimatedSection>
+      </section>
 
-      {/* Main Contact Section */}
-      <AnimatedSection className="section relative py-16">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
-            {/* Contact Info Cards */}
-            {contactInfo.map((info, index) => {
-              const Icon = info.icon;
+      {/* Channels */}
+      <section className="border-b border-steel/60 bg-ink py-12 sm:py-16">
+        <div className="mx-auto max-w-6xl px-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            {CONTACT_CHANNELS.map((c) => {
+              const Icon = c.icon;
+              const Tag = c.href ? 'a' : 'div';
               return (
-                <div
-                  key={index}
-                  className="card p-6 border border-steel/30 hover:border-electric/50 transition-colors duration-300"
+                <Tag
+                  key={c.title}
+                  {...(c.href ? { href: c.href, target: '_blank', rel: 'noopener noreferrer' } : {})}
+                  className={`group rounded-xl border p-6 flex flex-col gap-4 transition-all ${
+                    c.primary
+                      ? 'border-flame/30 bg-flame/5 hover:border-flame hover:bg-flame/10'
+                      : 'border-steel bg-carbon hover:border-flame/50'
+                  }`}
                 >
-                  <div className="flex items-start space-x-4">
-                    <div className="flex-shrink-0">
-                      <div className="flex items-center justify-center h-12 w-12 rounded-lg bg-gradient-to-br from-electric to-volt">
-                        <Icon className="h-6 w-6 text-white" />
-                      </div>
+                  <div className="flex items-center gap-3">
+                    <div className={`flex h-11 w-11 items-center justify-center rounded-lg ${c.primary ? 'bg-flame text-ink' : 'bg-flame/10 text-flame'}`}>
+                      <Icon size={20} strokeWidth={1.5} />
                     </div>
-                    <div className="flex-1">
-                      <h3 className="font-display text-lg font-bold text-pearl mb-2">
-                        {info.title}
-                      </h3>
-                      <p className="text-electric font-semibold mb-1">{info.value}</p>
-                      <p className="text-silver text-sm">{info.description}</p>
-                    </div>
+                    <h3 className="font-display text-lg font-bold text-bone">
+                      {c.title}
+                    </h3>
                   </div>
-                </div>
+                  <div className="font-mono text-sm font-semibold text-flame break-all">
+                    {c.value}
+                  </div>
+                  <p className="text-sm text-mute leading-relaxed">{c.description}</p>
+                </Tag>
               );
             })}
           </div>
-
-          {/* Contact Form Section */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-            {/* Form */}
-            <div className="order-2 lg:order-1">
-              <form onSubmit={handleSubmit} className="space-y-6">
-                {/* Name Field */}
-                <div>
-                  <label htmlFor="name" className="block text-pearl font-semibold mb-2">
-                    Full Name *
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleInputChange}
-                    required
-                    aria-required="true"
-                    className="input-field w-full"
-                    placeholder="John Doe"
-                  />
-                </div>
-
-                {/* Email Field */}
-                <div>
-                  <label htmlFor="email" className="block text-pearl font-semibold mb-2">
-                    Email Address *
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    required
-                    aria-required="true"
-                    className="input-field w-full"
-                    placeholder="john@example.com"
-                  />
-                </div>
-
-                {/* Phone Field */}
-                <div>
-                  <label htmlFor="phone" className="block text-pearl font-semibold mb-2">
-                    Phone Number
-                  </label>
-                  <input
-                    type="tel"
-                    id="phone"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleInputChange}
-                    className="input-field w-full"
-                    placeholder="(330) 314-8860"
-                  />
-                </div>
-
-                {/* Subject Dropdown */}
-                <div>
-                  <label htmlFor="subject" className="block text-pearl font-semibold mb-2">
-                    Subject *
-                  </label>
-                  <select
-                    id="subject"
-                    name="subject"
-                    value={formData.subject}
-                    onChange={handleInputChange}
-                    required
-                    aria-required="true"
-                    className="input-field w-full"
-                  >
-                    <option value="">Select a subject...</option>
-                    <option value="General Inquiry">General Inquiry</option>
-                    <option value="Build Service">Build Service</option>
-                    <option value="Troubleshooting/Repair">Troubleshooting/Repair</option>
-                    <option value="Upgrade Service">Upgrade Service</option>
-                    <option value="Warranty Claim">Warranty Claim</option>
-                    <option value="Other">Other</option>
-                  </select>
-                </div>
-
-                {/* Message Field */}
-                <div>
-                  <label htmlFor="message" className="block text-pearl font-semibold mb-2">
-                    Message *
-                  </label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    value={formData.message}
-                    onChange={handleInputChange}
-                    required
-                    aria-required="true"
-                    rows={5}
-                    className="input-field w-full resize-none"
-                    placeholder="Tell us more about your inquiry..."
-                  />
-                </div>
-
-                {/* Status Messages */}
-                {status === 'success' && (
-                  <div role="alert" aria-live="polite" className="p-4 rounded-lg bg-green-900/20 border border-green-500/50 text-green-400">
-                    {statusMessage}
-                  </div>
-                )}
-
-                {status === 'error' && (
-                  <div role="alert" aria-live="assertive" className="p-4 rounded-lg bg-red-900/20 border border-red-500/50 text-red-400">
-                    {statusMessage}
-                  </div>
-                )}
-
-                {/* Submit Button */}
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="btn-primary w-full flex items-center justify-center gap-2"
-                >
-                  <Send className="w-4 h-4" />
-                  {loading ? 'Sending...' : 'Send Message'}
-                </button>
-
-                <p className="text-silver text-sm text-center">* Required fields</p>
-              </form>
-            </div>
-
-            {/* Right Side Content */}
-            <div className="order-1 lg:order-2 space-y-8">
-              {/* Map Placeholder */}
-              <div className="card p-8 border border-steel/30">
-                <div className="w-full h-96 rounded-lg bg-gradient-to-br from-obsidian to-obsidian border border-steel/30 flex items-center justify-center">
-                  <div className="text-center">
-                    <MapPin className="w-16 h-16 text-steel/50 mx-auto mb-4" />
-                    <p className="text-silver text-lg font-display">Google Maps Coming Soon</p>
-                    <p className="text-steel text-sm mt-2">
-                      Interactive map will be embedded here
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* FAQ Callout */}
-              <div className="card p-6 border border-electric/30 hover:border-volt/50 transition-colors duration-300 bg-gradient-to-br from-electric/5 to-volt/5">
-                <h3 className="font-display text-lg font-bold text-pearl mb-2">
-                  Have Questions?
-                </h3>
-                <p className="text-silver mb-4">
-                  Check out our FAQ section for quick answers about pricing and services.
-                </p>
-                <Link
-                  href="/pricing#faq"
-                  className="inline-flex items-center gap-2 text-electric hover:text-volt font-semibold transition-colors"
-                >
-                  View FAQ
-                  <span className="text-xl">&#8594;</span>
-                </Link>
-              </div>
-            </div>
-          </div>
         </div>
-      </AnimatedSection>
+      </section>
 
-      {/* CTA Section */}
-      <AnimatedSection className="section relative py-16 border-t border-steel/30">
-        <div className="max-w-4xl mx-auto px-6 text-center">
-          <h2 className="section-title gradient-text mb-4">Urgent Request?</h2>
-          <p className="text-silver mb-8">
-            For urgent matters, feel free to call us directly during business hours.
+      {/* Form */}
+      <section className="border-b border-steel/60 bg-carbon/30 py-16 sm:py-20">
+        <div className="mx-auto max-w-3xl px-6">
+          <div className="mb-10 flex flex-col gap-3">
+            <span className="spec-tag w-fit">quick contact</span>
+            <h2 className="font-display text-3xl sm:text-4xl font-bold text-bone">
+              Or use the form.
+            </h2>
+            <p className="text-mute leading-relaxed">
+              Routes to the same inbox as the email above, but with project
+              type tagged so quotes turn around faster.
+            </p>
+          </div>
+
+          {status === 'success' && (
+            <div className="mb-6 flex items-start gap-3 rounded-xl border-2 border-green-500/30 bg-green-500/10 p-4 text-bone">
+              <CheckCircle size={20} className="text-green-400 mt-0.5 flex-shrink-0" />
+              <span>{statusMessage}</span>
+            </div>
+          )}
+          {status === 'error' && (
+            <div className="mb-6 flex items-start gap-3 rounded-xl border-2 border-red-500/30 bg-red-500/10 p-4 text-bone">
+              <AlertCircle size={20} className="text-red-400 mt-0.5 flex-shrink-0" />
+              <span>{statusMessage}</span>
+            </div>
+          )}
+
+          <form onSubmit={submit} className="flex flex-col gap-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <div className="flex flex-col gap-2">
+                <label htmlFor="contact-name" className="text-sm font-semibold text-bone">
+                  Your name
+                </label>
+                <input
+                  id="contact-name"
+                  type="text"
+                  required
+                  value={form.name}
+                  onChange={(e) => update('name', e.target.value)}
+                  className="input-field"
+                  placeholder="Whatever you want me to call you"
+                />
+              </div>
+              <div className="flex flex-col gap-2">
+                <label htmlFor="contact-email" className="text-sm font-semibold text-bone">
+                  Email
+                </label>
+                <input
+                  id="contact-email"
+                  type="email"
+                  required
+                  value={form.email}
+                  onChange={(e) => update('email', e.target.value)}
+                  className="input-field"
+                  placeholder="you@example.com"
+                />
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <label htmlFor="contact-subject" className="text-sm font-semibold text-bone">
+                Project type
+              </label>
+              <select
+                id="contact-subject"
+                required
+                value={form.subject}
+                onChange={(e) => update('subject', e.target.value)}
+                className="input-field"
+              >
+                <option value="">Pick one…</option>
+                {SUBJECT_OPTIONS.map((opt) => (
+                  <option key={opt} value={opt}>
+                    {opt}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <label htmlFor="contact-message" className="text-sm font-semibold text-bone">
+                What you&rsquo;re after
+              </label>
+              <textarea
+                id="contact-message"
+                required
+                value={form.message}
+                onChange={(e) => update('message', e.target.value)}
+                className="input-field"
+                rows={6}
+                placeholder="Half-baked ideas welcome. The more detail you give, the better the quote."
+              />
+              <p className="text-xs text-mute">
+                Discord server links, Loom recordings, screenshots — paste
+                them right into the message. I&rsquo;ll work with whatever
+                you send.
+              </p>
+            </div>
+
+            <button type="submit" disabled={loading} className="btn-primary disabled:opacity-50">
+              <span className="flex items-center gap-2">
+                {loading ? (
+                  <Loader2 size={18} className="animate-spin" />
+                ) : (
+                  <Send size={18} />
+                )}
+                {loading ? 'Sending…' : 'Send Message'}
+              </span>
+            </button>
+          </form>
+        </div>
+      </section>
+
+      {/* CTA — push to Discord as primary */}
+      <section className="bg-ink py-16 sm:py-20">
+        <div className="mx-auto max-w-3xl px-6 text-center">
+          <h2 className="font-display text-3xl sm:text-4xl font-bold text-bone mb-4">
+            Already on{' '}
+            <span className="gradient-text">Discord</span>?
+          </h2>
+          <p className="mx-auto max-w-xl text-mute mb-8 leading-relaxed">
+            Most of my clients prefer DM&rsquo;ing me directly there. Drop in
+            and ping me — same response window, less email.
           </p>
           <a
-            href="tel:+13303148860"
-            className="btn-primary inline-block"
+            href="https://discord.gg/inspire-dev"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-primary inline-flex"
           >
-            Call Now: (330) 314-8860
+            <span className="flex items-center gap-2">
+              <MessageSquare size={18} />
+              Join the Discord
+              <ArrowRight size={16} />
+            </span>
           </a>
         </div>
-      </AnimatedSection>
+      </section>
     </div>
   );
 }
