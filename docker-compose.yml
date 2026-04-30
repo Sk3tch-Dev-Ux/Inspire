@@ -29,6 +29,14 @@ services:
     restart: unless-stopped
     ports:
       - "127.0.0.1:3000:3000"
+    networks:
+      # Default bridge so postgres (also on default) is reachable.
+      - default
+      # Shared bridge with the host's docker-nginx-1 reverse proxy.
+      # Nginx upstreams use the hostname `inspire-web:3000`, so we must
+      # be on this network or `docker compose up -d` recreates will
+      # 502 the public site until manually `docker network connect`-ed.
+      - docker_frontend
     environment:
       - NODE_ENV=production
       - HOSTNAME=0.0.0.0
@@ -56,3 +64,8 @@ services:
 
 volumes:
   inspire-pg-data:
+
+networks:
+  default:
+  docker_frontend:
+    external: true
