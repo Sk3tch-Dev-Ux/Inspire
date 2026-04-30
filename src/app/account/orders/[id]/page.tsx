@@ -199,9 +199,9 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ id
                 <div className="flex items-start gap-3 p-3 bg-midnight rounded-lg border border-steel">
                   <MapPin className="w-4 h-4 text-volt mt-0.5 shrink-0" />
                   <div>
-                    <p className="text-sm text-pearl font-medium">Inspire PC</p>
-                    <p className="text-xs text-silver">Girard, OH 44420</p>
-                    <p className="text-xs text-silver mt-1">Call (330) 314-8860 to schedule pickup</p>
+                    <p className="text-sm text-pearl font-medium">Inspire Development</p>
+                    <p className="text-xs text-silver">Remote handoff</p>
+                    <p className="text-xs text-silver mt-1">We&apos;ll coordinate the handoff over Discord or email.</p>
                   </div>
                 </div>
               </div>

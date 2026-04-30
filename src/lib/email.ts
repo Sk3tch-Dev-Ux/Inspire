@@ -16,8 +16,8 @@ function getResend() {
   return new Resend(process.env.RESEND_API_KEY);
 }
 
-const FROM = 'Inspire PC <noreply@inspirepc.com>';
-const SUPPORT = 'support@inspirepc.com';
+const FROM = 'Inspire Development <noreply@inspirepc.com>';
+const SUPPORT = 'hello@inspirepc.com';
 
 interface OrderData {
   orderId: string;
@@ -88,7 +88,7 @@ export async function sendWelcomeEmail(data: { name: string; email: string }) {
   return resend.emails.send({
     from: FROM,
     to: data.email,
-    subject: 'Welcome to Inspire PC!',
+    subject: 'Welcome to Inspire Development',
     html: welcomeEmailHtml(data),
   });
 }

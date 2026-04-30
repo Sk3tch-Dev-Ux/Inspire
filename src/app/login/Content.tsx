@@ -24,10 +24,10 @@ function LoginForm() {
       <div className="max-w-md w-full mx-6">
         <div className="text-center mb-10">
           <h1 className="text-3xl md:text-4xl font-display font-bold mb-3 text-pearl">
-            Sign in to <span className="gradient-text">Inspire PC</span>
+            Sign in to <span className="gradient-text">Inspire Development</span>
           </h1>
           <p className="text-silver">
-            Track your orders, get build updates, and chat with our AI assistant.
+            Track your projects, get updates, and chat with our AI assistant.
           </p>
         </div>
 

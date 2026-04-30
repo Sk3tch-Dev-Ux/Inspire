@@ -36,9 +36,9 @@ export default async function OrdersPage() {
         {orders.length === 0 ? (
           <div className="card text-center py-12">
             <Package className="w-12 h-12 text-steel mx-auto mb-4" />
-            <p className="text-silver mb-4">You haven&apos;t placed any orders yet.</p>
-            <Link href="/order" className="btn-primary inline-flex">
-              <span>Book a Build</span>
+            <p className="text-silver mb-4">You haven&apos;t requested any projects yet.</p>
+            <Link href="/quote" className="btn-primary inline-flex">
+              <span>Request a Quote</span>
             </Link>
           </div>
         ) : (

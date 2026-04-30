@@ -44,7 +44,7 @@ export default function AdminLoginPage() {
             <Lock className="w-8 h-8 text-midnight" />
           </div>
           <h1 className="text-2xl font-display font-bold text-pearl">Admin Access</h1>
-          <p className="text-silver text-sm mt-1">Inspire PC Dashboard</p>
+          <p className="text-silver text-sm mt-1">Inspire Development Dashboard</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
