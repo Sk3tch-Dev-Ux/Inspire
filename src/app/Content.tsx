@@ -15,6 +15,7 @@ import {
 import AnimatedSection from '@/components/AnimatedSection';
 import ServiceCard from '@/components/ServiceCard';
 import PortfolioCard from '@/components/PortfolioCard';
+import { getFeaturedProjects } from '@/lib/portfolio-data';
 
 /**
  * Inspire Development — Homepage (Phase 2)
@@ -78,36 +79,11 @@ const services = [
   },
 ];
 
-// Portfolio placeholders — replace via /admin once real work is added.
-const recentWork = [
-  {
-    slug: 'rust-server-shop-bot',
-    title: 'Rust Server Shop Bot',
-    category: 'Discord Bot' as const,
-    outcome:
-      'In-game shop, role-based pricing, Steam OAuth — replaced their previous $200/mo SaaS with a one-time $1,200 build.',
-    imageUrl: '/images/portfolio/placeholder-1.svg',
-    techStack: ['discord.js', 'Postgres', 'Steam API'],
-  },
-  {
-    slug: 'gaming-community-layout',
-    title: 'Gaming Community Server',
-    category: 'Discord Layout' as const,
-    outcome:
-      '1,200-member community, full restructure: 8 categories, 40+ channels, role-gated regions, automated onboarding.',
-    imageUrl: '/images/portfolio/placeholder-2.svg',
-    techStack: ['Discord', 'Tickets.bot', 'Carl-bot'],
-  },
-  {
-    slug: 'dayz-trader-mod',
-    title: 'DayZ Custom Trader',
-    category: 'DayZ' as const,
-    outcome:
-      'Server-side trader mod with dynamic pricing, faction discounts, and a web dashboard for the server admin.',
-    imageUrl: '/images/portfolio/placeholder-3.svg',
-    techStack: ['Enscript', 'C#', 'PostgreSQL'],
-  },
-];
+// Featured projects pulled from the shared portfolio catalog. Mark a
+// project featured: true in src/lib/portfolio-data.ts to surface it
+// here. The strip caps at the first 3 to keep the page proportions
+// right.
+const recentWork = getFeaturedProjects().slice(0, 3);
 
 const processSteps = [
   {

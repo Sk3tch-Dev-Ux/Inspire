@@ -1,0 +1,72 @@
+<svg width="1280" height="800" viewBox="0 0 1280 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Portfolio placeholder — FiveM roleplay framework.
+       Stylized RP HUD with job, money, ID. Lua snippets background. -->
+  <defs>
+    <linearGradient id="bgF" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0A0A0A"/>
+      <stop offset="100%" stop-color="#0F0F0F"/>
+    </linearGradient>
+    <radialGradient id="glowF" cx="30%" cy="30%" r="60%">
+      <stop offset="0%" stop-color="#FF6B1A" stop-opacity="0.10"/>
+      <stop offset="100%" stop-color="#FF6B1A" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1280" height="800" fill="url(#bgF)"/>
+
+  <!-- Lua/JS code rain -->
+  <g font-family="ui-monospace, monospace" font-size="13" fill="#2D2D2D">
+    <text x="60" y="180">RegisterNetEvent('esx:playerLoaded')</text>
+    <text x="60" y="200">AddEventHandler('esx:playerLoaded', function(xPlayer)</text>
+    <text x="60" y="220">  TriggerClientEvent('inspire:loadJob', src, xPlayer.job)</text>
+    <text x="60" y="240">end)</text>
+
+    <text x="900" y="160">// jobs.json</text>
+    <text x="900" y="180">{ "police": { "tier": 4, "salary": 850 } }</text>
+    <text x="900" y="200">{ "ems":    { "tier": 3, "salary": 720 } }</text>
+    <text x="900" y="220">{ "mech":   { "tier": 2, "salary": 600 } }</text>
+
+    <text x="60" y="540">[OK] inspire-jobs resource started</text>
+    <text x="60" y="560">[OK] 8 jobs registered</text>
+    <text x="60" y="580">[OK] economy hook attached</text>
+
+    <text x="900" y="560">esx.RegisterUsableItem('lockpick', ...)</text>
+    <text x="900" y="580">esx.RegisterServerCallback('inspire:buy', ...)</text>
+  </g>
+
+  <rect width="1280" height="800" fill="url(#glowF)"/>
+
+  <!-- HUD card — job / cash / ID -->
+  <g transform="translate(360, 290)">
+    <rect width="560" height="220" rx="16" fill="#0F0F0F" fill-opacity="0.95" stroke="#FF6B1A" stroke-opacity="0.3" stroke-width="1.5"/>
+    <text x="32" y="44" font-family="ui-monospace, monospace" font-size="13" font-weight="700" fill="#FF6B1A" letter-spacing="3">JOB · POLICE OFFICER</text>
+
+    <!-- Three columns -->
+    <g transform="translate(32, 80)">
+      <text font-family="ui-monospace, monospace" font-size="11" font-weight="600" fill="#7A7A7A" letter-spacing="2">CASH</text>
+      <text y="36" font-family="'Space Grotesk', system-ui, sans-serif" font-size="32" font-weight="700" fill="#FAFAF7">$12,840</text>
+    </g>
+    <g transform="translate(220, 80)">
+      <text font-family="ui-monospace, monospace" font-size="11" font-weight="600" fill="#7A7A7A" letter-spacing="2">BANK</text>
+      <text y="36" font-family="'Space Grotesk', system-ui, sans-serif" font-size="32" font-weight="700" fill="#FAFAF7">$48,200</text>
+    </g>
+    <g transform="translate(400, 80)">
+      <text font-family="ui-monospace, monospace" font-size="11" font-weight="600" fill="#7A7A7A" letter-spacing="2">ID</text>
+      <text y="36" font-family="'Space Grotesk', system-ui, sans-serif" font-size="32" font-weight="700" fill="#FF6B1A">#0142</text>
+    </g>
+
+    <!-- Stamina/health bars at bottom -->
+    <text x="32" y="160" font-family="ui-monospace, monospace" font-size="11" font-weight="600" fill="#7A7A7A" letter-spacing="2">HP</text>
+    <rect x="60" y="151" width="200" height="10" rx="5" fill="#1A1A1A"/>
+    <rect x="60" y="151" width="180" height="10" rx="5" fill="#FF6B1A"/>
+
+    <text x="290" y="160" font-family="ui-monospace, monospace" font-size="11" font-weight="600" fill="#7A7A7A" letter-spacing="2">ARMOR</text>
+    <rect x="350" y="151" width="178" height="10" rx="5" fill="#1A1A1A"/>
+    <rect x="350" y="151" width="120" height="10" rx="5" fill="#FAFAF7" fill-opacity="0.6"/>
+  </g>
+
+  <g font-family="ui-monospace, monospace" font-size="14" font-weight="500" fill="#FF6B1A">
+    <rect x="64" y="64" width="130" height="34" rx="6" fill="#FF6B1A" fill-opacity="0.08" stroke="#FF6B1A" stroke-opacity="0.25"/>
+    <text x="129" y="86" text-anchor="middle">⚡ FiveM</text>
+  </g>
+</svg>
