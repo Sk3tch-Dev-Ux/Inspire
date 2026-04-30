@@ -1,322 +1,483 @@
-import Link from 'next/link'
-import AnimatedSection from '@/components/AnimatedSection'
+import Link from 'next/link';
 import {
-  Check,
-  Wrench,
-  Zap,
-  HelpCircle,
+  ArrowRight,
+  Bot,
+  Code2,
+  Gamepad2,
+  LayoutDashboard,
+  CheckCircle,
+  ChevronRight,
+  MessageSquare,
   Clock,
-  MessageCircle
-} from 'lucide-react'
+  Wallet,
+  Receipt,
+  Calculator,
+} from 'lucide-react';
+import AnimatedSection from '@/components/AnimatedSection';
 
-const services = [
+/**
+ * /pricing — Phase 5.
+ *
+ * The brand-pillar page. "Predictable pricing posted publicly" is one
+ * of the four pillars in BRAND.md, so this surface has to carry it
+ * alone — no hedging, no "starting at" weasel-words on top items.
+ *
+ * Sections:
+ *   1. Hero — pricing manifesto
+ *   2. Hourly rates table — direct $X/hr for each service category
+ *   3. Fixed-fee packages — flat-fee offerings where scope is known
+ *   4. Custom quote callout — when to skip the hourly path
+ *   5. How billing works — payment terms, no-surprise commitments
+ *   6. FAQ specific to pricing concerns
+ *   7. CTA
+ */
+
+const HOURLY_TIERS = [
   {
-    name: 'Standard Build',
-    price: '$150',
-    description: 'Complete PC assembly with professional cable management and testing.',
-    icon: Wrench,
-    turnaround: '3-5 business days',
-    features: [
-      'Full system assembly',
-      'Professional cable management',
-      'BIOS configuration',
-      'Stress testing (2+ hours)',
-      'OS installation (if license provided)',
-      'Driver installation',
-      'Build photos',
+    title: 'Discord Bots',
+    icon: Bot,
+    rate: 60,
+    serviceSlug: 'discord-bots',
+    typicalRange: '$200 – $1,500',
+    description:
+      'Most bot builds take 4–25 hours. Small command additions to existing bots: 1–4 hours.',
+  },
+  {
+    title: 'Custom Websites',
+    icon: Code2,
+    rate: 75,
+    serviceSlug: 'web',
+    typicalRange: '$1,500 – $4,000',
+    description:
+      'Marketing sites: typically fixed-fee. Web apps with auth/DB/payments: hourly because scope grows.',
+  },
+  {
+    title: 'Game Scripts',
+    icon: Gamepad2,
+    rate: 80,
+    serviceSlug: 'game-scripts',
+    typicalRange: '$400 – $2,000',
+    description:
+      'Niche skill, 15% premium over web. Rust, DayZ, FiveM. Larger custom mods quoted as projects.',
+  },
+];
+
+const FIXED_PACKAGES = [
+  {
+    title: 'Discord Server Setup',
+    icon: LayoutDashboard,
+    price: 300,
+    serviceSlug: 'discord-layouts',
+    deliveryTime: '1 day',
+    includes: [
+      'Audit of existing server (or clean-slate build)',
+      '8+ categories, 40+ channels, full role hierarchy',
+      'Welcome flow with rules-acceptance gating',
+      'Ticket system configured (Tickets.bot or similar)',
+      'Pre-configured moderation bots (Carl-bot / Dyno / MEE6)',
+      'Handoff doc for training your moderators',
     ],
-    popular: false,
   },
   {
-    name: 'Express Build',
-    price: '$300',
-    description: 'Same great service with priority turnaround time.',
-    icon: Zap,
-    turnaround: '24-48 hours',
-    features: [
-      'Everything in Standard Build',
-      'Priority turnaround',
-      'Priority support',
-      'Extended stress testing (4+ hours)',
-      'Detailed benchmark report',
+    title: 'Marketing Website',
+    icon: Code2,
+    price: 1800,
+    serviceSlug: 'web',
+    deliveryTime: '1 week',
+    includes: [
+      'Up to 6 pages (home, about, services, contact, etc.)',
+      'Mobile-responsive, Lighthouse 90+',
+      'Custom design — no template-feel',
+      'SEO baseline (meta tags, OG images, JSON-LD)',
+      'Deploy + domain setup (Vercel free tier or your VPS)',
+      '2 weeks of post-launch tweaks included',
     ],
-    popular: true,
+    badge: 'POPULAR',
   },
-]
+  {
+    title: 'Discord Server Audit',
+    icon: Receipt,
+    price: 60,
+    serviceSlug: 'discord-layouts',
+    deliveryTime: '1 hour',
+    includes: [
+      '1-hour written audit of your existing Discord',
+      'Specific recommendations for structure, roles, perms',
+      'Bot-stack review with replacement suggestions',
+      'Welcome flow + onboarding analysis',
+      'No rebuild — DIY-friendly findings, take it from there',
+    ],
+  },
+];
 
-const addons = [
-  { name: 'Budget Build Planning', price: '$49', note: 'Credited toward build service', desc: 'PC Part Picker list based on your budget' },
-  { name: 'Component Upgrade', price: '$49', note: 'per component', desc: 'Swap CPU, GPU, storage, etc.' },
-  { name: 'OS Installation Only', price: '$39', note: '', desc: 'Windows or Linux installation + drivers' },
-  { name: 'Data Migration', price: '$39', note: '', desc: 'Transfer files from old PC' },
-  { name: 'System Optimization', price: '$79', note: '', desc: 'Tune existing PC for performance' },
-  { name: 'AIO Cooler Install', price: '$29', note: 'add-on', desc: 'Includes thermal paste application' },
-]
+const billingPoints = [
+  {
+    icon: Clock,
+    title: 'Track time honestly',
+    description:
+      "Hourly time logged in 15-minute increments. I don't pad. If a 1-hour estimate finishes in 40 minutes, you pay for 40 minutes.",
+  },
+  {
+    icon: Wallet,
+    title: 'Pay on delivery',
+    description:
+      "Most projects: invoice when shipped, pay within 14 days. Stripe (card) or direct deposit. No upfront deposits for sub-$1,500 jobs.",
+  },
+  {
+    icon: Calculator,
+    title: 'Quotes never grow silently',
+    description:
+      "If a project is going over the original estimate by more than 20%, I stop and tell you before continuing. No 'oh by the way, I'm at $4,000 now.'",
+  },
+];
 
-const faqs = [
+const PRICING_FAQ = [
   {
-    q: 'Do you sell PC parts or complete systems?',
-    a: 'No, we are strictly a build service. You purchase your own parts and we assemble them for you. We can help you choose parts through our Budget Build Planning service.',
+    question: 'Do you charge for the initial quote?',
+    answer:
+      "No. Quotes are free, every time, within 24 hours of you reaching out. If the project doesn't make sense for me to take, I'll tell you that for free too — and usually point you to someone who's a better fit.",
   },
   {
-    q: 'How does Budget Build Planning work?',
-    a: 'Tell us your budget and what you want to use the PC for. We\'ll create a custom parts list on PC Part Picker, showing you exactly what to buy and where. You purchase the parts directly from retailers—we don\'t mark anything up.',
+    question: 'What if my project goes over the original estimate?',
+    answer:
+      "If we're approaching 120% of the quoted amount, I stop and tell you. You decide whether to keep going (with a new estimate), descope, or wrap. You never get a surprise bill at the end.",
   },
   {
-    q: 'How do I get my parts to you?',
-    a: 'You can ship them to our workshop or drop them off in person. We\'ll inspect everything on arrival and let you know if anything is missing or DOA.',
+    question: 'Do you do retainers?',
+    answer:
+      "Yes — for ongoing maintenance: $40/mo per game-script (covers game-update compatibility), $200/mo for web app maintenance (up to 3 hours of changes + on-call for breakages), or $15/mo bot hosting if you want me to run it on my VPS.",
   },
   {
-    q: 'What if a part arrives dead on arrival (DOA)?',
-    a: 'We\'ll identify the issue during our testing phase and let you know. You\'ll need to handle the RMA with the retailer since you purchased the parts. We can help guide you through the process.',
+    question: 'How does payment work for hourly billing?',
+    answer:
+      "Two patterns: (1) For shorter engagements (<20 hrs), invoice on delivery. (2) For ongoing work, weekly invoices every Friday for hours logged that week, payable within 7 days.",
   },
   {
-    q: 'How long does a build take?',
-    a: 'Standard builds are completed within 3-5 business days. Express builds are 24-48 hours.',
+    question: 'Refunds?',
+    answer:
+      "If something I delivered doesn't work as we agreed and I can't fix it within a reasonable window, I'll refund. This basically never comes up — projects ship working — but the answer is yes, refund.",
   },
   {
-    q: 'What warranty do you offer?',
-    a: 'We offer a 30-day workmanship warranty covering any assembly-related issues. Component warranties are handled by the manufacturers since you purchased the parts.',
+    question: 'Stripe? Crypto? Bank transfer?',
+    answer:
+      "Stripe (any card) and direct bank transfer (ACH/wire) for everyone. Crypto (BTC/ETH/USDC) on request — happy to use it but the rate locks at the time of invoice.",
   },
-  {
-    q: 'Do you do custom water cooling?',
-    a: 'We do not offer custom loop water cooling installation. However, we do install AIO (all-in-one) liquid coolers as an add-on service for $29.',
-  },
-]
+];
 
 export default function PricingContent() {
   return (
-    <div className="pt-20">
-      {/* Hero Section */}
-      <section className="relative py-24 overflow-hidden">
-        <div className="absolute inset-0">
-          <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-electric/10 rounded-full blur-[128px]" />
-          <div className="absolute bottom-1/4 left-1/4 w-96 h-96 bg-volt/10 rounded-full blur-[128px]" />
-        </div>
+    <div className="flex flex-col">
+      {/* Hero */}
+      <section className="relative overflow-hidden border-b border-steel/60 bg-ink">
+        <div
+          className="absolute inset-0 bg-grid-pattern opacity-50"
+          style={{ backgroundSize: '32px 32px' }}
+          aria-hidden="true"
+        />
+        <div
+          className="pointer-events-none absolute right-0 top-0 h-[500px] w-[500px] rounded-full"
+          style={{
+            background:
+              'radial-gradient(circle, rgba(255, 107, 26, 0.14) 0%, transparent 60%)',
+          }}
+          aria-hidden="true"
+        />
 
-        <div className="relative max-w-7xl mx-auto px-6">
-          <div className="text-center max-w-3xl mx-auto">
-            <h1 className="text-4xl md:text-5xl font-display font-bold mb-6 text-pearl">
-              Simple, Transparent <span className="gradient-text">Pricing</span>
+        <div className="relative mx-auto max-w-6xl px-6 pt-32 pb-20 sm:pt-40 sm:pb-24">
+          <nav className="mb-8 flex items-center gap-2 text-sm text-mute">
+            <Link href="/" className="hover:text-flame transition-colors">
+              Home
+            </Link>
+            <span className="text-steel">/</span>
+            <span className="text-flame">Pricing</span>
+          </nav>
+
+          <div className="flex flex-col gap-6 max-w-3xl">
+            <span className="spec-tag w-fit">no discovery calls</span>
+            <h1 className="font-display text-5xl sm:text-6xl font-bold leading-[1.05] tracking-tight text-bone">
+              The price is <span className="gradient-text">on the page</span>.
             </h1>
-            <p className="text-silver text-lg">
-              No hidden fees. No parts markup. Just honest pricing for expert PC assembly.
+            <p className="text-lg sm:text-xl text-mute leading-relaxed">
+              Hourly rates for everything I build. Fixed fees where the scope
+              is clear. Custom quotes within 24 hours for anything bigger.
+              No "schedule a call to learn more." No "tier 1, tier 2,
+              enterprise." Just numbers.
             </p>
           </div>
         </div>
       </section>
 
-      {/* Main Services */}
-      <section className="py-24 bg-obsidian">
-        <div className="max-w-5xl mx-auto px-6">
+      {/* Hourly rates */}
+      <section className="border-b border-steel/60 bg-ink py-16 sm:py-20">
+        <div className="mx-auto max-w-6xl px-6">
           <AnimatedSection>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {services.map((service) => (
-                <div
-                  key={service.name}
-                  className={`card relative h-full flex flex-col ${
-                    service.popular ? 'ring-2 ring-electric' : ''
-                  }`}
+            <div className="mb-10 flex flex-col gap-3">
+              <span className="spec-tag w-fit">hourly</span>
+              <h2 className="font-display text-3xl sm:text-4xl font-bold text-bone">
+                Hourly rates by category.
+              </h2>
+              <p className="section-subtitle">
+                Best for small features, bug fixes, audits, and exploratory
+                work where scope is fluid. Time tracked in 15-minute
+                increments — you don&rsquo;t pay for full hours when 40
+                minutes finished the job.
+              </p>
+            </div>
+          </AnimatedSection>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            {HOURLY_TIERS.map((t) => {
+              const Icon = t.icon;
+              return (
+                <Link
+                  key={t.title}
+                  href={`/services/${t.serviceSlug}`}
+                  className="card group flex flex-col gap-5"
                 >
-                  {service.popular && (
-                    <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                      <span className="px-4 py-1 bg-gradient-to-r from-electric to-volt text-midnight text-sm font-semibold rounded-full">
-                        Most Popular
+                  <div className="flex items-center gap-4">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-flame/10 text-flame transition-colors group-hover:bg-flame group-hover:text-ink">
+                      <Icon size={24} strokeWidth={1.5} />
+                    </div>
+                    <h3 className="font-display text-xl font-bold text-bone group-hover:text-flame transition-colors">
+                      {t.title}
+                    </h3>
+                  </div>
+
+                  <div>
+                    <div className="font-display text-5xl font-bold text-flame leading-none">
+                      ${t.rate}
+                      <span className="text-2xl text-mute font-medium ml-1">
+                        /hr
                       </span>
                     </div>
-                  )}
-
-                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-electric/20 to-volt/20 flex items-center justify-center mb-6">
-                    <service.icon className="w-7 h-7 text-electric" />
                   </div>
 
-                  <h3 className="font-display text-2xl font-semibold mb-2 text-pearl">
-                    {service.name}
-                  </h3>
-
-                  <p className="text-silver text-sm mb-2">
-                    {service.description}
+                  <p className="text-sm text-mute leading-relaxed">
+                    {t.description}
                   </p>
 
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-steel/30 border border-steel/50 text-xs text-silver mb-6">
-                    <Clock className="w-3.5 h-3.5 text-electric" />
-                    {service.turnaround}
+                  <div className="border-t border-steel pt-4">
+                    <div className="text-[10px] font-medium uppercase tracking-[0.2em] text-mute mb-1">
+                      Typical project
+                    </div>
+                    <div className="font-mono text-base font-semibold text-bone">
+                      {t.typicalRange}
+                    </div>
                   </div>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      </section>
 
-                  <div className="mb-6">
-                    <span className="text-4xl font-display font-bold gradient-text">
-                      {service.price}
+      {/* Fixed-fee packages */}
+      <section className="border-b border-steel/60 bg-carbon/30 py-16 sm:py-20">
+        <div className="mx-auto max-w-6xl px-6">
+          <AnimatedSection>
+            <div className="mb-10 flex flex-col gap-3">
+              <span className="spec-tag w-fit">fixed-fee packages</span>
+              <h2 className="font-display text-3xl sm:text-4xl font-bold text-bone">
+                Known-quantity outcomes, flat fee.
+              </h2>
+              <p className="section-subtitle">
+                When the scope is clear up front, hourly billing is just
+                paperwork. These flat-fee packages let you pay one number
+                for one outcome.
+              </p>
+            </div>
+          </AnimatedSection>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            {FIXED_PACKAGES.map((p) => {
+              const Icon = p.icon;
+              return (
+                <div
+                  key={p.title}
+                  className="relative rounded-2xl border border-steel bg-carbon p-6 flex flex-col gap-5 hover:border-flame transition-colors"
+                >
+                  {p.badge && (
+                    <span className="absolute right-5 top-5 spec-tag">
+                      {p.badge}
                     </span>
+                  )}
+
+                  <div className="flex items-center gap-4">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-flame/10 text-flame">
+                      <Icon size={24} strokeWidth={1.5} />
+                    </div>
+                    <h3 className="font-display text-xl font-bold text-bone">
+                      {p.title}
+                    </h3>
                   </div>
 
-                  <ul className="space-y-3 mb-8 flex-grow">
-                    {service.features.map((feature) => (
-                      <li key={feature} className="flex items-start gap-2 text-sm text-pearl">
-                        <Check className="w-5 h-5 text-volt shrink-0 mt-0.5" />
-                        {feature}
+                  <div>
+                    <div className="font-display text-5xl font-bold text-flame leading-none">
+                      ${p.price.toLocaleString()}
+                    </div>
+                    <div className="mt-2 text-xs uppercase tracking-[0.2em] text-mute">
+                      Delivers in {p.deliveryTime}
+                    </div>
+                  </div>
+
+                  <ul className="flex flex-col gap-2.5 text-sm">
+                    {p.includes.map((line) => (
+                      <li key={line} className="flex items-start gap-2.5">
+                        <CheckCircle
+                          size={16}
+                          className="text-flame mt-0.5 flex-shrink-0"
+                          strokeWidth={2}
+                        />
+                        <span className="text-bone leading-relaxed">{line}</span>
                       </li>
                     ))}
                   </ul>
 
-                  <Link
-                    href="/order"
-                    className={service.popular ? 'btn-primary w-full text-center' : 'btn-secondary w-full text-center'}
-                  >
-                    Book Now
-                  </Link>
+                  <div className="mt-auto pt-4 border-t border-steel">
+                    <Link
+                      href="/quote"
+                      className="inline-flex items-center gap-1.5 text-sm font-semibold text-flame hover:text-flame-glow transition-colors"
+                    >
+                      Get this package
+                      <ArrowRight size={14} />
+                    </Link>
+                  </div>
                 </div>
-              ))}
-            </div>
-          </AnimatedSection>
+              );
+            })}
+          </div>
+        </div>
+      </section>
 
-          {/* Not Sure CTA */}
-          <AnimatedSection>
-            <div className="mt-10 p-6 bg-midnight rounded-2xl border border-steel/50 flex flex-col sm:flex-row items-center justify-between gap-4">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-electric/20 to-volt/20 flex items-center justify-center shrink-0">
-                  <MessageCircle className="w-5 h-5 text-electric" />
-                </div>
-                <div>
-                  <p className="font-display font-semibold text-pearl">Not sure which tier is right?</p>
-                  <p className="text-sm text-silver">We&apos;ll help you figure out the best option for your build.</p>
-                </div>
+      {/* Custom quote callout */}
+      <section className="border-b border-steel/60 bg-ink py-16 sm:py-20">
+        <div className="mx-auto max-w-4xl px-6">
+          <div className="rounded-2xl border-2 border-flame/30 bg-flame/5 p-8 sm:p-10 flex flex-col gap-5">
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-flame text-ink">
+                <Calculator size={20} strokeWidth={1.75} />
               </div>
-              <Link href="/contact" className="btn-secondary whitespace-nowrap">
-                Get in Touch
+              <h2 className="font-display text-2xl sm:text-3xl font-bold text-bone">
+                Custom quote
+              </h2>
+            </div>
+            <p className="text-mute leading-relaxed text-lg">
+              For larger projects — multi-month engagements, custom game
+              modes, full multi-bot networks, or anything that doesn&rsquo;t
+              fit a category above — I quote a flat fee or a per-milestone
+              fee after a 15-minute call.
+            </p>
+            <div className="flex flex-wrap gap-2">
+              <span className="spec-tag">turnaround: 24 hours</span>
+              <span className="spec-tag">no fee for the quote</span>
+              <span className="spec-tag">no obligation</span>
+            </div>
+            <div className="mt-2">
+              <Link href="/quote" className="btn-primary w-fit">
+                <span className="flex items-center gap-2">
+                  Request a Custom Quote
+                  <ArrowRight size={18} />
+                </span>
               </Link>
             </div>
-          </AnimatedSection>
+          </div>
         </div>
       </section>
 
-      {/* Add-ons */}
-      <section className="py-24">
-        <div className="max-w-7xl mx-auto px-6">
-          <AnimatedSection className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-display font-bold mb-4 text-pearl">
-              Additional <span className="gradient-text">Services</span>
-            </h2>
-            <p className="text-silver text-lg max-w-2xl mx-auto">
-              Enhance your build with these optional add-ons.
-            </p>
-          </AnimatedSection>
-
+      {/* How billing works */}
+      <section className="border-b border-steel/60 bg-carbon/30 py-16 sm:py-20">
+        <div className="mx-auto max-w-6xl px-6">
           <AnimatedSection>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {addons.map((addon) => (
+            <div className="mb-10 flex flex-col gap-3 text-center">
+              <span className="spec-tag mx-auto w-fit">how billing works</span>
+              <h2 className="font-display text-3xl sm:text-4xl font-bold text-bone">
+                Three commitments. No exceptions.
+              </h2>
+            </div>
+          </AnimatedSection>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            {billingPoints.map((b) => {
+              const Icon = b.icon;
+              return (
                 <div
-                  key={addon.name}
-                  className="p-6 bg-obsidian rounded-xl border border-steel hover:border-electric/50 transition-colors"
+                  key={b.title}
+                  className="rounded-xl border border-steel bg-carbon p-6 flex flex-col gap-4"
                 >
-                  <div className="flex justify-between items-start mb-2">
-                    <h3 className="font-display text-lg font-semibold text-pearl">
-                      {addon.name}
-                    </h3>
-                    <div className="text-right">
-                      <span className="text-xl font-bold gradient-text">{addon.price}</span>
-                      {addon.note && (
-                        <p className="text-xs text-silver">{addon.note}</p>
-                      )}
-                    </div>
+                  <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-flame/10 text-flame">
+                    <Icon size={22} strokeWidth={1.5} />
                   </div>
-                  <p className="text-sm text-silver">{addon.desc}</p>
+                  <h3 className="font-display text-xl font-bold text-bone">
+                    {b.title}
+                  </h3>
+                  <p className="text-sm text-mute leading-relaxed">
+                    {b.description}
+                  </p>
                 </div>
-              ))}
-            </div>
-          </AnimatedSection>
-        </div>
-      </section>
-
-      {/* What's Included */}
-      <section className="py-24 bg-obsidian">
-        <div className="max-w-7xl mx-auto px-6">
-          <AnimatedSection className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-display font-bold mb-4 text-pearl">
-              What&apos;s <span className="gradient-text">Included</span>
-            </h2>
-            <p className="text-silver text-lg max-w-2xl mx-auto">
-              Every build comes with these services at no extra charge.
-            </p>
-          </AnimatedSection>
-
-          <AnimatedSection>
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {[
-                { title: 'Parts Inspection', desc: 'We check every component on arrival for damage or defects.' },
-                { title: 'Cable Management', desc: 'Clean, organized cables for optimal airflow and aesthetics.' },
-                { title: 'BIOS Setup', desc: 'XMP/EXPO enabled, boot order configured, settings optimized.' },
-                { title: 'Stress Testing', desc: 'CPU, GPU, and RAM tested under load to ensure stability.' },
-                { title: 'Thermal Paste', desc: 'Quality thermal compound applied for optimal cooling.' },
-                { title: 'Build Photos', desc: 'We send you photos of your completed build before shipping.' },
-                { title: 'Packing & Shipping', desc: 'Carefully packed with GPU support for safe transport.' },
-                { title: 'Post-Build Support', desc: 'Questions after your build? We\'re here to help.' },
-              ].map((item) => (
-                <div
-                  key={item.title}
-                  className="p-6 bg-midnight rounded-xl border border-steel"
-                >
-                  <h3 className="font-display font-semibold text-pearl mb-2">{item.title}</h3>
-                  <p className="text-sm text-silver">{item.desc}</p>
-                </div>
-              ))}
-            </div>
-          </AnimatedSection>
+              );
+            })}
+          </div>
         </div>
       </section>
 
       {/* FAQ */}
-      <section className="py-24">
-        <div className="max-w-4xl mx-auto px-6">
-          <AnimatedSection className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-display font-bold mb-4 text-pearl">
-              Frequently Asked <span className="gradient-text">Questions</span>
-            </h2>
-          </AnimatedSection>
-
+      <section className="border-b border-steel/60 bg-ink py-16 sm:py-20">
+        <div className="mx-auto max-w-3xl px-6">
           <AnimatedSection>
-            <div className="space-y-6">
-              {faqs.map((faq) => (
-                <div
-                  key={faq.q}
-                  className="p-6 bg-obsidian rounded-xl border border-steel"
-                >
-                  <div className="flex items-start gap-3">
-                    <HelpCircle className="w-5 h-5 text-electric shrink-0 mt-0.5" />
-                    <div>
-                      <h3 className="font-display font-semibold text-pearl mb-2">{faq.q}</h3>
-                      <p className="text-silver text-sm">{faq.a}</p>
-                    </div>
-                  </div>
-                </div>
-              ))}
+            <div className="mb-10 flex flex-col gap-3">
+              <span className="spec-tag w-fit">faq</span>
+              <h2 className="font-display text-3xl sm:text-4xl font-bold text-bone">
+                Pricing questions, answered.
+              </h2>
             </div>
           </AnimatedSection>
+          <div className="flex flex-col gap-4">
+            {PRICING_FAQ.map((q, i) => (
+              <details
+                key={i}
+                className="group rounded-xl border border-steel bg-carbon p-5 transition-colors hover:border-flame/50"
+              >
+                <summary className="cursor-pointer list-none flex items-start justify-between gap-4">
+                  <span className="font-semibold text-bone">{q.question}</span>
+                  <ChevronRight
+                    size={20}
+                    className="text-flame mt-0.5 flex-shrink-0 transition-transform group-open:rotate-90"
+                  />
+                </summary>
+                <p className="mt-3 text-mute leading-relaxed">{q.answer}</p>
+              </details>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* CTA */}
-      <section className="py-24 bg-obsidian relative overflow-hidden">
-        <div className="absolute inset-0">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-gradient-to-b from-electric/20 to-transparent rounded-full blur-[100px]" />
-        </div>
-
-        <AnimatedSection className="relative max-w-4xl mx-auto px-6 text-center">
-          <h2 className="text-3xl md:text-4xl font-display font-bold mb-6 text-pearl">
-            Ready to Get <span className="gradient-text">Started</span>?
+      <section className="bg-ink py-20 sm:py-24">
+        <div className="mx-auto max-w-3xl px-6 text-center">
+          <h2 className="section-title text-bone">
+            Ready to get a{' '}
+            <span className="gradient-text">specific number</span>?
           </h2>
-          <p className="text-silver text-lg max-w-2xl mx-auto mb-10">
-            Book your build today or contact us if you have questions.
+          <p className="mx-auto mt-5 max-w-xl text-lg text-mute">
+            Quote within 24 hours. If it doesn&rsquo;t fit, I&rsquo;ll tell
+            you immediately. No "fill out this form for a personalized
+            consultation."
           </p>
-          <div className="flex flex-wrap justify-center gap-4">
-            <Link href="/order" className="btn-primary">
-              Book Your Build
+          <div className="mt-10 flex flex-col sm:flex-row gap-3 justify-center">
+            <Link href="/quote" className="btn-primary">
+              <span className="flex items-center gap-2">
+                Get a Quote
+                <ArrowRight size={18} />
+              </span>
             </Link>
             <Link href="/services" className="btn-secondary">
-              Learn More
+              <span className="flex items-center gap-2">
+                <MessageSquare size={16} />
+                See What I Build
+              </span>
             </Link>
           </div>
-        </AnimatedSection>
+        </div>
       </section>
     </div>
-  )
+  );
 }
