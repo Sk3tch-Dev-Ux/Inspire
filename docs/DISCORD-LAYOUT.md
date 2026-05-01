@@ -1,28 +1,38 @@
-# Inspire Custom PCs — Discord Server Layout
+# Inspire Development — Discord Server Layout
 
-> A complete, end-to-end blueprint for an Inspire-branded Discord server designed
-> around two goals: **engage a real PC-enthusiast community** and **convert that
-> attention into custom PC orders**. Every channel, role, and bot is justified
-> against one of those two goals.
+> Server blueprint for **Inspire Development** — a one-person dev shop that
+> ships Discord bots, Rust/DayZ/FiveM mods, and websites for gaming
+> communities. The Discord is the *primary* sales channel for this kind of
+> business: clients are already in Discord, your portfolio is mostly
+> screenshots of Discord, and "talk to me here" beats "fill out a form."
+>
+> Two goals, in priority order:
+>
+> 1. **Convert lurkers → quoted projects.** Every channel exists either to
+>    build trust toward this or to support a customer who already paid.
+> 2. **Be the room game-server owners hang out in.** A community of your
+>    target audience asking each other for help is a moat that scales
+>    without you.
 
 ---
 
 ## 0. Strategic frame
 
-Most "company Discords" fail because they treat the server as a help-desk extension.
-This layout treats it as a **funnel + clubhouse** with three concentric rings:
+Most dev-shop Discords look like agencies (locked, formal, "schedule a call").
+Don't. The brand is **direct, first-person, public-pricing, same-week-starts**.
+Match the website voice. The server should feel like a **workshop with a
+viewing window**, not a sales office.
 
-| Ring | Audience | Purpose | Conversion signal |
+Three concentric rings:
+
+| Ring | Audience | Default visibility | Conversion signal |
 |---|---|---|---|
-| **Public** | Anyone — enthusiasts, tire-kickers | Discovery, content, fun | Joins server |
-| **Members** | Verified, opt-in | Build advice, deals, events | Asks for a quote |
-| **Customers** | Verified order | Support, warranty, VIP | Reorders / referrals |
+| **Public** | Game-server owners, devs, lurkers | Open | They ask in `#hire-me` or `#general` |
+| **Active Clients** | Currently paying for a project | Private project channels | They renew / refer |
+| **Alumni** | Past clients, vouched community | A small lounge | Testimonial, referral, repeat job |
 
-Channels are organized so that someone can join, get value for free, and
-self-select toward a purchase without ever feeling marketed-at.
-
-Brand voice: confident, technical, slightly playful. Same energy as the site —
-electric cyan / volt green, dark backgrounds, no corporate stiffness.
+A small lively server (200–500 members) beats a big dead one. Don't optimize
+for member count; optimize for **conversations per week** and **quotes per month**.
 
 ---
 
@@ -30,399 +40,545 @@ electric cyan / volt green, dark backgrounds, no corporate stiffness.
 
 | Setting | Value |
 |---|---|
-| **Server name** | Inspire Custom PCs |
-| **Vanity URL** | `discord.gg/inspire` (requires Boost Level 3) |
-| **Verification level** | Medium (must have verified email + 5 min member) |
+| **Server name** | Inspire Development |
+| **Vanity URL** | `discord.gg/inspire-dev` (Boost Level 3 unlocks) |
+| **Verification level** | Medium |
 | **Default notifications** | Only @mentions |
 | **Explicit content filter** | Scan from members without a role |
-| **Boost progress bar** | Enabled |
-| **AFK channel** | `#afk-shop` (5 min timeout) |
-| **System messages channel** | `#welcome-bay` (joins only, no boosts here) |
-| **Community features** | Enabled (unlocks announcements, discovery, insights) |
-| **Discoverable** | Yes — keywords: PC building, custom PC, gaming PC, workstation |
-
-### Server icon & banner
-- Icon: Inspire "I" mark on midnight, electric-cyan halo
-- Banner: rotating render of a current featured build (update monthly)
-- Splash invite: photo of a finished build, tagline "Built for the way you play."
+| **Server icon** | Bolt mark on `ink #0A0A0A` square — same `<Logo variant="mark" />` from the site |
+| **Banner** | Code-rain texture (Carbon `#1A1A1A`/Steel `#2D2D2D`) with `inspire⚡ DEVELOPMENT` wordmark |
+| **Splash invite** | Same banner, tagline "small shop. fast ships." |
+| **System messages channel** | `#welcome` (joins only — silence boosts here) |
+| **AFK channel** | `#afk` |
+| **Community features** | Enabled — unlocks announcements, discovery, insights |
+| **Discoverable** | Yes — keywords: discord bot, rust mod, fivem, dayz, game development, gaming community |
 
 ---
 
 ## 2. Role hierarchy
 
-Roles are sorted top-to-bottom with permission-cascade in mind. Color codes
-mirror the site palette.
+Tight. One founder, one trusted helper class, the rest are membership tiers.
+Hex codes mirror `BRAND.md`.
 
 ```
-@Founder          #00D4FF  (electric cyan)   — owner only
-@Crew             #00FF88  (volt green)      — staff / employees
-@Tech Support     #14F1FF                    — warranty handlers
-@Build Advisor    #14F1FF                    — quote / spec advisors
-@Moderator        #FFB400                    — community mods
-@Bot              #5865F2                    — bots only
+@Founder                #FF6B1A  (flame)        — owner only, top
+@Trusted Builder        #FF8742  (flame-glow)   — vouched devs who help in support channels
+@Bot                    #5865F2                 — bots only
 
-@VIP Founder      #FFD700  (gold)            — Tier-3 package buyers, lifetime
-@Inspired         #C792EA  (lavender)        — verified customer (any tier)
-@Beta Builder     #FF6F91                    — early access, test new packages
-@Streamer         #E91E63                    — affiliate / partner
-@Boost Buddy      #F47FFF                    — server booster
+@Active Client          #FAFAF7  (bone)         — currently retained on a project
+@Alumni Client          #7A7A7A  (mute)         — past client, kept long-term
+@Patron                 #CC4A00  (ember)        — Boost or paid supporter
 
-@Member           #B0BEC5                    — verified, default human role
-@Newcomer         #6B7280                    — pre-onboarding, limited channels
-@Quote Pending    #FFA726                    — opened a quote ticket
-@Order Pending    #2196F3                    — paid, awaiting build/ship
-@Muted            #424242                    — moderation
+@Member                 #2D2D2D  (steel)        — default verified human
+@Newcomer               #1A1A1A  (carbon)       — pre-onboarding, view-only
+
+@Muted                  #424242                 — moderation
 ```
 
-**Permission rules of thumb**
-- `@Newcomer` sees only `#welcome-bay`, `#rules`, and `#start-here`. Cannot send messages.
-- `@Member` is the default after onboarding; sees everything public + community.
-- `@Inspired` unlocks `#vip-lounge`, `#warranty`, `#upgrade-path`, plus reaction
-  rights in showcase channels.
-- `@VIP Founder` adds access to `#founders-table` (private, monthly Q&A with the owner).
-- Staff roles (`@Crew`, `@Tech Support`, etc.) inherit through `@Crew` for blanket access.
+### Self-assignable interest tags
+
+These are *not* roles for permissions — they exist purely so you can ping a
+relevant subset and so members signal what they care about. Granted via
+reaction-roles in `#start-here`.
+
+- `@discord-bots` — Discord.js / serenity / py-cord builders
+- `@rust-mods` — Oxide, Carbon, Rust+
+- `@dayz-mods` — community-server scripting
+- `@fivem` — QBCore, ESX, custom resources
+- `@web-dev` — Next.js, Astro, the website-side audience
+- `@hiring` — server owners actively looking to commission
+
+### Permission rules of thumb
+
+- `@Newcomer`: sees `#welcome`, `#rules`, `#start-here`. No send.
+- `@Member`: full public access; cannot see clients/alumni lounges.
+- `@Active Client`: project channels (one per active engagement).
+- `@Alumni Client`: `#alumni-lounge` and a referral channel.
+- `@Trusted Builder`: same as Member + can react-pin in help channels +
+  manage threads in their tagged help channel.
+- `@Founder`: everything.
+
+The role list is intentionally short. Resist adding "Verified Customer" / 
+"VIP Tier 2" subdivisions — you're one person, more roles = more drift.
 
 ---
 
 ## 3. Channel structure
 
-> Channel names use leading emoji to scan visually in the sidebar. Topic strings
-> are written as if the channel were already public — copy them verbatim into
-> Discord.
+Channel names use a leading emoji for visual scanning. Topics are written
+paste-ready.
 
 ### 📌 INFO
 
 | Channel | Type | Topic |
 |---|---|---|
-| `📍-start-here` | Text, locked except @Newcomer/@Member | Read this first. Pick your roles, intro yourself, and grab the discord-only promo code. |
-| `📜-rules` | Text, read-only | Be cool. No leaks of unreleased builds. No reselling our coupons. Full rules below. |
-| `📰-announcements` | Announcement | Drops, sales, restocks, new package launches. Subscribe to mirror to your own server. |
-| `💎-deals-and-drops` | Announcement | Discord-exclusive promos, GPU price drops, refurb units. Pings `@Member` weekly at most. |
-| `🛠️-changelog` | Text, read-only | Site updates, new features, infrastructure changes. Source-of-truth log. |
-| `❓-faq` | Text, read-only | Threaded answers to repeat questions. Mods convert good help-channel exchanges into FAQ threads. |
+| `📍-start-here` | Text, locked except @Newcomer/@Member | First stop. Pick interest tags, intro yourself, see how to hire me. |
+| `📜-rules` | Text, read-only | Be cool. No leak of unreleased client work. No DM-pitching members. Full rules below. |
+| `📰-news` | Announcement | Site updates, package launches, availability changes, occasional dev journal posts. |
+| `🛠️-changelog` | Text, read-only | Webhook from GitHub: every commit/deploy on the public repos lands here. Living portfolio. |
+| `❓-faq` | Text, read-only | Threaded answers to repeat questions. New questions worth keeping get pulled here. |
 
-### 🛒 SHOP & QUOTES
+### 💼 HIRE ME
 
-| Channel | Type | Topic |
-|---|---|---|
-| `🧰-package-tiers` | Text, read-only | Embed cards for Starter / Performance / Elite / Custom. "Click 💬 to start a quote." |
-| `💬-request-a-quote` | Forum | Opens a private ticket via bot. Each post = one quote. Visible only to OP + advisors. |
-| `📦-order-tracking` | Text, read-only | Webhook from Stripe + your fulfillment system. One line per order with status emoji. |
-| `🎁-giveaways` | Text, read-only | Bot-driven. Monthly accessory or part. Entry by reaction; auto-pull winner. |
-| `🤝-referral-program` | Text | Earn $50 store credit per friend who orders. Bot tracks referral codes per user. |
-
-### 🧠 BUILD ADVICE (community-led, lightly moderated)
+This is the conversion engine. Order of channels matters — top to bottom is
+the funnel.
 
 | Channel | Type | Topic |
 |---|---|---|
-| `💡-build-advice` | Text | "What should I build for $X?" — community + advisors weigh in. Quote-ready leads get pulled into DM. |
-| `🧪-parts-talk` | Text | GPU drops, CPU rumors, RAM kits. Tech news. Open to all. |
-| `🪛-troubleshooting` | Forum | One thread per issue. Bot prompts a template (symptoms / parts / what you've tried). |
-| `🎨-cable-management` | Text | Image-only, photos of cable runs, mounts, custom sleeves. Reactions only. |
-| `🖼️-build-of-the-week` | Text, read-only | Curated. Mods promote one community build every Monday with full specs + photos. |
+| `📋-services` | Text, read-only | Pinned embed cards for the four offerings: Discord Bot, Rust/DayZ Mod, FiveM Resource, Marketing Site. Linked to `/services`. |
+| `💵-pricing` | Text, read-only | $60/hr Discord bots · $80/hr game scripts · packaged rates. Linked to `/pricing`. Says "This is the same pricing as the website. I don't quote different rates in DMs." |
+| `📅-availability` | Text, read-only | Live status: open slots this month, current queue, next-available date. Updated weekly by the founder. |
+| `💬-quote-a-project` | Forum | One post = one quote thread. Auto-prompts a template (game/platform, scope, budget, deadline). Visible only to OP + @Founder. |
+| `📦-active-projects` | Text, read-only | One line per active client engagement (anonymized if requested) with status emoji. Public. |
+| `🏆-shipped` | Text, read-only | Every shipped project gets a post here. Screenshot, what it does, tech stack, optional client quote. The portfolio in motion. |
 
-### 🔥 SHOWCASE
+**Why the public `availability` and `active-projects` channels matter:**
+they replace the dreaded "DM me for availability." Visitors self-qualify
+and reach out only when there's an actual open slot, which compresses the
+sales cycle dramatically.
+
+### 🧰 WORKSHOP
+
+The "viewing window" into the founder. Not pitched — just visible.
 
 | Channel | Type | Topic |
 |---|---|---|
-| `🏗️-our-builds` | Text, staff-post | Every Inspire build that ships gets a post. Photo + specs + customer first name. Customer can reply. |
-| `📸-customer-rigs` | Text | Customers post their delivered build photos. `@Inspired` only can post; everyone reacts. |
-| `🎮-benchmarks` | Text | Frame counters, 3DMark / Cinebench scores. Friendly leaderboards. |
-| `🎥-streams-and-videos` | Text | YouTube/Twitch links. Auto-embed. `@Streamer` posts get pinned for 24h. |
+| `🔨-now-building` | Text | Casual posts: "shipped X today," "stuck on Y, here's the rabbit hole," screenshots of in-progress work (with client permission or anonymized). 1–3 posts a week minimum. |
+| `📓-dev-journal` | Text, founder-post | Longer-form posts. "Why I rewrote the Rust shop bot's auth," "Turning a 200ms p99 into 20ms." Cross-post worthy ones to LinkedIn / X. |
+| `🎬-clips` | Text | Short video/gif clips of bots in action, mod features, before/afters. Auto-embeds. |
+| `🧪-experiments` | Text | Things you're trying that aren't client work yet. Open-source repos, prototype bots. Sparks future scope. |
 
-### 🤝 COMMUNITY
+### 🆘 COMMUNITY HELP
+
+This is what makes the server *useful* without you having to be present.
+Each channel has a Trusted Builder or two who answer.
 
 | Channel | Type | Topic |
 |---|---|---|
-| `💬-general` | Text | Anything PC, gaming, tech-adjacent. The town square. |
-| `🎮-gaming-lfg` | Text | Looking-for-group. Tag the game in topic. |
-| `🍕-off-topic` | Text | Memes, food, life. Keep it kind. |
-| `🐶-pets-of-inspire` | Text | The most engaging channel in any server. Don't skip this. |
-| `🎵-music-and-vibes` | Text + voice | Music bot pinned, share what's on. |
+| `🤖-discord-bots-help` | Forum | discord.js / py-cord / serenity questions. Tag your library. |
+| `🦀-rust-modding-help` | Forum | Oxide & Carbon plugins, hooks, common pitfalls. |
+| `🪖-fivem-help` | Forum | QBCore / ESX / standalone resources. |
+| `🧟-dayz-help` | Forum | Server scripts, mod conflicts, community-server setup. |
+| `🌐-web-help` | Forum | Next.js, Astro, deploy issues. Scoped to game-community sites. |
+| `💡-build-advice` | Text | "I want to build X — where do I start?" — high-level architecture chat, faster than forum. |
+
+Forum channels with auto-prompted templates ("game · what you tried · paste
+the error") cut down on low-effort posts hard. Carl-bot or Discord's native
+forum settings.
+
+### 🔥 COMMUNITY
+
+| Channel | Type | Topic |
+|---|---|---|
+| `💬-general` | Text | Anything dev/gaming. The town square. |
+| `🎮-server-owners` | Text | Audience-specific: running a Rust/DayZ/FiveM server, hosting, mod packs, monetization rules. |
+| `🐛-cursed-bugs` | Text | Bug-of-the-day stories. Excellent retention bait. |
+| `📚-resources` | Text, read-only | Links: docs, mod APIs, tutorials, your own guides. Editable by `@Trusted Builder`. |
+| `🍕-off-topic` | Text | Food, life, music. Keep it kind. |
 
 ### 🔊 VOICE
 
 | Channel | Type | Notes |
 |---|---|---|
-| `🎙️ Build Talk` | Voice + stage | Owner hosts a monthly "Office Hours" stage. Public. |
-| `🎮 Gaming 1 / 2 / 3` | Voice | Auto-spawn additional rooms when full (via Voicemaster bot). |
-| `🛠️ Tech Help` | Voice | Drop-in for screen-share troubleshooting with `@Tech Support`. |
+| `🎙️ Office Hours` | Voice + stage | Founder hosts a weekly stage — ask anything, no slide deck. The sales channel that doesn't feel like sales. |
+| `👥 Pair Coding` | Voice | Drop-in for screen-share help (free for `@Active Client`, `@Patron`; otherwise time-limited). |
+| `🎮 Casual` | Voice | Hang out while working. Often the most-used voice channel. |
 | `🤫 AFK` | Voice | Auto-move target. |
 
-### 🎟️ TICKETS (private, bot-managed)
+### 🎫 TICKETS
 
 | Channel | Type | Notes |
 |---|---|---|
-| `🎫-tickets` | Text, locked | Hub channel with embed: "What do you need help with?" buttons. |
-| `(auto) ticket-####` | Text, private | Spawned per ticket. Visible to OP + relevant staff role. |
+| `🎫-tickets` | Text, locked | Hub embed with buttons: "Quote a project", "Active client question", "Press / partnership", "Other". |
+| `(auto) ticket-####` | Text, private | Spawned per ticket, visible to OP + `@Founder`. |
 
-Ticket categories (each a button on the hub embed):
-- **Quote a build** → spawns thread, pings `@Build Advisor`
-- **Order issue** → pings `@Crew`
-- **Warranty / RMA** → pings `@Tech Support`, requires order ID input
-- **Partnership / press** → pings `@Founder`
-- **Anything else** → general queue
+The quote ticket is the single most important automation in the whole
+server. See §6 for the bot spec.
 
-### 💎 CUSTOMER LOUNGE (`@Inspired` and above)
+### 💎 ACTIVE CLIENTS (`@Active Client` only)
 
-| Channel | Type | Topic |
-|---|---|---|
-| `🛡️-warranty` | Text | Threaded warranty questions. Faster than email. |
-| `🔧-upgrade-path` | Text | Bring back your old Inspire build for upgrade quotes. Loyalty pricing. |
-| `🪞-vip-lounge` | Text | Customer-only chat. Early access to new packages 48h before public. |
-| `📅-events` | Text | RSVP-driven. Range from "GPU drop watch party" to "owner's monthly Q&A." |
-
-### 👑 VIP FOUNDERS (`@VIP Founder` only — Elite tier customers)
-
-| Channel | Type | Topic |
-|---|---|---|
-| `🍷-founders-table` | Text | Direct line to the owner. Monthly written update on the business. |
-| `🧪-prototype-lab` | Text | First look at upcoming packages, ask for input on parts. |
-
-### 🛡️ STAFF (`@Crew`+ only)
+When a client is contracted, spawn one private channel per project under a
+`◇ PROJECTS` category. Format: `🚧-{client}-{project-shortname}`.
 
 | Channel | Type | Notes |
 |---|---|---|
-| `📣-staff-announce` | Text | Internal updates. |
-| `📋-handoffs` | Text | Shift handoff notes for support. |
-| `🚨-incidents` | Text | Bot pipes site/Stripe alerts here. |
+| `🚧-{client}-{project}` | Text, private | Project channel. Founder + that one client only. Daily-ish updates, screenshots, deploy logs. Lives until project closes. |
+| `📅-client-events` | Text | Pinned schedule: weekly checkins, demo dates, milestones across all active engagements. Visible to all `@Active Client`. |
+| `❓-active-client-help` | Text, private | Cross-client lounge. Active clients can chat, ask each other for advice. Optional — only enable if there are 3+ active. |
+
+Per-project channels move to **archived** (read-only) when the project
+closes — clients keep access via `@Alumni Client`. Don't delete; the
+history is the receipt.
+
+### 🤝 ALUMNI (`@Alumni Client`, `@Active Client`)
+
+| Channel | Type | Topic |
+|---|---|---|
+| `🏅-alumni-lounge` | Text | Past clients — quiet, occasional check-ins, founder posts wins/news. |
+| `🎁-referrals` | Text | Refer a friend → 10% off your next maintenance retainer or $X store credit. Tracked via per-user code. |
+
+The alumni room is high-leverage because **referrals from past clients
+close at 5–10× the rate of cold leads**. One small channel that nudges
+this is worth more than any ad budget.
+
+### 🛠️ STAFF / FOUNDER (`@Founder` + `@Trusted Builder` for some)
+
+| Channel | Type | Notes |
+|---|---|---|
 | `🤖-bot-logs` | Text | All bot audit logs in one place. |
-| `💼-leads` | Text | New quote tickets cross-posted here so any advisor can pick up. |
-| `🗣️-customer-feedback` | Text | Mods drop interesting customer quotes for product use. |
+| `📊-server-insights` | Text | Carl-bot or Statbot weekly digest. |
+| `📋-leads` | Text | New `#quote-a-project` posts cross-posted with summary so you can scan in one screen. |
+| `📝-founder-notes` | Text, founder-only | Scratchpad — what's working, what isn't. |
 
 ---
 
 ## 4. Onboarding flow
 
-Run this with **MEE6** or **Carl-bot** (gates) plus a custom welcome message.
+Run with **Carl-bot** (reaction roles) + **Discord's native onboarding screen**
+(rules accept). No need for MEE6 unless you want levels later.
 
-1. **Join** → user lands in `#welcome-bay` with the only visible role being `@Newcomer`.
-2. **Welcome embed posts** with three reaction-roles:
-   - 🛒 *Looking to buy* → grants `@Member` + visibility to shop channels first
-   - 🧠 *Here for build advice* → grants `@Member` + auto-pings `#build-advice`
-   - 🎮 *Just here for the community* → grants `@Member` + skips shop on tour
-3. **`#start-here`** auto-DMs a 60-second tour:
-   - "Here's how to get a free quote"
-   - "Here's the showcase channel"
-   - "Here's your discord-only `WELCOME10` promo code"
-4. **Captcha** via Wick or built-in Discord onboarding (rules accept) before any send permissions.
+1. **Join** → user lands on Discord's onboarding screen with the rules.
+2. After accepting → they get `@Newcomer` and see only `#welcome`, `#rules`,
+   `#start-here`.
+3. **`#start-here` welcome embed** with two question blocks:
 
-### Welcome embed copy
+   **Why are you here?** *(grants `@Member` + sets primary intent)*
+   - 💼 To hire someone for a project
+   - 🛠️ I'm a dev — here to help and learn
+   - 🎮 Game server owner, browsing
+   - 👀 Just lurking
+
+   **What are you into?** *(self-assignable interest tags, multi-select)*
+   - `@discord-bots` `@rust-mods` `@dayz-mods` `@fivem` `@web-dev` `@hiring`
+
+4. After picking → bot DMs a 60-second tour:
+   - "Pricing is in `#pricing` — same as the website."
+   - "Currently open slots: see `#availability`."
+   - "Want a quote? `#quote-a-project` — takes 2 minutes."
+   - "Just here to learn? Help channels are forum-style, very active."
+
+### Welcome embed copy (paste-ready)
 
 ```
-✦ Welcome to Inspire Custom PCs ✦
+✦ inspire⚡ Development ✦
 
-We build PCs the way they should be built — quiet, beautiful, fast.
+Small shop. Fast ships. I build Discord bots, Rust/DayZ/FiveM mods,
+and websites for gaming communities.
 
-▸ Need a build? Hit "Looking to buy" below to unlock the shop.
-▸ Just researching? Pick "Build advice" — our community has opinions.
-▸ Already an owner? Drop your order ID in #🎫-tickets to claim your @Inspired role.
+▸ Hourly: $60 Discord bots · $80 game scripts · packaged rates in #pricing
+▸ Currently: see #availability for open slots and queue
+▸ Need a quote? #quote-a-project — 2 minutes, real reply within 24h
 
-Your discord-only code: WELCOME10  (10% off any tier, first order)
+Pick what you're here for ↓ to unlock the rest of the server.
 ```
 
 ---
 
-## 5. Bots & automations
+## 5. Recurring rhythm
+
+The cadence that keeps the server alive without burning you out.
+
+| Cadence | Event | Channel | Owner effort |
+|---|---|---|---|
+| **Daily-ish** | One screenshot or 2-line note in `#now-building` | `#now-building` | 60 sec |
+| **Weekly (Mon)** | Update `#availability` with this week's queue + open slots | `#availability` | 5 min |
+| **Weekly (Wed)** | Office Hours stage — 30 min, ask-anything | `🎙️ Office Hours` | 30 min |
+| **Weekly (Fri)** | "Shipped this week" recap post | `#shipped` | 10 min |
+| **Bi-weekly** | Long-form `#dev-journal` post (~500 words). Cross-post excerpt to X / LinkedIn. | `#dev-journal` | 1 hr |
+| **Monthly** | Founder's note in `#news` — wins, lessons, what's coming | `#news` | 30 min |
+| **Quarterly** | Open-source release: a small useful thing (a Discord-bot template, a Rust plugin). Posts to `#experiments` + GitHub. | `#experiments` | 1 day |
+
+Skip a beat sometimes — that's fine. Don't fake a rhythm; it shows.
+
+---
+
+## 6. Bots & automations
 
 | Bot | Role | Why |
 |---|---|---|
-| **Ticket Tool** *(or custom)* | Tickets, quote intake | The single most important bot for conversion. |
-| **Carl-bot** | Reaction roles, automod, scheduled posts | Best free permissions/roles bot. |
-| **MEE6** *(optional, paid for premium)* | Levels + welcome + auto-mod | Levels drive retention; gating with levels filters spam joins. |
-| **Statbot / Vulkan** | Server analytics | Tells you which channels actually convert. |
-| **Sesh** | Events, RSVPs, timezone-aware | Better than Discord's native events for recurring. |
-| **Voicemaster** | Auto-create voice rooms | Voice channels never feel empty if they spawn on demand. |
-| **GiveawayBot** | Monthly giveaway | Reaction-entry, auto-draw. |
-| **Custom Inspire Bot** *(build later)* | Stripe webhooks → role grants → `#order-tracking` posts; quote-form → `#leads`; warranty status lookups | The *integrated* layer. Most company servers never build this and miss the biggest wins. |
+| **Carl-bot** | Reaction roles, automod, scheduled posts, sticky messages | Free, dependable. The default. |
+| **Ticket Tool** | Quote/support tickets | One-button quote intake. |
+| **Sesh** | Office Hours scheduling, RSVPs, timezone-aware reminders | Native Discord events are okay; Sesh is better for recurring. |
+| **GitHub webhook** *(native)* | Pipes commits to `#changelog` | Free. Live portfolio. |
+| **Statbot** | Server analytics | Tells you which channel actually generates leads. |
+| **Voicemaster** | Auto-spawn voice rooms when full | Voice never empty. |
+| **Custom Inspire bot** *(build later)* | Stripe → role grants → project-channel spawn → `#active-projects` updates | The single piece that turns this from "Discord with a lot of channels" into a sales system. |
 
 ### Custom-bot must-haves (priority order)
 
-1. **Stripe → role automation** — when a checkout completes, look up Discord ID
-   from the order email (collect during checkout), grant `@Inspired`, post to
-   `#order-tracking`, DM the customer their ticket-prefilled with order details.
-2. **Quote command** — `/quote budget:2500 use:gaming pref:rgb` opens a thread
-   in `#request-a-quote` with a pre-filled embed an advisor can finish.
-3. **Order-status lookup** — `/order #12345` returns ship status + tracking
-   from your fulfillment provider, pulling from the same DB as the website.
-4. **Promo redemption** — bot validates a code, marks it consumed, prevents
-   resharing.
+1. **`/quote` slash command** — opens a forum post in `#quote-a-project`
+   pre-filled with a template (game/platform, scope, deadline, budget). DMs
+   founder with a summary.
+2. **Stripe webhook → role + channel automation** — when a deposit invoice
+   is paid:
+   - Promote user to `@Active Client`
+   - Create `🚧-{client}-{project}` channel under `◇ PROJECTS`
+   - Post a starter embed in `#active-projects` ("New: {project}, kicking off {date}")
+   - DM client with onboarding checklist (access requests, kickoff date, what you need from them)
+3. **Project-close flow** — owner runs `/project close {channel}`:
+   - Demote `@Active Client` → `@Alumni Client` (if no other active project)
+   - Archive the project channel (lock posts, keep history)
+   - Post a "Shipped" embed in `#shipped` with optional fields the client fills
+   - Send a referral-code DM 7 days later
+4. **`/availability` admin command** — updates the pinned embed in
+   `#availability` with current open-slot count and next-available date.
+5. **GitHub deploy → `#shipped` cross-post** — when a tagged release lands on
+   one of your client repos, optionally post a "Shipped vN" entry.
 
 ---
 
-## 6. Engagement programs (the *recurring* mechanisms)
-
-Events that fire on a schedule — these are what make the server *feel alive*
-when the owner isn't posting.
-
-| Cadence | Event | Owner |
-|---|---|---|
-| **Weekly (Mon)** | "Build of the Week" — staff picks one community/customer build, big embed in `#build-of-the-week` | Mod team |
-| **Weekly (Thu)** | "Parts Drop" — Carl-bot scheduled post in `#deals-and-drops` with whatever's on sale that week | Owner |
-| **Bi-weekly (Sat)** | "Build Talk" — 30 min stage in `🎙️ Build Talk` voice. Topic posted Friday. | Founder |
-| **Monthly (1st)** | Giveaway — peripheral, fan, or accessory. Entry by reaction in `#giveaways`. | Bot + mods |
-| **Monthly (15th)** | "Founder's Letter" — text post in `#founders-table` (VIPs) and a public excerpt in `#announcements` | Founder |
-| **Quarterly** | "Show Your Setup" contest with prize for best photo. Winner gets feature on the website + IG. | Marketing |
-| **Annually** | "Inspire Anniversary" — sale + livestreamed build challenge | Whole team |
-
----
-
-## 7. Sales funnel mechanics inside Discord
-
-This is the part most servers miss. Each step is **a real channel + a real bot
-trigger.**
+## 7. Sales funnel — the actual mechanics
 
 ```
-        Discovery                      Engagement                   Conversion
-   ┌──────────────────┐           ┌──────────────────┐         ┌──────────────────┐
-   │  #announcements  │  ──────►  │  #build-advice   │  ─────► │ #request-a-quote │
-   │  #showcase       │           │  voice "Build    │         │ → ticket spawned │
-   │  #giveaways      │           │   Talk" stage    │         │ → advisor pings  │
-   └──────────────────┘           └──────────────────┘         └──────────────────┘
-                                                                          │
-                                                                          ▼
-                                                              ┌──────────────────────┐
-                                                              │ Stripe checkout link │
-                                                              │ posted in ticket     │
-                                                              └──────────────────────┘
-                                                                          │
-                                                                          ▼
-                                                                ┌──────────────────┐
-                                                                │ Bot grants       │
-                                                                │ @Inspired role,  │
-                                                                │ posts to         │
-                                                                │ #order-tracking, │
-                                                                │ unlocks customer │
-                                                                │ lounge           │
-                                                                └──────────────────┘
-                                                                          │
-                                                                          ▼
-                                                              ┌──────────────────────┐
-                                                              │ Showcase post in     │
-                                                              │ #our-builds when     │
-                                                              │ shipped → social     │
-                                                              │ proof for next       │
-                                                              │ buyer in funnel top  │
-                                                              └──────────────────────┘
+┌────────────────────┐    ┌────────────────────┐    ┌────────────────────┐
+│   Discovery        │    │   Engagement       │    │   Conversion       │
+│                    │    │                    │    │                    │
+│ #shipped           │ ─► │ #now-building      │ ─► │ #quote-a-project   │
+│ #changelog         │    │ #dev-journal       │    │ → ticket spawned   │
+│ #portfolio (site)  │    │ Office Hours stage │    │ → 24h reply SLA    │
+│ X / LinkedIn       │    │ help channels      │    │                    │
+└────────────────────┘    └────────────────────┘    └─────────┬──────────┘
+                                                              │
+                                                              ▼
+                                                  ┌────────────────────┐
+                                                  │  Stripe deposit    │
+                                                  │  link in ticket    │
+                                                  └─────────┬──────────┘
+                                                            │
+                                                            ▼
+                                                  ┌────────────────────┐
+                                                  │ Bot grants         │
+                                                  │ @Active Client,    │
+                                                  │ spawns project     │
+                                                  │ channel, posts to  │
+                                                  │ #active-projects   │
+                                                  └─────────┬──────────┘
+                                                            │
+                                                            ▼
+                                                  ┌────────────────────┐
+                                                  │ Ship → #shipped    │
+                                                  │ post becomes new   │
+                                                  │ social proof at    │
+                                                  │ funnel top         │
+                                                  └─────────┬──────────┘
+                                                            │
+                                                            ▼
+                                                  ┌────────────────────┐
+                                                  │ Client → Alumni;   │
+                                                  │ referral DM after  │
+                                                  │ 7 days; testimonial│
+                                                  │ ask after 30 days  │
+                                                  └────────────────────┘
 ```
 
-Two closed loops to design for explicitly:
+Three closed loops to design for explicitly:
 
-- **Showcase loop** — every shipped build feeds back into discovery. Don't skip
-  the photo step.
-- **Referral loop** — each `@Inspired` member gets a referral code in DM the day
-  after their build ships. Track in `#referral-program`.
-
----
-
-## 8. Moderation & safety
-
-- **Automod (built-in)** — spam, mention spam, slur list. Action: timeout 10 min.
-- **Carl-bot or Wick** — link filter outside `#deals-and-drops`, raid alarms.
-- **Verification gate** — Discord's onboarding screen requiring rule accept.
-- **Slowmode** in `#general` (10s) and `#build-advice` (30s) — discourages reflex
-  arguing about AMD vs Nvidia.
-- **No DM staff** rule — all support runs through tickets so it's logged.
-- **Modmail** for sensitive issues (refunds, warranty disputes).
+- **Showcase loop** — every shipped project becomes top-of-funnel content.
+- **Referral loop** — alumni get a per-user referral code that grants the
+  referee 10% off and the referrer credit on their next maintenance.
+- **Help-desk-as-marketing loop** — answering forum questions in
+  `#discord-bots-help` etc. visibly (not paywalled) is your best lead-gen.
+  Half the people who come to ask for free help eventually have a real
+  budget; treat the answers as marketing impressions.
 
 ---
 
-## 9. KPIs to actually watch
+## 8. Pricing visibility — the differentiator
 
-A pretty server is worthless if you can't tell whether it sells. Track monthly:
+Most dev-shop Discords hide pricing. Yours should not.
+
+- `#pricing` mirrors the site's `/pricing` page exactly. Same numbers, same
+  packages.
+- Pinned message starts with **"Same prices as the website. I don't quote
+  different rates in DMs — saves us both time."** This single sentence
+  prevents 90% of haggle DMs.
+- `#availability` makes scheduling transparent. Format:
+  ```
+  ⚡ open slots
+    May 6 — 1 slot · small (≤ 1 wk)
+    May 13 — 2 slots
+    May 20 — full
+    May 27 — 1 slot
+
+  current queue
+    Project A · ETA May 8
+    Project B · ETA May 17
+    Project C · ETA May 22
+
+  next available start: May 6
+  ```
+
+This also serves as accountability: **public commitments push you to ship
+on time.**
+
+---
+
+## 9. Moderation & safety
+
+- **Discord automod** for spam, mention spam, slur list. Action: timeout 10 min.
+- **Carl-bot** for link filter outside `#resources` and `#shipped`.
+- **No DM solicitation rule.** Members poaching leads from your server is
+  the only ban-on-first-offense rule. Pin it in `#rules`.
+- **Slowmode** in `#general` (10s) and `#discord-bots-help` text channel
+  (30s). Forum channels don't need it.
+- **All quotes go through tickets.** Anyone DM'ing for a quote gets pointed
+  to `#quote-a-project`. Keeps a paper trail and prevents scope drift in DMs.
+
+---
+
+## 10. KPIs — what to actually watch
 
 | Metric | Source | Target (90 days in) |
 |---|---|---|
-| Joins | Server insights | 50–150/wk steady-state |
-| `@Member` activation rate | Carl-bot logs | >70% of joiners |
-| Tickets opened in `#request-a-quote` | Bot | 5–15/wk |
-| Ticket → paid order conversion | Custom bot + Stripe | 20%+ |
-| `@Inspired` count growth | Bot | Tracks paid orders |
-| 30-day repeat showcase posts | Manual | A measure of pride/loyalty |
-| Discord-attributed revenue | UTM in checkout link | The number that matters |
+| Active members per week | Server Insights | 80–150 |
+| `#quote-a-project` posts | Bot | 4–10 / month |
+| Quote → contracted conversion | Bot + Stripe | 30%+ (a high bar — services close differently than products) |
+| Office Hours attendance | Sesh | 5–15 / week |
+| `#shipped` cadence | Manual | ≥ 1 / week |
+| Alumni → referral conversion | Custom bot | 1–2 referrals / quarter to start |
+| Discord-attributed revenue | UTM `?utm_source=discord` on every outbound link | The number that justifies all of this |
 
-Add UTMs to every link out of Discord (`?utm_source=discord&utm_campaign=channelname`).
-Without that, this whole server is invisible in your analytics.
+If after 90 days the server has lots of activity but no quotes, the funnel
+is broken — usually because **`#hire-me` isn't visible enough** or
+**`#availability` isn't being updated**.
 
 ---
 
-## 10. 30 / 60 / 90 day rollout
+## 11. 30 / 60 / 90 day rollout
 
-### Days 1–7 — Skeleton
-- Create roles, categories, channels exactly as above
-- Wire Carl-bot, Ticket Tool, Sesh
-- Write the welcome embed; stand up reaction-role onboarding
-- Manually invite ~30 friends/customers as seed
+### Days 1–7 — Skeleton & seed
+- Roles, categories, channels exactly as above
+- Carl-bot + Ticket Tool + Sesh + GitHub webhook to `#changelog`
+- Write the welcome embed; wire onboarding reaction-roles
+- Pin pricing + availability messages
+- Manually invite past clients, X followers, friendly devs (~30 seed members)
 
-### Days 8–30 — Content rhythm
-- Start "Build of the Week" and "Parts Drop"
-- Publish first Founder's Letter
-- Run first monthly giveaway
-- Add UTM on every site CTA pointing to Discord
+### Days 8–30 — Content rhythm + first ship
+- Daily `#now-building` posts (low bar — even one screenshot)
+- First weekly Office Hours
+- First `#dev-journal` post — cross-post excerpt
+- First "Shipped this week" recap, even if just past work backfilled
+- First quote ticket end-to-end (pretend if needed; document the flow)
 
 ### Days 31–60 — Funnel close
-- Build the **custom Stripe → Discord bot** (priority items 1–2 from §5)
-- Backfill `@Inspired` for all existing customers (manual or via order export)
-- Open `#our-builds` with last 10 ship photos as seed posts
-- Launch referral program
+- Build the **custom Stripe → Discord bot** (priority items 1–3 from §6)
+- Backfill `@Alumni Client` for past clients
+- Open `#shipped` with 5–10 prior projects as seed
+- Launch `#hire-me` referral program
 
 ### Days 61–90 — Community moats
-- First "Build Talk" stage event
-- First quarterly setup contest
-- VIP `@Founder` tier rolled out for past Elite buyers
-- Audit: which channels are dead? Archive ruthlessly. A small lively server beats a big dead one.
+- First open-source quarterly release in `#experiments`
+- Promote 1–2 active community helpers to `@Trusted Builder`
+- Audit dead channels — archive ruthlessly
+- First retrospective post: what worked, what didn't, what's next
 
 ---
 
-## 11. What *not* to do
+## 12. What *not* to do
 
-- **Don't make a #general-chat be the first channel a new joiner sees.** Always
-  funnel through `#start-here` first. Otherwise the server feels chaotic on day one.
-- **Don't gate too aggressively.** A 5-step verification kills the conversion
-  rate. Two clicks max before they can read everything.
-- **Don't post sales pitches in community channels.** `#deals-and-drops` is the
-  *only* place outright promo lives. Trust the funnel to do the work.
-- **Don't ignore the `@Inspired` lounge after launch.** A customer-only channel
-  with no staff activity is worse than no channel at all.
-- **Don't run announcements through `@everyone`.** Use role pings (`@Member`,
-  `@Inspired`) so people can opt out without leaving.
-- **Don't archive too slowly.** Channel sprawl is the #1 cause of dead servers.
-  Quarterly archive review.
+- **Don't gate pricing.** The whole brand is anti-this. Pricing in Discord
+  matches pricing on the site. Anyone asking for a "private rate" gets the
+  same answer as the website.
+- **Don't run announcements with `@everyone`.** Use `@Member` or interest
+  tags so people opt out without leaving.
+- **Don't build a level system early.** Levels work for big servers; in a
+  small founder-led server they create perverse incentives (spammy
+  one-liners).
+- **Don't archive too slowly.** Channel sprawl kills small servers. Quarterly
+  archive review.
+- **Don't make `#general` the first channel a new joiner sees.** Always
+  funnel through `#start-here`.
+- **Don't hide active client work entirely.** Anonymized progress posts
+  in `#now-building` (with permission) are the most effective marketing
+  you have. Share the *shape* of the work even if you can't share the
+  client name.
+- **Don't take on a `@Trusted Builder` you wouldn't hire.** They speak for
+  the brand in help channels.
 
 ---
 
-## 12. Appendix — Channel rule blocks (paste-ready)
+## 13. Appendix — paste-ready content
 
 ### `#📜-rules`
+
 ```
-1. Be cool. No personal attacks, slurs, or harassment. We're here to nerd out.
-2. No leaks of unreleased Inspire builds, packages, or pricing.
-3. No reselling, sharing, or scraping our promo codes.
-4. Keep self-promo to #streams-and-videos. Posting your own store/server elsewhere = ban.
-5. NSFW content = instant ban.
-6. Follow Discord's ToS. Obviously.
-7. DMs from staff are never used for support. We use tickets. If someone DMs you
-   pretending to be us — screenshot, report, block.
+1. Be cool. No personal attacks, slurs, harassment.
+2. No DM-pitching members for work. Use #quote-a-project. This is the
+   only ban-on-first-offense rule.
+3. No leaks of unreleased client work. Confidentiality is a sales feature.
+4. Help channels: read the pinned template before posting. Effort gets effort.
+5. Self-promo: keep to #shipped (yours), #experiments (yours), or
+   #resources (community-edited). Don't post your own server / store
+   anywhere else.
+6. NSFW = ban.
+7. Follow Discord's ToS.
 ```
 
 ### `#📍-start-here` welcome message
+
 ```
-✦ Welcome to Inspire ✦
+✦ inspire⚡ Development ✦
 
-This is the home of Inspire Custom PCs. Join the conversation, get free build
-advice, and unlock a discord-only deal.
+Small shop. Fast ships.
 
-▸ Pick what you're here for below to unlock the rest of the server:
-   🛒  Looking to buy a PC
-   🧠  Here for build advice
-   🎮  Here to hang out
+I build:
+   🤖  Discord bots ($60/hr)
+   🦀  Rust / DayZ / FiveM mods ($80/hr)
+   🌐  Marketing sites for gaming communities (packaged rates)
 
-▸ Already a customer? Open a ticket in #🎫-tickets to claim @Inspired and unlock
-   warranty + the customer lounge.
+   ▸ Pricing → #💵-pricing  (same as the website)
+   ▸ Availability → #📅-availability  (live queue, open slots)
+   ▸ Quote a project → #💬-quote-a-project  (24h reply)
 
-▸ Your welcome code: WELCOME10  (10% off your first order)
+Pick what you're here for below to unlock the rest:
+
+   💼  Hiring for a project
+   🛠️  Dev — helping & learning
+   🎮  Game server owner, browsing
+   👀  Just lurking
+
+Then pick interests so I can ping you about relevant stuff only:
+
+   @discord-bots  @rust-mods  @dayz-mods  @fivem  @web-dev  @hiring
+```
+
+### `#📅-availability` pinned message format
+
+```
+⚡ open slots
+   May 6 — 1 slot · small (≤ 1 wk)
+   May 13 — 2 slots
+   May 20 — full
+   May 27 — 1 slot
+
+current queue
+   {Client A} · ETA May 8
+   {Client B} · ETA May 17
+   {Client C} · ETA May 22
+
+next available start:  May 6
+
+want a slot? → #💬-quote-a-project
+last updated: {auto, by bot or weekly manually}
+```
+
+### `#💵-pricing` pinned message intro
+
+```
+Same prices as the website. I don't quote different rates in DMs —
+saves us both time.
+
+   Discord bots:        $60/hr
+   Rust / DayZ / FiveM: $80/hr
+   Marketing site:      $1,500 packaged (more in /pricing)
+   Larger jobs:         fixed-price quote in #quote-a-project
+
+Why hourly is published: I want clients who pick the rate, not who
+get talked into one. If the budget is tight, say so up-front in the
+quote ticket — I'd rather scope down than over-commit.
 ```
 
 ---
 
-*Document version 1.0 — generated 2026-04-30. Live at `/opt/inspire/docs/DISCORD-LAYOUT.md`.*
+*Document version 2.0 — rebuilt 2026-04-30 against the Inspire Development brand
+(was previously written against the legacy "Inspire Custom PCs" README).*
