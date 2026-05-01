@@ -27,6 +27,7 @@
     "resend": "^6.9.4",
     "stripe": "^17.7.0",
     "tailwindcss": "^4.1.8",
+    "tweetnacl": "^1.0.3",
     "typescript": "^5.8.3"
   },
   "description": "",
