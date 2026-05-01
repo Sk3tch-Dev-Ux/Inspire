@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { query } from '@/lib/db';
 import { sendPaymentConfirmation } from '@/lib/email';
+import { onDepositPaid, resolveDiscordUserId } from '@/lib/discord/flows/on-deposit-paid';
 
 export async function POST(request: NextRequest) {
   try {
@@ -55,6 +56,25 @@ export async function POST(request: NextRequest) {
               });
             } catch (emailErr) {
               console.error('Payment confirmation email failed:', emailErr);
+            }
+
+            // Discord provisioning — only fires if a Discord user is linked
+            // to this order (via checkout custom field or pre-existing link).
+            try {
+              const discordUserId = await resolveDiscordUserId({
+                orderId,
+                metadataDiscordUserId: session.metadata?.discord_user_id,
+              });
+              if (discordUserId) {
+                await onDepositPaid({
+                  orderId,
+                  discordUserId,
+                  projectName: order.service,
+                  clientHandle: order.name,
+                });
+              }
+            } catch (discordErr) {
+              console.error('Discord provisioning failed:', discordErr);
             }
           }
         }
