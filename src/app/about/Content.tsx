@@ -8,8 +8,10 @@ import {
   Terminal,
   CheckCircle,
   XCircle,
-  Github,
   ChevronRight,
+  Package,
+  Server,
+  Cloud,
 } from 'lucide-react';
 import AnimatedSection from '@/components/AnimatedSection';
 
@@ -162,8 +164,9 @@ export default function AboutContent() {
             I started writing Discord bots in 2020 for a Rust server I helped
             run — the existing options were either too generic or too
             expensive. The bot grew, then someone asked me to make one for
-            their server, then another. Six years and 40+ projects later,
-            this is the full-time gig.
+            their server, then another. Six years later, between client
+            work and the three in-house products I&rsquo;m shipping
+            (Clan Ops, Citadel, Citadel Cloud), this is the full-time gig.
           </p>
           <p className="text-mute leading-relaxed text-lg">
             What I&rsquo;m good at is the intersection of game communities and
@@ -182,8 +185,87 @@ export default function AboutContent() {
         </div>
       </section>
 
-      {/* What I do / don't do */}
+      {/* Currently shipping */}
       <section className="border-b border-steel/60 bg-carbon/30 py-16 sm:py-20">
+        <div className="mx-auto max-w-6xl px-6">
+          <AnimatedSection>
+            <div className="mb-10 flex flex-col gap-3">
+              <span className="spec-tag w-fit">
+                <Package size={12} />
+                currently shipping
+              </span>
+              <h2 className="font-display text-3xl sm:text-4xl font-bold text-bone">
+                Three products, in parallel with client work.
+              </h2>
+              <p className="section-subtitle max-w-2xl">
+                Building these in the open. Each one started as a problem I
+                kept solving for clients and decided to solve properly,
+                once.
+              </p>
+            </div>
+          </AnimatedSection>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            {[
+              {
+                icon: Bot,
+                name: 'Clan Ops',
+                status: 'Soft-launch',
+                blurb:
+                  'Discord bot for clan management — rosters, ranks, op scheduling with RSVPs, and a recruitment pipeline.',
+                href: '/portfolio/clan-ops',
+              },
+              {
+                icon: Server,
+                name: 'Citadel',
+                status: 'Soft-launch',
+                blurb:
+                  'Self-hosted game server management panel. One dashboard for Rust, DayZ, and FiveM — server controls, live logs, player tools.',
+                href: '/portfolio/citadel',
+              },
+              {
+                icon: Cloud,
+                name: 'Citadel Cloud',
+                status: 'In development',
+                blurb:
+                  'Hosted, multi-tenant Citadel. The same panel without the self-hosting step — for clans that just want it to work.',
+                href: '/portfolio/citadel-cloud',
+              },
+            ].map((p) => {
+              const Icon = p.icon;
+              return (
+                <Link
+                  key={p.name}
+                  href={p.href}
+                  className="group flex flex-col gap-4 rounded-xl border border-steel bg-carbon p-6 transition-all hover:-translate-y-1 hover:border-flame hover:shadow-[0_14px_30px_rgba(255,107,26,0.10)]"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-flame/10 text-flame">
+                      <Icon size={20} strokeWidth={1.5} />
+                    </div>
+                    <div className="flex flex-col">
+                      <h3 className="font-display text-lg font-bold text-bone group-hover:text-flame transition-colors">
+                        {p.name}
+                      </h3>
+                      <span className="text-[11px] font-mono uppercase tracking-[0.18em] text-flame">
+                        {p.status}
+                      </span>
+                    </div>
+                  </div>
+                  <p className="text-sm text-mute leading-relaxed">{p.blurb}</p>
+                  <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-flame mt-auto">
+                    Case study
+                    <ArrowRight size={14} />
+                  </span>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* What I do / don't do */}
+      <section className="border-b border-steel/60 bg-ink py-16 sm:py-20">
         <div className="mx-auto max-w-6xl px-6">
           <AnimatedSection>
             <div className="mb-10 flex flex-col gap-3">
@@ -233,7 +315,7 @@ export default function AboutContent() {
       </section>
 
       {/* Tools */}
-      <section className="border-b border-steel/60 bg-ink py-16 sm:py-20">
+      <section className="border-b border-steel/60 bg-carbon/30 py-16 sm:py-20">
         <div className="mx-auto max-w-6xl px-6">
           <AnimatedSection>
             <div className="mb-10 flex flex-col gap-3">
@@ -280,7 +362,7 @@ export default function AboutContent() {
       </section>
 
       {/* How I work */}
-      <section className="border-b border-steel/60 bg-carbon/30 py-16 sm:py-20">
+      <section className="border-b border-steel/60 bg-ink py-16 sm:py-20">
         <div className="mx-auto max-w-6xl px-6">
           <AnimatedSection>
             <div className="mb-10 flex flex-col gap-3">

@@ -152,7 +152,24 @@ export default async function CaseStudyPage({
           </nav>
 
           <div className="mb-8 flex flex-col gap-5">
-            <span className="spec-tag w-fit">⚡ {project.category}</span>
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="spec-tag">⚡ {project.category}</span>
+              <span
+                className={`spec-tag ${
+                  project.status === 'shipped'
+                    ? 'border-flame/40 bg-flame/10 text-flame'
+                    : project.status === 'soft-launch'
+                    ? 'border-flame/30 bg-flame/5 text-flame-glow'
+                    : 'border-steel bg-carbon text-mute'
+                }`}
+              >
+                {project.status === 'shipped'
+                  ? 'shipped'
+                  : project.status === 'soft-launch'
+                  ? 'soft-launch'
+                  : 'in development'}
+              </span>
+            </div>
             <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold leading-[1.05] tracking-tight text-bone max-w-4xl">
               {project.title}
             </h1>

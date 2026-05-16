@@ -5,12 +5,11 @@ import {
   Code2,
   Gamepad2,
   LayoutDashboard,
-  Quote,
-  Star,
   Terminal,
   CheckCircle,
   MessageSquare,
   Zap,
+  Package,
 } from 'lucide-react';
 import AnimatedSection from '@/components/AnimatedSection';
 import ServiceCard from '@/components/ServiceCard';
@@ -18,21 +17,25 @@ import PortfolioCard from '@/components/PortfolioCard';
 import { getFeaturedProjects } from '@/lib/portfolio-data';
 
 /**
- * Inspire Development — Homepage (Phase 2)
+ * Inspire Development — Homepage.
  *
  * Sections, top to bottom:
  *   1. Hero — positioning + dual CTA
- *   2. Trust strip — quick credibility (years, projects, response time)
- *   3. Services — 4 ServiceCards covering the four pillars
- *   4. Recent work — 3 PortfolioCards (placeholder data; swap in real
- *      work as it's published from /admin)
+ *   2. Trust strip — three honest credibility chips (years, in-house
+ *      products shipping, response time). No invented headcount.
+ *   3. In-house products — Clan Ops, Citadel, Citadel Cloud. These
+ *      anchor the brand: they show what gets built, not just claimed.
+ *   4. Services — 4 ServiceCards covering the four service pillars
  *   5. How it works — 3-step process for service engagements
- *   6. Testimonials — keep as a section, neutral placeholder copy
- *   7. Final CTA — Discord invite + "Get a Quote"
+ *   6. Final CTA — Discord invite + "Get a Quote"
  *
  * The homepage is a server component; interactive bits like the chat
  * widget live in the global layout. Animation wrappers (AnimatedSection)
  * provide reveal-on-scroll for sections.
+ *
+ * Testimonials were removed deliberately — every quote a freelance site
+ * carries should be from a named, verifiable client. When real clients
+ * agree to be quoted, this section comes back.
  */
 
 const services = [
@@ -109,30 +112,6 @@ const processSteps = [
   },
 ];
 
-const testimonials = [
-  {
-    name: 'Marcus T.',
-    role: 'Discord Server Owner — 800 members',
-    text:
-      "Replaced our old custom bot in two days. Everything we asked for, plus suggestions I hadn't thought of. Documentation included.",
-    rating: 5,
-  },
-  {
-    name: 'Sarah J.',
-    role: 'Rust Server Admin',
-    text:
-      'Custom raid alerts + a Discord bridge for in-game events. My players actually log into Discord now to follow what is happening.',
-    rating: 5,
-  },
-  {
-    name: 'David K.',
-    role: 'FiveM Roleplay Server',
-    text:
-      "Hourly billing meant I could test ideas cheaply. Three small features later, and our community is more active than it's been in a year.",
-    rating: 5,
-  },
-];
-
 export default function HomeContent() {
   return (
     <div className="flex flex-col">
@@ -191,7 +170,7 @@ export default function HomeContent() {
           <div className="mx-auto grid max-w-6xl grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-steel/50">
             {[
               { value: '6+', label: 'Years building Discord & game tooling' },
-              { value: '40+', label: 'Projects shipped for community owners' },
+              { value: '3', label: 'In-house products in active development' },
               { value: '24h', label: 'Quote turnaround on every request' },
             ].map((stat) => (
               <div key={stat.label} className="px-6 py-6 text-center">
@@ -238,10 +217,18 @@ export default function HomeContent() {
           <AnimatedSection>
             <div className="mb-12 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
               <div className="flex flex-col gap-4">
-                <span className="spec-tag w-fit">recent work</span>
+                <span className="spec-tag w-fit">
+                  <Package size={12} />
+                  what i&rsquo;m shipping
+                </span>
                 <h2 className="section-title text-bone">
-                  Real projects, real outcomes.
+                  In-house products.
                 </h2>
+                <p className="section-subtitle max-w-2xl">
+                  Three products I&rsquo;m building in parallel with client
+                  work — the same primitives I keep ending up needing, turned
+                  into things you can actually use.
+                </p>
               </div>
               <Link
                 href="/portfolio"
@@ -296,47 +283,6 @@ export default function HomeContent() {
                 </div>
               );
             })}
-          </div>
-        </div>
-      </section>
-
-      {/* ─── Testimonials ─────────────────────────────────────── */}
-      <section className="border-b border-steel/60 bg-carbon/30 py-20 sm:py-28">
-        <div className="mx-auto max-w-6xl px-6">
-          <AnimatedSection>
-            <div className="mb-12 flex flex-col gap-4 text-center">
-              <span className="spec-tag mx-auto w-fit">what clients say</span>
-              <h2 className="section-title text-bone">
-                Built for builders, by a builder.
-              </h2>
-            </div>
-          </AnimatedSection>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {testimonials.map((t) => (
-              <figure
-                key={t.name}
-                className="relative rounded-xl border border-steel bg-carbon p-6"
-              >
-                <Quote className="absolute right-5 top-5 text-flame/30" size={28} />
-                <div className="flex gap-0.5 mb-4">
-                  {Array.from({ length: t.rating }).map((_, i) => (
-                    <Star
-                      key={i}
-                      size={14}
-                      className="fill-flame text-flame"
-                    />
-                  ))}
-                </div>
-                <blockquote className="text-bone leading-relaxed mb-4">
-                  &ldquo;{t.text}&rdquo;
-                </blockquote>
-                <figcaption>
-                  <div className="font-semibold text-bone text-sm">{t.name}</div>
-                  <div className="text-xs text-mute mt-0.5">{t.role}</div>
-                </figcaption>
-              </figure>
-            ))}
           </div>
         </div>
       </section>

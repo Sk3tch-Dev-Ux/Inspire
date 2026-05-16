@@ -42,7 +42,7 @@ export default function Footer() {
                 <Mail className="w-4 h-4" />
                 hello@inspirepc.com
               </a>
-              <a href="https://discord.gg/inspire" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-mute hover:text-flame transition-colors text-sm">
+              <a href="https://discord.gg/inspire-dev" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-mute hover:text-flame transition-colors text-sm">
                 <MessageSquare className="w-4 h-4" />
                 Discord (fastest)
               </a>

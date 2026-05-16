@@ -32,7 +32,7 @@ not raw hex codes.
 | `--color-ink` | `#0A0A0A` | `ink` | Primary background — slightly warm black so orange reads electric |
 | `--color-carbon` | `#1A1A1A` | `carbon` | Card / panel surface |
 | `--color-steel` | `#2D2D2D` | `steel` | Borders, dividers, inactive states |
-| `--color-mute` | `#7A7A7A` | `mute` | Secondary text, timestamps, metadata |
+| `--color-mute` | `#9A9A9A` | `mute` | Secondary text, timestamps, metadata (WCAG AA on ink + carbon) |
 | `--color-bone` | `#FAFAF7` | `bone` | Off-white text on dark; primary bg on light pages |
 | `--color-pure` | `#FFFFFF` | (none — use `text-white`) | Highest-contrast text only |
 

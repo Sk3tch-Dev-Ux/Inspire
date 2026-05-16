@@ -25,7 +25,7 @@ export interface PortfolioCardProps {
   /** Project title — short, descriptive. */
   title: string;
   /** Category label. Renders as the spec-tag chip. */
-  category: 'Discord Bot' | 'Discord Layout' | 'Website' | 'Rust' | 'DayZ' | 'FiveM' | string;
+  category: 'Product' | 'Discord Bot' | 'Discord Layout' | 'Website' | 'Rust' | 'DayZ' | 'FiveM' | string;
   /** Outcome blurb — what the customer got out of it. ~140 chars. */
   outcome: string;
   /** Public-facing image — first screenshot, before/after composite, etc. */

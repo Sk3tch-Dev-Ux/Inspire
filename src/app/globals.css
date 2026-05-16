@@ -18,7 +18,7 @@
   --color-ink: #0A0A0A;        /* primary background */
   --color-carbon: #1A1A1A;     /* card / panel surface */
   --color-steel: #2D2D2D;      /* borders, dividers, inactive */
-  --color-mute: #7A7A7A;       /* secondary text, metadata */
+  --color-mute: #9A9A9A;       /* secondary text, metadata — bumped from #7A7A7A to clear WCAG AA (≥4.5:1) on ink and carbon */
   --color-bone: #FAFAF7;       /* primary text on dark; bg on light */
   --color-pure: #FFFFFF;       /* highest contrast text only */
 

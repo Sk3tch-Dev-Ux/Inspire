@@ -217,20 +217,38 @@ export default function ContactContent() {
             </p>
           </div>
 
+          {/* Live status region — announced to screen readers when the
+              submit result lands. role="status" is polite; "alert" is
+              reserved for the error state so it interrupts. */}
           {status === 'success' && (
-            <div className="mb-6 flex items-start gap-3 rounded-xl border-2 border-green-500/30 bg-green-500/10 p-4 text-bone">
-              <CheckCircle size={20} className="text-green-400 mt-0.5 flex-shrink-0" />
+            <div
+              id="contact-form-status"
+              role="status"
+              aria-live="polite"
+              className="mb-6 flex items-start gap-3 rounded-xl border-2 border-green-500/30 bg-green-500/10 p-4 text-bone"
+            >
+              <CheckCircle size={20} className="text-green-400 mt-0.5 flex-shrink-0" aria-hidden="true" />
               <span>{statusMessage}</span>
             </div>
           )}
           {status === 'error' && (
-            <div className="mb-6 flex items-start gap-3 rounded-xl border-2 border-red-500/30 bg-red-500/10 p-4 text-bone">
-              <AlertCircle size={20} className="text-red-400 mt-0.5 flex-shrink-0" />
+            <div
+              id="contact-form-status"
+              role="alert"
+              aria-live="assertive"
+              className="mb-6 flex items-start gap-3 rounded-xl border-2 border-red-500/30 bg-red-500/10 p-4 text-bone"
+            >
+              <AlertCircle size={20} className="text-red-400 mt-0.5 flex-shrink-0" aria-hidden="true" />
               <span>{statusMessage}</span>
             </div>
           )}
 
-          <form onSubmit={submit} className="flex flex-col gap-5">
+          <form
+            onSubmit={submit}
+            className="flex flex-col gap-5"
+            aria-describedby={status !== 'idle' ? 'contact-form-status' : undefined}
+            noValidate={false}
+          >
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div className="flex flex-col gap-2">
                 <label htmlFor="contact-name" className="text-sm font-semibold text-bone">

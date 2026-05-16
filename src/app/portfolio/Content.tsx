@@ -70,12 +70,13 @@ export default function PortfolioContent() {
           <div className="flex flex-col gap-6 max-w-3xl">
             <span className="spec-tag w-fit">recent work</span>
             <h1 className="font-display text-5xl sm:text-6xl font-bold leading-[1.05] tracking-tight text-bone">
-              Real projects, <span className="gradient-text">real outcomes</span>.
+              Products and <span className="gradient-text">project work</span>.
             </h1>
             <p className="text-lg text-mute leading-relaxed">
-              Every entry has a brief, what got built, and what happened
-              after. No before-and-after templates, no inflated metrics —
-              just receipts.
+              The three in-house products I&rsquo;m shipping, plus client
+              work as it lands. Each entry has a brief, what got built, and
+              what happened after — no inflated metrics, no invented
+              testimonials.
             </p>
           </div>
         </div>
